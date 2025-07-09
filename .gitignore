@@ -1,0 +1,70 @@
+# Xcode
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+DerivedData/
+.DS_Store
+build/
+vendor/
+.bundle/
+
+# Конфиденциальные данные и рабочие файлы
+Config/Secrets.swift
+*.pem
+*.p12
+*.mobileprovision
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Скрипты для разработки (могут содержать чувствительные данные)
+Scripts/
+
+# Документация и инструкции (могут содержать конфиденциальную информацию)
+instruction.md
+Описание*.pdf
+
+# Дизайн-макеты и примеры экранов
+Экран*.png
+Экран*.jpeg
+Экран*.jpg
+*Экран*.png
+*Экран*.jpeg
+*Экран*.jpg
+*Экран*.PNG
+*Экран*.JPEG
+*Экран*.JPG
+
+# Логи сборки и тестов
+*.log
+build*.log
+test*.log
+all_tests.log
+test_results.log
+test_run.log
+
+# Временные скрипты проверки и утилиты
+check_project_files.sh
+comprehensive_check.sh
+
+# Автоматически генерируемые отчеты
+detailed_check_report.md
+
+# Временные Ruby скрипты для настройки проекта (одноразовые утилиты)
+add_share_extension_tests_to_scheme.rb
+create_share_extension_tests_target.rb
+fix_share_extension_tests.rb
+remove_share_extension_tests_from_build.rb
