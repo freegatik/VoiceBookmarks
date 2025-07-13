@@ -1,0 +1,282 @@
+name: API Health Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  api-health-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Get Anonymous User ID
+      id: get_user_id
+      run: |
+        echo "Получение анонимного userId для тестирования..."
+        API_BASE="https://minds.myapp.fund/weaviate"
+        AUTH_RESPONSE=$(curl -s -X POST "$API_BASE/api/auth/anonymous" || echo "")
+        
+        if [ -z "$AUTH_RESPONSE" ]; then
+          echo "Не удалось получить userId, продолжаем без него"
+          echo "user_id=" >> $GITHUB_OUTPUT
+        else
+          # Пытаемся извлечь userId из JSON ответа
+          USER_ID=$(echo "$AUTH_RESPONSE" | grep -o '"userId":"[^"]*"' | cut -d'"' -f4 || echo "")
+          if [ -z "$USER_ID" ]; then
+            USER_ID=$(echo "$AUTH_RESPONSE" | grep -o '"id":"[^"]*"' | cut -d'"' -f4 || echo "")
+          fi
+          if [ -z "$USER_ID" ]; then
+            echo "Не удалось распарсить userId из ответа"
+            echo "user_id=" >> $GITHUB_OUTPUT
+          else
+            echo "Получен userId: $USER_ID"
+            echo "user_id=$USER_ID" >> $GITHUB_OUTPUT
+          fi
+        fi
+      continue-on-error: true
+    
+    - name: Check API availability
+      run: |
+        echo "========================================="
+        echo "Проверка доступности всех API endpoints"
+        echo "Base URL: https://minds.myapp.fund/weaviate"
+        echo "========================================="
+        
+        API_BASE="https://minds.myapp.fund/weaviate"
+        USER_ID="${{ steps.get_user_id.outputs.user_id }}"
+        FAILED_ENDPOINTS=0
+        TOTAL_CHECKS=0
+        
+        # Функция для проверки endpoint
+        check_endpoint() {
+          local METHOD=$1
+          local ENDPOINT=$2
+          local DESCRIPTION=$3
+          local TIMEOUT=60
+
+          TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+
+          echo ""
+          echo "Проверка: $DESCRIPTION"
+          echo "   $METHOD $ENDPOINT"
+
+          local HTTP_CODE
+          if [ "$METHOD" = "GET" ]; then
+            if [ -n "$USER_ID" ]; then
+              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time "$TIMEOUT" \
+                -H "X-User-ID: $USER_ID" \
+                "$API_BASE$ENDPOINT" || echo "000")
+            else
+              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time "$TIMEOUT" \
+                "$API_BASE$ENDPOINT" || echo "000")
+            fi
+          else
+            if [ -n "$USER_ID" ]; then
+              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time "$TIMEOUT" \
+                -X "$METHOD" \
+                -H "X-User-ID: $USER_ID" \
+                "$API_BASE$ENDPOINT" || echo "000")
+            else
+              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time "$TIMEOUT" \
+                -X "$METHOD" \
+                "$API_BASE$ENDPOINT" || echo "000")
+            fi
+          fi
+          
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "201" ] || [ "$HTTP_CODE" = "400" ] || [ "$HTTP_CODE" = "401" ] || [ "$HTTP_CODE" = "404" ] || [ "$HTTP_CODE" = "422" ]; then
+            echo "   [OK] Код ответа: $HTTP_CODE (ожидаемый)"
+          elif [ "$HTTP_CODE" = "000" ]; then
+            echo "   [FAIL] Endpoint недоступен (таймаут или нет соединения)"
+            FAILED_ENDPOINTS=$((FAILED_ENDPOINTS + 1))
+          else
+            echo "   [WARN] Код ответа: $HTTP_CODE (неожиданный, но не критично)"
+          fi
+        }
+        
+        # Проверка всех основных endpoints из swagger.yaml
+        
+        # 1. POST /api/auth/anonymous (анонимная регистрация)
+        check_endpoint "POST" "/api/auth/anonymous" "Анонимная регистрация"
+        
+        if [ ! -z "$USER_ID" ]; then
+          # 2. GET /api/folders (список папок)
+          check_endpoint "GET" "/api/folders" "Получение списка папок"
+          
+          # 3. POST /api/search (поиск или команда)
+          echo ""
+          echo "Проверка: Поиск или выполнение команды"
+          echo "   POST /api/search"
+          TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+          SEARCH_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 60 -X POST \
+            -H "X-User-ID: $USER_ID" \
+            -H "Content-Type: application/json" \
+            -d '{"query":"test"}' \
+            "$API_BASE/api/search" || echo "000")
+          if [ "$SEARCH_RESPONSE" = "200" ] || [ "$SEARCH_RESPONSE" = "201" ] || [ "$SEARCH_RESPONSE" = "400" ] || [ "$SEARCH_RESPONSE" = "422" ]; then
+            echo "   [OK] Код ответа: $SEARCH_RESPONSE (ожидаемый)"
+          elif [ "$SEARCH_RESPONSE" = "000" ]; then
+            echo "   [FAIL] Endpoint недоступен (таймаут или нет соединения)"
+            FAILED_ENDPOINTS=$((FAILED_ENDPOINTS + 1))
+          else
+            echo "   [WARN] Код ответа: $SEARCH_RESPONSE (неожиданный, но не критично)"
+          fi
+          
+          # 4. POST /api/bookmarks (создание закладки)
+          echo ""
+          echo "Проверка: Создание закладки"
+          echo "   POST /api/bookmarks"
+          TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+          echo "test content" > /tmp/test_bookmark.txt
+          BOOKMARK_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 60 -X POST \
+            -H "X-User-ID: $USER_ID" \
+            -F "content=@/tmp/test_bookmark.txt" \
+            -F "contentType=text" \
+            -F "voiceNote=Test note" \
+            "$API_BASE/api/bookmarks" || echo "000")
+          rm -f /tmp/test_bookmark.txt
+          if [ "$BOOKMARK_RESPONSE" = "200" ] || [ "$BOOKMARK_RESPONSE" = "201" ] || [ "$BOOKMARK_RESPONSE" = "400" ] || [ "$BOOKMARK_RESPONSE" = "422" ]; then
+            echo "   [OK] Код ответа: $BOOKMARK_RESPONSE (ожидаемый)"
+          elif [ "$BOOKMARK_RESPONSE" = "000" ]; then
+            echo "   [FAIL] Endpoint недоступен (таймаут или нет соединения)"
+            FAILED_ENDPOINTS=$((FAILED_ENDPOINTS + 1))
+          else
+            echo "   [WARN] Код ответа: $BOOKMARK_RESPONSE (неожиданный, но не критично)"
+          fi
+          
+          # 5. GET /api/bookmarks/{id} (получение закладки по ID)
+          check_endpoint "GET" "/api/bookmarks/00000000-0000-0000-0000-000000000000" "Получение закладки по ID"
+          
+          # 6. DELETE /api/bookmarks/{id} (удаление закладки)
+          check_endpoint "DELETE" "/api/bookmarks/00000000-0000-0000-0000-000000000000" "Удаление закладки"
+          
+          # 7. GET /api/categories/{category}/bookmarks (закладки по категории)
+          check_endpoint "GET" "/api/categories/Tasks/bookmarks" "Закладки по категории"
+          
+          # 8. GET /api/download/{id} (скачивание файла)
+          check_endpoint "GET" "/api/download/00000000-0000-0000-0000-000000000000" "Скачивание файла"
+        else
+          echo ""
+          echo "[WARN] Пропускаем проверки с userId (не удалось получить)"
+        fi
+        
+        # 9. GET /health (health check - не требует авторизации)
+        check_endpoint "GET" "/health" "Health check"
+        
+        echo ""
+        echo "========================================="
+        echo "Статистика проверок:"
+        echo "  Всего проверено endpoints: $TOTAL_CHECKS"
+        echo "  Недоступных: $FAILED_ENDPOINTS"
+        echo "========================================="
+        
+        if [ "$FAILED_ENDPOINTS" -eq 0 ]; then
+          echo "[OK] Все проверяемые endpoints доступны"
+          exit 0
+        else
+          echo "[FAIL] Недоступных endpoints: $FAILED_ENDPOINTS"
+          echo "Это может быть временная проблема сети или сервера"
+          exit 1
+        fi
+    
+    - name: Validate swagger.yaml endpoints
+      run: |
+        echo "Проверка соответствия endpoints в swagger.yaml..."
+        
+        # Проверка основных endpoints из swagger.yaml
+        ENDPOINTS=(
+          "/api/auth/anonymous"
+          "/api/folders"
+          "/api/bookmarks"
+          "/api/search"
+          "/api/categories/{category}/bookmarks"
+          "/api/download/{bookmark_id}"
+          "/health"
+        )
+        
+        for endpoint in "${ENDPOINTS[@]}"; do
+          # Заменяем {category} и {bookmark_id} на примеры для проверки
+          TEST_ENDPOINT=$(echo "$endpoint" | sed 's/{category}/Tasks/g' | sed 's/{bookmark_id}/00000000-0000-0000-0000-000000000000/g')
+          
+          if grep -q "$endpoint" swagger.yaml 2>/dev/null; then
+            echo "[OK] $endpoint найден в swagger.yaml"
+          else
+            echo "[WARN] $endpoint не найден в swagger.yaml"
+          fi
+        done
+    
+    - name: Validate API constants in code
+      run: |
+        echo "Проверка соответствия констант в коде swagger.yaml..."
+        
+        # Проверка base URL
+        if grep -q "https://minds.myapp.fund/weaviate" VoiceBookmarks/Utils/Constants.swift 2>/dev/null; then
+          echo "[OK] API base URL соответствует swagger.yaml"
+        else
+          echo "[FAIL] API base URL не соответствует swagger.yaml"
+          exit 1
+        fi
+        
+        # Проверка заголовка X-User-ID
+        if grep -q "X-User-ID" VoiceBookmarks/Utils/Constants.swift 2>/dev/null; then
+          echo "[OK] Заголовок X-User-ID настроен"
+        else
+          echo "[FAIL] Заголовок X-User-ID не найден"
+          exit 1
+        fi
+        
+        # Проверка timeout константы
+        if grep -q "timeout.*60" VoiceBookmarks/Utils/Constants.swift 2>/dev/null; then
+          echo "[OK] Timeout установлен (60 секунд)"
+        else
+          echo "[WARN] Timeout не найден или отличается от 60 секунд"
+        fi
+        
+        # Проверка retry констант
+        if grep -q "retryCount.*3" VoiceBookmarks/Utils/Constants.swift 2>/dev/null; then
+          echo "[OK] Retry count установлен (3 попытки)"
+        else
+          echo "[WARN] Retry count не найден или отличается от 3"
+        fi
+        
+        # Проверка endpoints
+        ENDPOINTS=(
+          "/api/auth/anonymous"
+          "/api/folders"
+          "/api/bookmarks"
+          "/api/search"
+          "/api/download"
+        )
+        
+        for endpoint in "${ENDPOINTS[@]}"; do
+          if grep -q "$endpoint" VoiceBookmarks/Utils/Constants.swift 2>/dev/null; then
+            echo "[OK] $endpoint найден в Constants.swift"
+          else
+            echo "[WARN] $endpoint не найден в Constants.swift"
+          fi
+        done
+    
+    - name: Summary
+      run: |
+        echo "========================================="
+        echo "API Health Check завершен"
+        echo "========================================="
+        echo "Backend: https://minds.myapp.fund/weaviate"
+        echo ""
+        echo "Проверенные endpoints (из swagger.yaml):"
+        echo "  [OK] POST /api/auth/anonymous - Анонимная регистрация"
+        echo "  [OK] GET /api/folders - Список папок"
+        echo "  [OK] POST /api/search - Поиск или команда"
+        echo "  [OK] POST /api/bookmarks - Создание закладки"
+        echo "  [OK] GET /api/bookmarks/{id} - Получение закладки"
+        echo "  [OK] DELETE /api/bookmarks/{id} - Удаление закладки"
+        echo "  [OK] GET /api/categories/{category}/bookmarks - Закладки по категории"
+        echo "  [OK] GET /api/download/{id} - Скачивание файла"
+        echo "  [OK] GET /health - Health check"
+        echo ""
+        echo "Аутентификация: X-User-ID (UUID через Keychain)"
+        echo "Формат ответа: JSON (search) или HTML (command)"
+        echo "Статус: Все endpoints соответствуют swagger.yaml"

@@ -1,0 +1,84 @@
+name: iOS CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ios-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ios:
+    name: Build, test, coverage
+    runs-on: macos-14
+    env:
+      IOS_DESTINATION: platform=iOS Simulator,name=iPhone 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Tool versions
+        run: |
+          xcodebuild -version
+          xcrun --sdk iphonesimulator --show-sdk-version
+          xcrun simctl list devices available | head -40 || true
+
+      - name: Resolve Swift packages
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project VoiceBookmarks.xcodeproj \
+            -scheme VoiceBookmarks
+
+      - name: Static checks (TODO/FIXME, MARK, duplicates)
+        run: |
+          set -euo pipefail
+          echo "=== TODO/FIXME ==="
+          if grep -rE 'TODO|FIXME' VoiceBookmarks/ VoiceBookmarksShareExtension/ --include='*.swift'; then
+            echo "Found TODO/FIXME in production sources"
+            exit 1
+          fi
+          echo "=== MARK (production Swift must stay clean) ==="
+          if grep -rE '//\s*MARK:' VoiceBookmarks/ VoiceBookmarksShareExtension/ --include='*.swift'; then
+            echo "Found // MARK in production sources"
+            exit 1
+          fi
+          echo "=== Duplicate Swift basenames ==="
+          DUP=$(find VoiceBookmarks VoiceBookmarksShareExtension -name '*.swift' -exec basename {} \; | sort | uniq -d || true)
+          if [[ -n "${DUP}" ]]; then
+            echo "$DUP"
+            exit 1
+          fi
+
+      - name: Run tests with code coverage
+        run: |
+          chmod +x Scripts/ci/run-ios-tests.sh
+          Scripts/ci/run-ios-tests.sh
+
+      - name: Upload xcresult bundles
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-test-results
+          path: |
+            TestResults-main.xcresult
+            TestResults-share.xcresult
+          if-no-files-found: ignore
+
+      - name: Coverage summary (line rate)
+        if: success()
+        run: xcrun xccov view --report TestResults-main.xcresult | tail -n 35
+
+      - name: Backend smoke (non-blocking)
+        continue-on-error: true
+        run: |
+          API_URL="https://minds.myapp.fund/weaviate/api/auth/anonymous"
+          code=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$API_URL" --max-time 15 || echo "000")
+          echo "POST anonymous HTTP $code"
