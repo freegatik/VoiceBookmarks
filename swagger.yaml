@@ -1,0 +1,574 @@
+openapi: 3.0.3
+info:
+  title: Voice Bookmarks API
+  description: |
+    API для системы Voice Bookmarks - сохранение и поиск контента с помощью AI.
+    
+    **Основные возможности:**
+    - Сохранение файлов (фото, аудио, видео, документы)
+    - Автоматическая обработка через OpenAI (Vision, Whisper)
+    - AI категоризация и генерация описаний через Weaviate
+    - Семантический поиск по содержимому
+    - Выполнение команд с генерацией HTML
+    - Хранение файлов в Supabase Storage
+    
+    **Архитектура:**
+    - Backend: Python FastAPI
+    - Vector DB: Weaviate (Documents + Chunks)
+    - Storage: Supabase Storage
+    - AI: OpenAI (GPT-4, Vision, Whisper)
+    
+  version: 1.0.0
+  contact:
+    name: Voice Bookmarks API
+    url: https://your-api-server.com/
+
+servers:
+  - url: https://your-api-server.com
+    description: Production сервер (замените на ваш API сервер)
+
+tags:
+  - name: Auth
+    description: Прозрачная анонимная регистрация
+  - name: Folders
+    description: Управление категориями/папками
+  - name: Bookmarks
+    description: Работа с закладками
+  - name: Search
+    description: Поиск и команды
+  - name: Files
+    description: Работа с файлами
+
+components:
+  securitySchemes:
+    UserIdAuth:
+      type: apiKey
+      in: header
+      name: X-User-ID
+      description: |
+        UUID анонимного пользователя.
+        
+        **Получение:**
+        1. При первом запуске → POST /api/auth/anonymous
+        2. Сохранить userId в Keychain/UserDefaults
+        3. Добавлять ко всем запросам в заголовке X-User-ID
+        
+        **Изоляция данных:**
+        - Каждый пользователь видит только свои документы
+        - Фильтрация по userId на уровне Weaviate
+
+security:
+  - UserIdAuth: []
+
+paths:
+  /api/auth/anonymous:
+    post:
+      tags:
+        - Auth
+      summary: Создать анонимного пользователя
+      description: |
+        **Прозрачная регистрация:**
+        
+        При первом запуске iOS приложение вызывает этот endpoint.
+        Backend генерирует UUID который iOS сохраняет в Keychain.
+        
+        **Workflow:**
+        1. iOS проверяет Keychain/UserDefaults
+        2. Если userId нет → POST /api/auth/anonymous
+        3. Получает userId → сохраняет
+        4. Использует во всех запросах (заголовок X-User-ID)
+        
+        **Безопасность:**
+        - userId в Keychain (защищён iOS)
+        - Данные изолированы по userId
+        - Пользователь не знает об аккаунте
+        
+      security: []  # Не требует auth (это endpoint регистрации)
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deviceInfo:
+                  type: object
+                  description: Информация об устройстве (опционально)
+                  properties:
+                    model:
+                      type: string
+                      example: "iPhone 15 Pro"
+                    systemVersion:
+                      type: string
+                      example: "17.0"
+      responses:
+        '200':
+          description: Анонимный пользователь создан
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  userId:
+                    type: string
+                    format: uuid
+                    description: UUID для хранения в Keychain
+                    example: "550e8400-e29b-41d4-a716-446655440000"
+                  anonymousId:
+                    type: string
+                    format: uuid
+                    description: Дополнительный ID (для отладки)
+                    example: "660e8400-e29b-41d4-a716-446655440111"
+                  message:
+                    type: string
+                    example: "Анонимный пользователь создан"
+
+  /api/folders:
+    get:
+      tags:
+        - Folders
+      summary: Получить список папок/категорий
+      description: Возвращает предопределённый список категорий для сортировки закладок
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  folders:
+                    type: array
+                    items:
+                      type: string
+                    example: ["SelfReflection", "Tasks", "ProjectResources", "Uncategorised"]
+
+  /api/bookmarks:
+    post:
+      tags:
+        - Bookmarks
+      summary: Создать новую закладку
+      security:
+        - UserIdAuth: []
+      parameters:
+        - name: X-User-ID
+          in: header
+          required: false
+          schema:
+            type: string
+            format: uuid
+          description: UUID анонимного пользователя (для изоляции данных)
+          example: "550e8400-e29b-41d4-a716-446655440000"
+      description: |
+        Загружает файл, обрабатывает через AI и сохраняет в систему.
+        
+        **Процесс:**
+        1. Файл загружается в Supabase Storage → получаем URL
+        2. Извлечение контента (Vision для фото, Whisper для аудио/видео)
+        3. Chunking текста (разбиение на части)
+        4. Векторизация chunks через Weaviate + OpenAI
+        5. Weaviate AI создаёт summary
+        6. Автокатегоризация
+        7. Сохранение метаданных в Weaviate
+        
+        **Обработка форматов:**
+        - Изображения: OpenAI Vision → описание содержимого
+        - Аудио: OpenAI Whisper → транскрипция речи
+        - Видео: FFmpeg + Whisper → транскрипция
+        - Текст/PDF/DOCX: извлечение текста
+        
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - content
+                - contentType
+              properties:
+                content:
+                  type: string
+                  description: Текстовый контент или имя файла
+                  example: "photo.jpg"
+                voiceNote:
+                  type: string
+                  description: Заметка пользователя (текст, не голос в веб-версии)
+                  example: "Фото моих коллег по проекту"
+                contentType:
+                  type: string
+                  enum: [text, file]
+                  description: Тип контента
+                  example: "file"
+                category:
+                  type: string
+                  enum: [SelfReflection, Tasks, ProjectResources, Uncategorised]
+                  description: Категория закладки (опционально, по умолчанию Uncategorised)
+                  example: "Tasks"
+                fileName:
+                  type: string
+                  description: Имя файла (опционально)
+                  example: "photo.jpg"
+                file:
+                  type: string
+                  format: binary
+                  description: Бинарные данные файла
+      responses:
+        '200':
+          description: Закладка успешно создана
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Закладка успешно сохранена!"
+                  bookmarkId:
+                    type: string
+                    format: uuid
+                    description: ID созданного документа в Weaviate
+                    example: "c8ae9823-9bb3-48da-a52f-0177f3816855"
+        '500':
+          description: Ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/search:
+    post:
+      tags:
+        - Search
+      summary: Поиск или выполнение команды
+      security:
+        - UserIdAuth: []
+      parameters:
+        - name: X-User-ID
+          in: header
+          required: false
+          schema:
+            type: string
+            format: uuid
+          description: UUID пользователя для фильтрации результатов
+      description: |
+        Универсальный endpoint для поиска и команд.
+        
+        **Определение intent:**
+        - AI анализирует запрос и определяет: SEARCH или COMMAND
+        
+        **SEARCH** (поиск):
+        - Запрос: "найди фото коллег"
+        - Ответ: список найденных элементов (JSON)
+        
+        **COMMAND** (команда):
+        - Запрос: "найди тз И выдели главное жёлтым И вставь фото"
+        - Ответ: сгенерированная HTML страница
+        
+        **Поиск:**
+        - Векторный поиск по chunks (содержимое файлов)
+        - Поиск по AI summary
+        - Поиск по заметкам пользователя
+        - Фильтр по категории (опционально)
+        - Фильтр по релевантности (distance < 0.7)
+        
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - query
+              properties:
+                query:
+                  type: string
+                  description: Запрос пользователя (поиск или команда)
+                  example: "найди тз проекта и выдели жёлтым главные мысли"
+                category:
+                  type: string
+                  nullable: true
+                  enum: [SelfReflection, Tasks, ProjectResources, Uncategorised, null]
+                  description: Фильтр по категории (null = все)
+                  example: null
+                elementId:
+                  type: string
+                  nullable: true
+                  description: ID элемента или категории
+                  example: null
+      responses:
+        '200':
+          description: Результаты поиска или HTML команды
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/SearchResponse'
+                  - $ref: '#/components/schemas/CommandResponse'
+              examples:
+                search:
+                  summary: Результат поиска
+                  value:
+                    intent: "search"
+                    results:
+                      - id: "abc123"
+                        fileName: "photo.jpg"
+                        contentType: "image"
+                        category: "Uncategorised"
+                        summary: "Фото офиса"
+                        voiceNote: "Мои коллеги"
+                        fileUrl: "https://vqlbgcxeahpqfdlsumvz.supabase.co/storage/.../photo.jpg"
+                        distance: 0.45
+                command:
+                  summary: Результат команды
+                  value:
+                    intent: "command"
+                    html: "<!DOCTYPE html>..."
+                    results: []
+
+  /api/bookmarks/{bookmark_id}:
+    get:
+      tags:
+        - Bookmarks
+      summary: Получить закладку по ID
+      description: Возвращает метаданные документа (контент в chunks, доступен отдельно)
+      parameters:
+        - name: bookmark_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID документа в Weaviate
+          example: "c8ae9823-9bb3-48da-a52f-0177f3816855"
+      responses:
+        '200':
+          description: Документ найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bookmark'
+        '404':
+          description: Документ не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Bookmarks
+      summary: Удалить закладку
+      description: |
+        Удаляет:
+        - Документ из Weaviate (Documents collection)
+        - Все chunks документа (Chunks collection)
+        - Файл из Supabase Storage (если есть fileUrl)
+      parameters:
+        - name: bookmark_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Успешно удалено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    example: "Закладка удалена"
+
+  /api/categories/{category}/bookmarks:
+    get:
+      tags:
+        - Bookmarks
+      summary: Получить все закладки категории
+      parameters:
+        - name: category
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [SelfReflection, Tasks, ProjectResources, Uncategorised]
+          example: "Tasks"
+      responses:
+        '200':
+          description: Список закладок
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  category:
+                    type: string
+                  bookmarks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Bookmark'
+
+  /api/download/{bookmark_id}:
+    get:
+      tags:
+        - Files
+      summary: Скачать файл
+      description: |
+        Proxy endpoint для скачивания файлов из Supabase Storage.
+        
+        **Зачем proxy:**
+        - Решает проблему CORS для cross-origin скачивания
+        - Устанавливает правильные заголовки Content-Disposition
+        - Браузер скачивает файл вместо открытия
+        
+      parameters:
+        - name: bookmark_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Файл для скачивания
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+              description: 'attachment; filename="filename.ext"'
+        '404':
+          description: Файл не найден
+
+  /health:
+    get:
+      tags:
+        - System
+      summary: Health check
+      description: Проверка статуса сервиса
+      responses:
+        '200':
+          description: Сервис работает
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "healthy"
+                  weaviate_connected:
+                    type: boolean
+                    example: true
+
+components:
+  schemas:
+    Bookmark:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: UUID документа в Weaviate
+          example: "c8ae9823-9bb3-48da-a52f-0177f3816855"
+        fileName:
+          type: string
+          description: Имя файла
+          example: "photo.jpg"
+        contentType:
+          type: string
+          enum: [text, audio, video, image, file]
+          description: Тип контента
+          example: "image"
+        category:
+          type: string
+          enum: [SelfReflection, Tasks, ProjectResources, Uncategorised]
+          description: Категория (автоопределяется Weaviate AI)
+          example: "ProjectResources"
+        voiceNote:
+          type: string
+          description: Заметка пользователя
+          example: "Фото моих коллег по проекту"
+        fileUrl:
+          type: string
+          format: uri
+          description: URL файла в Supabase Storage
+        summary:
+          type: string
+          description: AI-генерированное описание от Weaviate AI
+          example: "На изображении четыре человека в офисе. Описание рабочей обстановки..."
+        content:
+          type: string
+          description: Фрагмент контента (из chunk при поиске, пустой при get_by_id)
+          example: "На изображении группа..."
+        timestamp:
+          type: string
+          format: date-time
+          description: Дата создания
+          example: "2025-10-15T10:38:53Z"
+        totalChunks:
+          type: integer
+          description: Количество chunks документа
+          example: 4
+        distance:
+          type: number
+          format: float
+          description: Релевантность при поиске (0-1, меньше = релевантнее)
+          example: 0.45
+          minimum: 0
+          maximum: 1
+
+    SearchResponse:
+      type: object
+      properties:
+        intent:
+          type: string
+          enum: [search]
+          example: "search"
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bookmark'
+
+    CommandResponse:
+      type: object
+      properties:
+        intent:
+          type: string
+          enum: [command]
+          example: "command"
+        html:
+          type: string
+          description: Сгенерированная HTML страница с результатом команды
+          example: "<!DOCTYPE html><html>...</html>"
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bookmark'
+          description: Исходные результаты поиска (для отладки)
+
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Описание ошибки
+          example: "500: Не удалось сохранить закладку"
+
+
+
