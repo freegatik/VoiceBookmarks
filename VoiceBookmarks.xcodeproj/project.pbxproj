@@ -1,0 +1,1093 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0C7E60CF84BF69DD74C2FC18 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4424AC2CCFB832932B8AE5C /* Foundation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		115FED91714FEB20F5E73E04 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4424AC2CCFB832932B8AE5C /* Foundation.framework */; };
+		8B3162E3085B94D82070CC0B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4424AC2CCFB832932B8AE5C /* Foundation.framework */; };
+		92FD0808FAF998C9D311476B /* ShareExtensionUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3701F503E9996001372978A /* ShareExtensionUITests.swift */; };
+		C5A7902FB265128873C8296D /* VoiceBookmarksShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8E1B8B132B51A32BFB50847A /* VoiceBookmarksShareExtension.appex */; };
+		D2D2C243A6475CE11F1E28B8 /* ShareExtensionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0ED976EB7C724D92B5858D /* ShareExtensionViewModelTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1DA76A74B4B6D9112210CED9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DBDFE6552EAFF7F4006F25DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BAAF538E8AA0C82435377F64;
+			remoteInfo = VoiceBookmarksShareExtension;
+		};
+		28A4350F9A1CA6C2BA9FC6D8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DBDFE6552EAFF7F4006F25DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DBDFE65C2EAFF7F4006F25DC;
+			remoteInfo = VoiceBookmarks;
+		};
+		D29C0C9CAA5AE251B8BBEC8E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DBDFE6552EAFF7F4006F25DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BAAF538E8AA0C82435377F64;
+			remoteInfo = VoiceBookmarksShareExtension;
+		};
+		DBDFE6712EAFF7F5006F25DC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DBDFE6552EAFF7F4006F25DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DBDFE65C2EAFF7F4006F25DC;
+			remoteInfo = VoiceBookmarks;
+		};
+		DBDFE67B2EAFF7F5006F25DC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DBDFE6552EAFF7F4006F25DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DBDFE65C2EAFF7F4006F25DC;
+			remoteInfo = VoiceBookmarks;
+		};
+		F0BC03A54FEC1E56B5030A83 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DBDFE6552EAFF7F4006F25DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DBDFE65C2EAFF7F4006F25DC;
+			remoteInfo = VoiceBookmarks;
+		};
+		F2A3B4C5D6E7F8A9B0C1D2E3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DBDFE6552EAFF7F4006F25DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BAAF538E8AA0C82435377F64;
+			remoteInfo = VoiceBookmarksShareExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EC13A6BCAD5D28FF97D87BEB /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				C5A7902FB265128873C8296D /* VoiceBookmarksShareExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0865DBE67796EA241B447E52 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = VoiceBookmarksShareExtensionUITests/Info.plist; sourceTree = "<group>"; };
+		3C0ED976EB7C724D92B5858D /* ShareExtensionViewModelTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ShareExtensionViewModelTests.swift; path = VoiceBookmarksShareExtensionTests/ShareExtensionViewModelTests.swift; sourceTree = "<group>"; };
+		5EAB9C170E2DFE7165FA6234 /* VoiceBookmarksShareExtensionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoiceBookmarksShareExtensionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E1B8B132B51A32BFB50847A /* VoiceBookmarksShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = VoiceBookmarksShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		C42B6B6161FBDB60379A4109 /* VoiceBookmarksShareExtensionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoiceBookmarksShareExtensionUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C4424AC2CCFB832932B8AE5C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		DBD125F22EBF77EC003A9EBD /* VoiceBookmarks.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = VoiceBookmarks.xcodeproj; sourceTree = "<group>"; };
+		DBDFE65D2EAFF7F4006F25DC /* VoiceBookmarks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceBookmarks.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBDFE6702EAFF7F5006F25DC /* VoiceBookmarksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoiceBookmarksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBDFE67A2EAFF7F5006F25DC /* VoiceBookmarksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoiceBookmarksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E3701F503E9996001372978A /* ShareExtensionUITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ShareExtensionUITests.swift; path = VoiceBookmarksShareExtensionUITests/ShareExtensionUITests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		DBBCA9DF2EB7E63F00BD0E75 /* Exceptions for "VoiceBookmarks" folder in "VoiceBookmarksShareExtensionTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ViewModels/ShareExtensionViewModel.swift,
+			);
+			target = 5CCE71269F2863DB5AE24313 /* VoiceBookmarksShareExtensionTests */;
+		};
+		DBEE51952EB5142400CD19C5 /* Exceptions for "VoiceBookmarksShareExtension" folder in "VoiceBookmarksShareExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = BAAF538E8AA0C82435377F64 /* VoiceBookmarksShareExtension */;
+		};
+		DBEE524C2EB5158600CD19C5 /* Exceptions for "VoiceBookmarks" folder in "VoiceBookmarksShareExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Models/APIError.swift,
+				Models/Bookmark.swift,
+				Models/ContentType.swift,
+				Persistence/PersistenceController.swift,
+				Services/API/BookmarkService.swift,
+				Services/Core/FileService.swift,
+				Services/Core/GlobalToastManager.swift,
+				Services/Core/KeychainService.swift,
+				Services/Core/LoggerService.swift,
+				Services/Core/NetworkService.swift,
+				Services/Core/OfflineQueueService.swift,
+				Services/Core/RecentHashCache.swift,
+				Utils/Constants.swift,
+				"Utils/Extensions/Color+Theme.swift",
+				Utils/SharedUserDefaults.swift,
+				ViewModels/ShareExtensionViewModel.swift,
+			);
+			target = BAAF538E8AA0C82435377F64 /* VoiceBookmarksShareExtension */;
+		};
+		DBF0A5C12F4F9F9C00E4BC12 /* Exceptions for "VoiceBookmarks" folder in "VoiceBookmarks" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = DBDFE65C2EAFF7F4006F25DC /* VoiceBookmarks */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		361CD1BA03A9F2D38D65BE4C /* VoiceBookmarksShareExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				DBEE51952EB5142400CD19C5 /* Exceptions for "VoiceBookmarksShareExtension" folder in "VoiceBookmarksShareExtension" target */,
+			);
+			path = VoiceBookmarksShareExtension;
+			sourceTree = "<group>";
+		};
+		DBDFE65F2EAFF7F4006F25DC /* VoiceBookmarks */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				DBF0A5C12F4F9F9C00E4BC12 /* Exceptions for "VoiceBookmarks" folder in "VoiceBookmarks" target */,
+				DBEE524C2EB5158600CD19C5 /* Exceptions for "VoiceBookmarks" folder in "VoiceBookmarksShareExtension" target */,
+				DBBCA9DF2EB7E63F00BD0E75 /* Exceptions for "VoiceBookmarks" folder in "VoiceBookmarksShareExtensionTests" target */,
+			);
+			path = VoiceBookmarks;
+			sourceTree = "<group>";
+		};
+		DBDFE6732EAFF7F5006F25DC /* VoiceBookmarksTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = VoiceBookmarksTests;
+			sourceTree = "<group>";
+		};
+		DBDFE67D2EAFF7F5006F25DC /* VoiceBookmarksUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = VoiceBookmarksUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2313FA05F15A2CCEEB2C8BFE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0C7E60CF84BF69DD74C2FC18 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6EEEFC8D17B6798A2DEAB9F7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B3162E3085B94D82070CC0B /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBDFE65A2EAFF7F4006F25DC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBDFE66D2EAFF7F5006F25DC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBDFE6772EAFF7F5006F25DC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FA30138E4EBFD449291FD5C9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				115FED91714FEB20F5E73E04 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0CC6DE8EC0659698BC65884C /* VoiceBookmarksShareExtensionUITests */ = {
+			isa = PBXGroup;
+			children = (
+				0865DBE67796EA241B447E52 /* Info.plist */,
+				E3701F503E9996001372978A /* ShareExtensionUITests.swift */,
+			);
+			name = VoiceBookmarksShareExtensionUITests;
+			sourceTree = "<group>";
+		};
+		7FE900496A2BAF7CDB428115 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				C4424AC2CCFB832932B8AE5C /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		DBD125F32EBF77EC003A9EBD /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DBDFE6542EAFF7F4006F25DC = {
+			isa = PBXGroup;
+			children = (
+				DBDFE65F2EAFF7F4006F25DC /* VoiceBookmarks */,
+				DBDFE6732EAFF7F5006F25DC /* VoiceBookmarksTests */,
+				DBDFE67D2EAFF7F5006F25DC /* VoiceBookmarksUITests */,
+				DBDFE65E2EAFF7F4006F25DC /* Products */,
+				EB8BD2301663868E38B2EC12 /* Frameworks */,
+				361CD1BA03A9F2D38D65BE4C /* VoiceBookmarksShareExtension */,
+				E42FBE3902C48986303796FC /* VoiceBookmarksShareExtensionTests */,
+				0CC6DE8EC0659698BC65884C /* VoiceBookmarksShareExtensionUITests */,
+			);
+			sourceTree = "<group>";
+		};
+		DBDFE65E2EAFF7F4006F25DC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DBDFE65D2EAFF7F4006F25DC /* VoiceBookmarks.app */,
+				DBDFE6702EAFF7F5006F25DC /* VoiceBookmarksTests.xctest */,
+				DBDFE67A2EAFF7F5006F25DC /* VoiceBookmarksUITests.xctest */,
+				8E1B8B132B51A32BFB50847A /* VoiceBookmarksShareExtension.appex */,
+				5EAB9C170E2DFE7165FA6234 /* VoiceBookmarksShareExtensionTests.xctest */,
+				C42B6B6161FBDB60379A4109 /* VoiceBookmarksShareExtensionUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E42FBE3902C48986303796FC /* VoiceBookmarksShareExtensionTests */ = {
+			isa = PBXGroup;
+			children = (
+				3C0ED976EB7C724D92B5858D /* ShareExtensionViewModelTests.swift */,
+			);
+			name = VoiceBookmarksShareExtensionTests;
+			sourceTree = "<group>";
+		};
+		EB8BD2301663868E38B2EC12 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7FE900496A2BAF7CDB428115 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5CCE71269F2863DB5AE24313 /* VoiceBookmarksShareExtensionTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D6E7B89037A03EF820A9AF3 /* Build configuration list for PBXNativeTarget "VoiceBookmarksShareExtensionTests" */;
+			buildPhases = (
+				5347D1FD416C853D20933A43 /* Sources */,
+				6EEEFC8D17B6798A2DEAB9F7 /* Frameworks */,
+				C34D71A1C5F9D95404BBF297 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0B7298975503E6B78AD9EEA5 /* PBXTargetDependency */,
+				0B1B1E26BC9A06DAAFBBDEF0 /* PBXTargetDependency */,
+			);
+			name = VoiceBookmarksShareExtensionTests;
+			productName = VoiceBookmarksShareExtensionTests;
+			productReference = 5EAB9C170E2DFE7165FA6234 /* VoiceBookmarksShareExtensionTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		BAAF538E8AA0C82435377F64 /* VoiceBookmarksShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B48C4DB5E5F9387E932A4B8D /* Build configuration list for PBXNativeTarget "VoiceBookmarksShareExtension" */;
+			buildPhases = (
+				D2971B80C0765EC6E2AA950E /* Sources */,
+				2313FA05F15A2CCEEB2C8BFE /* Frameworks */,
+				967F4F5A3D7EE31718553C20 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				361CD1BA03A9F2D38D65BE4C /* VoiceBookmarksShareExtension */,
+			);
+			name = VoiceBookmarksShareExtension;
+			productName = VoiceBookmarksShareExtension;
+			productReference = 8E1B8B132B51A32BFB50847A /* VoiceBookmarksShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		D7BCF5D917E01BCCFB5654D0 /* VoiceBookmarksShareExtensionUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C1032F3C84EF9BF2202A53FE /* Build configuration list for PBXNativeTarget "VoiceBookmarksShareExtensionUITests" */;
+			buildPhases = (
+				920F8543DF0993E3DD9C2034 /* Sources */,
+				FA30138E4EBFD449291FD5C9 /* Frameworks */,
+				50976EE8E22CBE5189BDC58E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				097CE614210E83BFC181C1F6 /* PBXTargetDependency */,
+			);
+			name = VoiceBookmarksShareExtensionUITests;
+			productName = VoiceBookmarksShareExtensionUITests;
+			productReference = C42B6B6161FBDB60379A4109 /* VoiceBookmarksShareExtensionUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		DBDFE65C2EAFF7F4006F25DC /* VoiceBookmarks */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DBDFE6842EAFF7F5006F25DC /* Build configuration list for PBXNativeTarget "VoiceBookmarks" */;
+			buildPhases = (
+				DBDFE6592EAFF7F4006F25DC /* Sources */,
+				DBDFE65A2EAFF7F4006F25DC /* Frameworks */,
+				DBDFE65B2EAFF7F4006F25DC /* Resources */,
+				EC13A6BCAD5D28FF97D87BEB /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EFB165EF5ED29AE01C27FC5C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				DBDFE65F2EAFF7F4006F25DC /* VoiceBookmarks */,
+			);
+			name = VoiceBookmarks;
+			productName = VoiceBookmarks;
+			productReference = DBDFE65D2EAFF7F4006F25DC /* VoiceBookmarks.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DBDFE66F2EAFF7F5006F25DC /* VoiceBookmarksTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DBDFE6872EAFF7F5006F25DC /* Build configuration list for PBXNativeTarget "VoiceBookmarksTests" */;
+			buildPhases = (
+				DBDFE66C2EAFF7F5006F25DC /* Sources */,
+				DBDFE66D2EAFF7F5006F25DC /* Frameworks */,
+				DBDFE66E2EAFF7F5006F25DC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DBDFE6722EAFF7F5006F25DC /* PBXTargetDependency */,
+				F3B4C5D6E7F8A9B0C1D2E3F4 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				DBDFE6732EAFF7F5006F25DC /* VoiceBookmarksTests */,
+			);
+			name = VoiceBookmarksTests;
+			productName = VoiceBookmarksTests;
+			productReference = DBDFE6702EAFF7F5006F25DC /* VoiceBookmarksTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		DBDFE6792EAFF7F5006F25DC /* VoiceBookmarksUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DBDFE68A2EAFF7F5006F25DC /* Build configuration list for PBXNativeTarget "VoiceBookmarksUITests" */;
+			buildPhases = (
+				DBDFE6762EAFF7F5006F25DC /* Sources */,
+				DBDFE6772EAFF7F5006F25DC /* Frameworks */,
+				DBDFE6782EAFF7F5006F25DC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DBDFE67C2EAFF7F5006F25DC /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				DBDFE67D2EAFF7F5006F25DC /* VoiceBookmarksUITests */,
+			);
+			name = VoiceBookmarksUITests;
+			productName = VoiceBookmarksUITests;
+			productReference = DBDFE67A2EAFF7F5006F25DC /* VoiceBookmarksUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DBDFE6552EAFF7F4006F25DC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 2610;
+				TargetAttributes = {
+					DBDFE65C2EAFF7F4006F25DC = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					DBDFE66F2EAFF7F5006F25DC = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = DBDFE65C2EAFF7F4006F25DC;
+					};
+					DBDFE6792EAFF7F5006F25DC = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = DBDFE65C2EAFF7F4006F25DC;
+					};
+				};
+			};
+			buildConfigurationList = DBDFE6582EAFF7F4006F25DC /* Build configuration list for PBXProject "VoiceBookmarks" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DBDFE6542EAFF7F4006F25DC;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = DBDFE65E2EAFF7F4006F25DC /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = DBD125F32EBF77EC003A9EBD /* Products */;
+					ProjectRef = DBD125F22EBF77EC003A9EBD /* VoiceBookmarks.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				DBDFE65C2EAFF7F4006F25DC /* VoiceBookmarks */,
+				DBDFE66F2EAFF7F5006F25DC /* VoiceBookmarksTests */,
+				DBDFE6792EAFF7F5006F25DC /* VoiceBookmarksUITests */,
+				BAAF538E8AA0C82435377F64 /* VoiceBookmarksShareExtension */,
+				5CCE71269F2863DB5AE24313 /* VoiceBookmarksShareExtensionTests */,
+				D7BCF5D917E01BCCFB5654D0 /* VoiceBookmarksShareExtensionUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		50976EE8E22CBE5189BDC58E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		967F4F5A3D7EE31718553C20 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C34D71A1C5F9D95404BBF297 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBDFE65B2EAFF7F4006F25DC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBDFE66E2EAFF7F5006F25DC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBDFE6782EAFF7F5006F25DC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5347D1FD416C853D20933A43 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D2D2C243A6475CE11F1E28B8 /* ShareExtensionViewModelTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		920F8543DF0993E3DD9C2034 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				92FD0808FAF998C9D311476B /* ShareExtensionUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D2971B80C0765EC6E2AA950E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBDFE6592EAFF7F4006F25DC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBDFE66C2EAFF7F5006F25DC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBDFE6762EAFF7F5006F25DC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		097CE614210E83BFC181C1F6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = VoiceBookmarks;
+			target = DBDFE65C2EAFF7F4006F25DC /* VoiceBookmarks */;
+			targetProxy = 28A4350F9A1CA6C2BA9FC6D8 /* PBXContainerItemProxy */;
+		};
+		0B1B1E26BC9A06DAAFBBDEF0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DBDFE65C2EAFF7F4006F25DC /* VoiceBookmarks */;
+			targetProxy = F0BC03A54FEC1E56B5030A83 /* PBXContainerItemProxy */;
+		};
+		0B7298975503E6B78AD9EEA5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = VoiceBookmarksShareExtension;
+			target = BAAF538E8AA0C82435377F64 /* VoiceBookmarksShareExtension */;
+			targetProxy = 1DA76A74B4B6D9112210CED9 /* PBXContainerItemProxy */;
+		};
+		DBDFE6722EAFF7F5006F25DC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DBDFE65C2EAFF7F4006F25DC /* VoiceBookmarks */;
+			targetProxy = DBDFE6712EAFF7F5006F25DC /* PBXContainerItemProxy */;
+		};
+		DBDFE67C2EAFF7F5006F25DC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DBDFE65C2EAFF7F4006F25DC /* VoiceBookmarks */;
+			targetProxy = DBDFE67B2EAFF7F5006F25DC /* PBXContainerItemProxy */;
+		};
+		EFB165EF5ED29AE01C27FC5C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = VoiceBookmarksShareExtension;
+			target = BAAF538E8AA0C82435377F64 /* VoiceBookmarksShareExtension */;
+			targetProxy = D29C0C9CAA5AE251B8BBEC8E /* PBXContainerItemProxy */;
+		};
+		F3B4C5D6E7F8A9B0C1D2E3F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BAAF538E8AA0C82435377F64 /* VoiceBookmarksShareExtension */;
+			targetProxy = F2A3B4C5D6E7F8A9B0C1D2E3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		033934B6D964CC927CD1FE07 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 92U4GXDCD4;
+				DISABLE_APP_INTENTS_METADATA_EXTRACTION = YES;
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = VoiceBookmarksShareExtensionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_INCLUDE_PATHS = "$(BUILT_PRODUCTS_DIR) $(BUILT_PRODUCTS_DIR)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				VALIDATE_PRODUCT = YES;
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Release;
+		};
+		2D5DDC6E33341A6A14802CA1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = VoiceBookmarksShareExtension/VoiceBookmarksShareExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 92U4GXDCD4;
+				DISABLE_APP_INTENTS_METADATA_EXTRACTION = YES;
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = VoiceBookmarksShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.voicebookmarks.app.ShareExtension;
+				PRODUCT_NAME = VoiceBookmarksShareExtension;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		4C27F5D9667DF65989169617 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				DEVELOPMENT_TEAM = 92U4GXDCD4;
+				ENABLE_TESTABILITY = YES;
+				INFOPLIST_FILE = VoiceBookmarksShareExtensionUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.voicebookmarks.VoiceBookmarksShareExtensionUITests;
+				PRODUCT_NAME = VoiceBookmarksShareExtensionUITests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = VoiceBookmarks;
+			};
+			name = Debug;
+		};
+		ABC060EEAAE01CFC2FB654DF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = VoiceBookmarksShareExtension/VoiceBookmarksShareExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 92U4GXDCD4;
+				DISABLE_APP_INTENTS_METADATA_EXTRACTION = YES;
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = VoiceBookmarksShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.voicebookmarks.app.ShareExtension;
+				PRODUCT_NAME = VoiceBookmarksShareExtension;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		ABE0BDF2775AB38AD20241F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 92U4GXDCD4;
+				DISABLE_APP_INTENTS_METADATA_EXTRACTION = YES;
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = VoiceBookmarksShareExtensionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_INCLUDE_PATHS = "$(BUILT_PRODUCTS_DIR) $(BUILT_PRODUCTS_DIR)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Debug;
+		};
+		DBDFE6822EAFF7F5006F25DC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 92U4GXDCD4;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		DBDFE6832EAFF7F5006F25DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 92U4GXDCD4;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		DBDFE6852EAFF7F5006F25DC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = VoiceBookmarks/VoiceBookmarks.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 92U4GXDCD4;
+				DISABLE_APP_INTENTS_METADATA_EXTRACTION = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = VoiceBookmarks/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.voicebookmarks.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Debug;
+		};
+		DBDFE6862EAFF7F5006F25DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = VoiceBookmarks/VoiceBookmarks.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 92U4GXDCD4;
+				DISABLE_APP_INTENTS_METADATA_EXTRACTION = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = VoiceBookmarks/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.voicebookmarks.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Release;
+		};
+		DBDFE6882EAFF7F5006F25DC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 92U4GXDCD4;
+				DISABLE_APP_INTENTS_METADATA_EXTRACTION = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = VoiceBookmarksTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VoiceBookmarks.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VoiceBookmarks";
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Debug;
+		};
+		DBDFE6892EAFF7F5006F25DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 92U4GXDCD4;
+				DISABLE_APP_INTENTS_METADATA_EXTRACTION = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = VoiceBookmarksTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VoiceBookmarks.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VoiceBookmarks";
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Release;
+		};
+		DBDFE68B2EAFF7F5006F25DC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 92U4GXDCD4;
+				DISABLE_APP_INTENTS_METADATA_EXTRACTION = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = VoiceBookmarksUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_TARGET_NAME = VoiceBookmarks;
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Debug;
+		};
+		DBDFE68C2EAFF7F5006F25DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 92U4GXDCD4;
+				DISABLE_APP_INTENTS_METADATA_EXTRACTION = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = VoiceBookmarksUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_TARGET_NAME = VoiceBookmarks;
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Release;
+		};
+		E09D4F305FF9183EEB8EE8DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				DEVELOPMENT_TEAM = 92U4GXDCD4;
+				ENABLE_TESTABILITY = YES;
+				INFOPLIST_FILE = VoiceBookmarksShareExtensionUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.voicebookmarks.VoiceBookmarksShareExtensionUITests;
+				PRODUCT_NAME = VoiceBookmarksShareExtensionUITests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = VoiceBookmarks;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2D6E7B89037A03EF820A9AF3 /* Build configuration list for PBXNativeTarget "VoiceBookmarksShareExtensionTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				033934B6D964CC927CD1FE07 /* Release */,
+				ABE0BDF2775AB38AD20241F4 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B48C4DB5E5F9387E932A4B8D /* Build configuration list for PBXNativeTarget "VoiceBookmarksShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ABC060EEAAE01CFC2FB654DF /* Release */,
+				2D5DDC6E33341A6A14802CA1 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C1032F3C84EF9BF2202A53FE /* Build configuration list for PBXNativeTarget "VoiceBookmarksShareExtensionUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E09D4F305FF9183EEB8EE8DC /* Release */,
+				4C27F5D9667DF65989169617 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DBDFE6582EAFF7F4006F25DC /* Build configuration list for PBXProject "VoiceBookmarks" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DBDFE6822EAFF7F5006F25DC /* Debug */,
+				DBDFE6832EAFF7F5006F25DC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DBDFE6842EAFF7F5006F25DC /* Build configuration list for PBXNativeTarget "VoiceBookmarks" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DBDFE6852EAFF7F5006F25DC /* Debug */,
+				DBDFE6862EAFF7F5006F25DC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DBDFE6872EAFF7F5006F25DC /* Build configuration list for PBXNativeTarget "VoiceBookmarksTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DBDFE6882EAFF7F5006F25DC /* Debug */,
+				DBDFE6892EAFF7F5006F25DC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DBDFE68A2EAFF7F5006F25DC /* Build configuration list for PBXNativeTarget "VoiceBookmarksUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DBDFE68B2EAFF7F5006F25DC /* Debug */,
+				DBDFE68C2EAFF7F5006F25DC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DBDFE6552EAFF7F4006F25DC /* Project object */;
+}
