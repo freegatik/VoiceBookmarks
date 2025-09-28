@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Замените на ваш App Group identifier перед использованием -->
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.com.yourcompany.yourapp</string>
+	</array>
+	<!-- Замените на ваш bundle identifier перед использованием -->
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)com.yourcompany.yourapp</string>
+	</array>
+</dict>
+</plist>
