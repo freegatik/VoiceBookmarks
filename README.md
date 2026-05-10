@@ -76,7 +76,7 @@ open VoiceBookmarks.xcodeproj
    
    Откройте `VoiceBookmarks/Utils/Constants.swift` и замените:
    ```swift
-   static let baseURL = "https://your-api-server.com"
+   static let baseURL = "https://minds.myapp.fund/weaviate"
    ```
    на адрес вашего API сервера.
 
@@ -159,7 +159,7 @@ open VoiceBookmarks.xcodeproj
 
 ### Базовые настройки
 
-- **Base URL**: Настраивается в `Constants.swift` (по умолчанию: `https://your-api-server.com`)
+- **Base URL**: Настраивается в `Constants.swift` (по умолчанию: `https://minds.myapp.fund/weaviate`)
 - **Авторизация**: Header `X-User-ID` с UUID пользователя
 - **Timeout**: 30 секунд
 - **Retry**: до 3 попыток с задержкой 1 секунда
@@ -385,7 +385,7 @@ VoiceBookmarks/
 
 Перед публикацией в публичный репозиторий все чувствительные данные заменены на placeholder значения:
 
-- API Base URL: `https://your-api-server.com` (замените на ваш сервер)
+- API Base URL: `https://minds.myapp.fund/weaviate`
 - App Group Identifier: `group.com.yourcompany.yourapp` (замените на ваш)
 - Keychain Service: `com.yourcompany.yourapp.keychain` (замените на ваш bundle identifier)
 - URL Scheme: `yourapp` (замените на ваш)

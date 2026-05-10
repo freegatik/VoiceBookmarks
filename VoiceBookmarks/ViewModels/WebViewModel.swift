@@ -2,14 +2,14 @@
 //  WebViewModel.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
 import Foundation
 import Combine
 import SwiftUI
+
+// MARK: - WebViewModel
 
 class WebViewModel: ObservableObject {
     
@@ -85,14 +85,14 @@ class WebViewModel: ObservableObject {
                         logger.warning("Таймаут загрузки контента (20 сек), принудительно завершаем", category: .webview)
                         isLoading = false
                         if loadError == nil {
-                            loadError = "Таймаут загрузки контента. Проверьте подключение к интернету."
+                            loadError = "Content load timed out. Check your network connection."
                         }
                     }
                 }
             }
         } else if !isAsyncLoad {
                 isLoading = false
-            loadError = "Не удалось подготовить контент для отображения"
+            loadError = "Could not prepare content for display"
         }
         
         return contentURL
@@ -137,13 +137,14 @@ class WebViewModel: ObservableObject {
                                     self.htmlContent = htmlString
                                     let newFileURL = self.createHTMLFile(from: htmlString)
                                     self.currentHTMLFileURL = newFileURL
-                                    self.contentURL = newFileURL // Обновляем contentURL для обновления WebView
+                                    self.contentURL = newFileURL
+
                                 }
                             } else {
                                 logger.error("Не удалось декодировать HTML с URL", category: .webview)
                             }
                         } catch {
-                            logger.error("Ошибка загрузки HTML с URL: \(error)", category: .webview)
+                            logger.error("Error загрузки HTML с URL: \(error)", category: .webview)
                         }
                     }
                     
@@ -193,7 +194,7 @@ class WebViewModel: ObservableObject {
                         }
                     }
                 } catch {
-                    logger.error("Ошибка загрузки HTML файла с сервера: \(error). fileUrl: \(bookmark.fileUrl ?? "отсутствует")", category: .webview)
+                    logger.error("Error загрузки HTML файла с сервера: \(error). fileUrl: \(bookmark.fileUrl ?? "отсутствует")", category: .webview)
                     await MainActor.run {
                         self.useFallbackHTMLContent(for: bookmark, error: error)
                     }
@@ -252,9 +253,11 @@ class WebViewModel: ObservableObject {
                     
                     let timeout: UInt64
                     if bookmark.contentType == .video || bookmark.contentType == .audio {
-                        timeout = 30_000_000_000 // 30 секунд для видео и аудио
+                        timeout = 30_000_000_000
+
                     } else {
-                        timeout = 15_000_000_000 // 15 секунд для остальных типов файлов
+                        timeout = 15_000_000_000
+
                     }
                     
                     let downloadTask = Task {
@@ -326,7 +329,7 @@ class WebViewModel: ObservableObject {
                                         shouldUseFallback = true
                                             logger.warning("Текстовый файл не найден на сервере (HTTP \(statusCode)): bookmarkId=\(bookmark.id), fileName=\(bookmark.fileName), используем fallback", category: .webview)
                                         } else {
-                                            errorMessage = "Ошибка загрузки файла (HTTP \(statusCode))"
+                                            errorMessage = "Error загрузки файла (HTTP \(statusCode))"
                                         }
                                     }
                                     else if case .serverError(let message) = apiError {
@@ -335,7 +338,7 @@ class WebViewModel: ObservableObject {
                                             errorMessage = "Файл не найден на сервере. Возможно, файл не был загружен при создании закладки."
                                             logger.warning("Файл не найден на сервере (serverError: \(message)): bookmarkId=\(bookmark.id), fileName=\(bookmark.fileName), fileUrl=\(bookmark.fileUrl ?? "отсутствует"), используем fallback", category: .webview)
                                         } else {
-                                            errorMessage = "Ошибка сервера: \(message)"
+                                            errorMessage = "Error сервера: \(message)"
                                         }
                                     }
                                     else if case .networkError = apiError {
@@ -343,7 +346,7 @@ class WebViewModel: ObservableObject {
                                         logger.warning("Сетевая ошибка при загрузке файла: bookmarkId=\(bookmark.id), используем fallback", category: .webview)
                                     }
                                     else {
-                                        errorMessage = "Ошибка загрузки: \(error.localizedDescription)"
+                                        errorMessage = "Error загрузки: \(error.localizedDescription)"
                                     }
                                 } else {
                                     shouldUseFallback = true
@@ -442,7 +445,7 @@ class WebViewModel: ObservableObject {
                             self.updateImageContent(with: dataURL, for: bookmark)
                         }
                     } catch {
-                        logger.error("Ошибка загрузки изображения: \(error)", category: .webview)
+                        logger.error("Error загрузки изображения: \(error)", category: .webview)
                         await MainActor.run {
                             self.useFallbackImageContent(for: bookmark)
                         }
@@ -465,7 +468,7 @@ class WebViewModel: ObservableObject {
                     justify-content: center; 
                     align-items: center; 
                   }
-                </style></head><body><p>Загрузка изображения...</p></body></html>
+                </style></head><body><p>Loading image...</p></body></html>
                 """
                 htmlContent = html
                 let fileURL = createHTMLFile(from: html)
@@ -539,7 +542,7 @@ class WebViewModel: ObservableObject {
                                     self.updateImageContent(with: dataURL, for: bookmark)
                                 }
                             } catch {
-                                logger.error("Ошибка загрузки изображения с сервера: \(error)", category: .webview)
+                                logger.error("Error загрузки изображения с сервера: \(error)", category: .webview)
                                 await MainActor.run {
                                     self.useFallbackImageContent(for: bookmark)
                                 }
@@ -562,7 +565,7 @@ class WebViewModel: ObservableObject {
                             justify-content: center; 
                             align-items: center; 
                           }
-                        </style></head><body><p>Загрузка изображения...</p></body></html>
+                        </style></head><body><p>Loading image...</p></body></html>
                         """
                         htmlContent = html
                         let fileURL = createHTMLFile(from: html)
@@ -613,7 +616,7 @@ class WebViewModel: ObservableObject {
                                 self.updateImageContent(with: dataURL, for: bookmark)
                             }
                         } catch {
-                            logger.error("Ошибка загрузки изображения из URL: \(error)", category: .webview)
+                            logger.error("Error загрузки изображения из URL: \(error)", category: .webview)
                             await MainActor.run {
                                 self.useFallbackImageContent(for: bookmark)
                             }
@@ -636,7 +639,7 @@ class WebViewModel: ObservableObject {
                         justify-content: center; 
                         align-items: center; 
                       }
-                    </style></head><body><p>Загрузка изображения...</p></body></html>
+                    </style></head><body><p>Loading image...</p></body></html>
                     """
                     htmlContent = html
                     let fileURL = createHTMLFile(from: html)
@@ -751,7 +754,7 @@ class WebViewModel: ObservableObject {
                         self.isLoading = false
                     }
                 } catch {
-                    logger.error("Ошибка загрузки PDF: \(error)", category: .webview)
+                    logger.error("Error загрузки PDF: \(error)", category: .webview)
                     await MainActor.run {
                         if let apiError = error as? APIError {
                             if case .httpError(let statusCode) = apiError, statusCode == 404 || statusCode == 500 {
@@ -806,7 +809,7 @@ class WebViewModel: ObservableObject {
                             logger.info("contentURL обновлен на локальный аудио файл: \(tempURL.lastPathComponent)", category: .webview)
                         }
                     } catch {
-                        logger.error("Ошибка загрузки аудио с сервера: \(error)", category: .webview)
+                        logger.error("Error загрузки аудио с сервера: \(error)", category: .webview)
                         await MainActor.run {
                             if let apiError = error as? APIError {
                                 if case .httpError(let statusCode) = apiError, statusCode == 404 || statusCode == 500 {
@@ -852,7 +855,7 @@ class WebViewModel: ObservableObject {
                             logger.info("contentURL обновлен на локальный видео файл: \(tempURL.lastPathComponent)", category: .webview)
                         }
                     } catch {
-                        logger.error("Ошибка загрузки видео с сервера: \(error)", category: .webview)
+                        logger.error("Error загрузки видео с сервера: \(error)", category: .webview)
                         await MainActor.run {
                             if let apiError = error as? APIError {
                                 if case .httpError(let statusCode) = apiError, statusCode == 404 || statusCode == 500 {
@@ -917,7 +920,7 @@ class WebViewModel: ObservableObject {
                                 logger.error("Не удалось декодировать HTML с URL из content", category: .webview)
                             }
                         } catch {
-                            logger.error("Ошибка загрузки HTML с URL из content: \(error)", category: .webview)
+                            logger.error("Error загрузки HTML с URL из content: \(error)", category: .webview)
                         }
                     }
                     
@@ -1073,7 +1076,7 @@ class WebViewModel: ObservableObject {
                                 }
                             }
                         } catch {
-                            logger.error("Ошибка загрузки PDF с fileUrl: \(error), используем download endpoint", category: .webview)
+                            logger.error("Error загрузки PDF с fileUrl: \(error), используем download endpoint", category: .webview)
                         }
                     }
                     
@@ -1101,7 +1104,7 @@ class WebViewModel: ObservableObject {
                         logger.info("contentURL обновлен на локальный PDF файл: \(tempURL.lastPathComponent)", category: .webview)
                     }
                 } catch {
-                        logger.error("Ошибка загрузки PDF с сервера: \(error)", category: .webview)
+                        logger.error("Error загрузки PDF с сервера: \(error)", category: .webview)
                         await MainActor.run {
                             if let apiError = error as? APIError {
                                 if case .httpError(let statusCode) = apiError, statusCode == 404 || statusCode == 500 {
@@ -1180,7 +1183,7 @@ class WebViewModel: ObservableObject {
                             await self.fallbackDownloadHTML(bookmarkId: bookmark.id)
                         }
                     } catch {
-                        logger.error("Ошибка загрузки HTML с URL: \(error)", category: .webview)
+                        logger.error("Error загрузки HTML с URL: \(error)", category: .webview)
                         await self.fallbackDownloadHTML(bookmarkId: bookmark.id)
                     }
                 }
@@ -1273,7 +1276,7 @@ class WebViewModel: ObservableObject {
                             logger.info("contentURL обновлен на локальный аудио файл: \(tempURL.lastPathComponent)", category: .webview)
                         }
                     } catch {
-                        logger.error("Ошибка загрузки аудио с сервера: \(error)", category: .webview)
+                        logger.error("Error загрузки аудио с сервера: \(error)", category: .webview)
                         await MainActor.run {
                             self.loadError = "Не удалось загрузить аудио файл: \(error.localizedDescription)"
                             self.isLoading = false
@@ -1341,7 +1344,7 @@ class WebViewModel: ObservableObject {
                             logger.info("contentURL обновлен на локальный видео файл: \(tempURL.lastPathComponent)", category: .webview)
                         }
                     } catch {
-                        logger.error("Ошибка загрузки видео с сервера: \(error)", category: .webview)
+                        logger.error("Error загрузки видео с сервера: \(error)", category: .webview)
                         await MainActor.run {
                             self.loadError = "Не удалось загрузить видео файл: \(error.localizedDescription)"
                             self.isLoading = false
@@ -1436,7 +1439,7 @@ class WebViewModel: ObservableObject {
                             }
                         }
                     } catch {
-                        logger.error("Ошибка загрузки текстового файла с сервера: \(error)", category: .webview)
+                        logger.error("Error загрузки текстового файла с сервера: \(error)", category: .webview)
                         await MainActor.run {
                             if let apiError = error as? APIError {
                                 if case .httpError(let statusCode) = apiError, statusCode == 404 || statusCode == 500 {
@@ -1488,8 +1491,9 @@ class WebViewModel: ObservableObject {
         return url
     }
 
-    
-    /// Заголовки авторизации для защищенных URL (наш домен API)
+    // MARK: - API headers
+
+    /// Headers for loading assets from our API origin (authenticated downloads).
     func requestHeaders(for url: URL) -> [String: String]? {
         guard let host = URL(string: Constants.API.baseURL)?.host,
               url.host == host,
@@ -1499,8 +1503,9 @@ class WebViewModel: ObservableObject {
         return [Constants.API.Headers.userID: userId]
     }
     
-    
-    /// Подготовка HTML контента для команды: удаление дубликатов изображений и создание файла
+    // MARK: - Command HTML
+
+    /// Dedupe embedded images and persist command HTML for preview.
     private func prepareHTMLContent(html: String) -> URL? {
         logger.info("Создание HTML файла для команды, размер HTML: \(html.count) символов", category: .webview)
         
@@ -1553,8 +1558,10 @@ class WebViewModel: ObservableObject {
         for match in matches {
             guard match.numberOfRanges >= 2 else { continue }
             
-            let fullRange = match.range(at: 0) // Полный тег <img>
-            let srcRange = match.range(at: 1) // Значение src атрибута
+            let fullRange = match.range(at: 0)
+
+            let srcRange = match.range(at: 1)
+
             
             guard srcRange.location != NSNotFound else { continue }
             
@@ -1649,7 +1656,7 @@ class WebViewModel: ObservableObject {
             logger.info("HTML файл создан: \(fileURL.path) (запись заняла \(String(format: "%.3f", writeDuration))с, размер: \(html.count) символов)", category: .webview)
                 return fileURL
             } catch {
-                logger.error("Ошибка создания HTML файла: \(error)", category: .webview)
+                logger.error("Error создания HTML файла: \(error)", category: .webview)
                 loadError = "Не удалось создать HTML файл"
                 return nil
         }
@@ -1792,7 +1799,8 @@ class WebViewModel: ObservableObject {
                     self.htmlContent = htmlString
                     let newFileURL = self.createHTMLFile(from: htmlString)
                     self.currentHTMLFileURL = newFileURL
-                    self.contentURL = newFileURL // Обновляем contentURL для обновления WebView
+                    self.contentURL = newFileURL
+
                     logger.info("HTML файл загружен через /api/download и сохранен в локальный файл", category: .webview)
                 }
             } else {
@@ -1803,7 +1811,7 @@ class WebViewModel: ObservableObject {
                 }
             }
         } catch {
-            logger.error("Ошибка загрузки HTML файла через /api/download: \(error)", category: .webview)
+            logger.error("Error загрузки HTML файла через /api/download: \(error)", category: .webview)
             await MainActor.run {
                 self.loadError = "Не удалось загрузить HTML файл: \(error.localizedDescription)"
                 self.isLoading = false
@@ -1824,12 +1832,12 @@ class WebViewModel: ObservableObject {
                     if !hasFileUrl {
                         errorMessage = "Файл недоступен: отсутствует ссылка на файл. Возможно, файл не был корректно сохранен при создании закладки."
                     } else {
-                        errorMessage = "Ошибка сервера при загрузке файла"
+                        errorMessage = "Error сервера при загрузке файла"
                     }
                 } else if statusCode == 404 {
                     errorMessage = "Файл не найден на сервере"
                 } else {
-                    errorMessage = "Ошибка загрузки (код: \(statusCode))"
+                    errorMessage = "Error загрузки (код: \(statusCode))"
                 }
             case .serverError(let message):
                 errorMessage = message
@@ -1842,9 +1850,9 @@ class WebViewModel: ObservableObject {
         
         var content = errorMessage
         if let summary = bookmark.summary, !summary.isEmpty {
-            content = "\(errorMessage)\n\nОписание:\n\(summary)"
+            content = "\(errorMessage)\n\nDescription:\n\(summary)"
         } else if let voiceNote = bookmark.voiceNote, !voiceNote.isEmpty {
-            content = "\(errorMessage)\n\nЗаметка:\n\(voiceNote)"
+            content = "\(errorMessage)\n\nNote:\n\(voiceNote)"
         }
         
         let escapedContent = content
@@ -2008,8 +2016,9 @@ class WebViewModel: ObservableObject {
         currentHTMLFileURL = newFileURL
     }
     
-    
-    /// Подготовка данных для Share sheet: URL файла, имя, описание или HTML команды
+    // MARK: - Share / Files / Delete
+
+    /// Builds items for the system share sheet (file URL or raw HTML).
     func handleShareAction() {
         logger.info("Открытие Share sheet", category: .ui)
         
@@ -2047,8 +2056,8 @@ class WebViewModel: ObservableObject {
                 showDocumentPicker = true
                 
             } catch {
-                loadError = "Ошибка подготовки файла: \(error.localizedDescription)"
-                logger.error("Ошибка подготовки файла для сохранения: \(error)", category: .ui)
+                loadError = "Error подготовки файла: \(error.localizedDescription)"
+                logger.error("Error подготовки файла для сохранения: \(error)", category: .ui)
             }
         }
     }
@@ -2113,14 +2122,15 @@ class WebViewModel: ObservableObject {
             
         } catch {
             await MainActor.run {
-                loadError = "Ошибка удаления: \(error.localizedDescription)"
-                logger.error("Ошибка удаления закладки: \(error)", category: .network)
+                loadError = "Delete failed: \(error.localizedDescription)"
+                logger.error("Error удаления закладки: \(error)", category: .network)
                 isDeleting = false
             }
         }
     }
     
-    
+    // MARK: - Web lifecycle
+
     func loadingDidFinish() {
         isLoading = false
         logger.info("Контент загружен в WebView", category: .webview)
@@ -2138,7 +2148,7 @@ class WebViewModel: ObservableObject {
         }
         
         loadError = error.localizedDescription
-        logger.error("Ошибка загрузки в WebView: \(error)", category: .webview)
+        logger.error("Error загрузки в WebView: \(error)", category: .webview)
     }
     
     func cleanup() {
@@ -2146,4 +2156,3 @@ class WebViewModel: ObservableObject {
         logger.debug("WebViewModel cleanup: ресурсы освобождены", category: .webview)
     }
 }
-

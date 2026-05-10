@@ -2,8 +2,6 @@
 //  WebContentView.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -27,7 +25,7 @@ struct WebContentView: View {
                         .offset(dragOffset)
                         .overlay {
                             if viewModel.isLoading {
-                                LoadingView(message: "Загрузка...")
+                                LoadingView(message: "Loading...")
                                     .background(Color.appBackground.opacity(0.9))
                             }
                         }
@@ -37,7 +35,7 @@ struct WebContentView: View {
                         retryAction: nil
                     )
                 } else {
-                    LoadingView(message: "Подготовка контента...")
+                    LoadingView(message: "Preparing content...")
                 }
             }
             .navigationTitle(viewModel.content.title)
@@ -54,20 +52,20 @@ struct WebContentView: View {
                         Button {
                             viewModel.handleSaveToFiles()
                         } label: {
-                            Label("Сохранить в Файлы", systemImage: "arrow.down.doc")
+                            Label("Save to Files", systemImage: "arrow.down.doc")
                         }
                         
                         Button {
                             viewModel.handleShareAction()
                         } label: {
-                            Label("Поделиться", systemImage: "square.and.arrow.up")
+                            Label("Share", systemImage: "square.and.arrow.up")
                         }
                         
                         if viewModel.content.canDelete {
                             Button(role: .destructive) {
                                 viewModel.handleDeleteAction()
                             } label: {
-                                Label("Удалить", systemImage: "trash")
+                                Label("Delete", systemImage: "trash")
                             }
                         }
                     } label: {
@@ -86,7 +84,8 @@ struct WebContentView: View {
                         
                         let horizontalSwipe = abs(value.translation.width) > abs(value.translation.height)
                         if horizontalSwipe && value.translation.width > 0 {
-                            let limitedWidth = min(value.translation.width, 120) // Ограничиваем до 120px
+                            let limitedWidth = min(value.translation.width, 120)
+
                             if limitedWidth.isFinite {
                             dragOffset = CGSize(width: limitedWidth, height: 0)
                             } else {
@@ -107,18 +106,18 @@ struct WebContentView: View {
             ShareSheet(items: viewModel.itemsToShare)
         }
         .confirmationDialog(
-            "Удалить закладку?",
+            "Delete bookmark?",
             isPresented: $viewModel.showDeleteConfirmation,
             titleVisibility: .visible
         ) {
-            Button("Удалить", role: .destructive) {
+            Button("Delete", role: .destructive) {
                 Task {
                     await viewModel.confirmDelete()
                 }
             }
-            Button("Отмена", role: .cancel) {}
+            Button("Cancel", role: .cancel) {}
         } message: {
-            Text("Это действие нельзя отменить")
+            Text("This action cannot be undone")
         }
         .onChange(of: viewModel.shouldDismiss) { shouldDismiss in
             if shouldDismiss {
@@ -225,7 +224,8 @@ struct WebContentView: View {
                         viewModel.loadingDidFail(error: error)
                     }
                 )
-                .id(url.absoluteString) // Принудительно пересоздаем view при изменении URL
+                .id(url.absoluteString)
+
             case .file:
                 let ext = url.pathExtension.lowercased()
                 if ext == "pdf" {
@@ -324,4 +324,3 @@ extension WebViewContent {
         }
     }
 }
-

@@ -2,8 +2,6 @@
 //  NetworkService.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -45,8 +43,8 @@ class NetworkService {
     /// Использует URLComponents и percent encoding для корректной обработки русских символов
     private func buildURL(endpoint: String) throws -> URL {
         guard let baseURLComponents = URLComponents(string: baseURL) else {
-            logger.error("Неверный baseURL: \(baseURL)", category: .network)
-            throw APIError.serverError(message: "Неверный baseURL")
+            logger.error("Invalid base URL: \(baseURL)", category: .network)
+            throw APIError.serverError(message: "Invalid base URL")
         }
         
         let normalizedEndpoint = endpoint.hasPrefix("/") ? String(endpoint.dropFirst()) : endpoint
@@ -78,8 +76,8 @@ class NetworkService {
         logger.debug("URL сформирован: \(urlComponents.url?.absoluteString ?? "nil"), исходный endpoint: \(endpoint)", category: .network)
         
         guard let url = urlComponents.url else {
-            logger.error("Неверный URL: baseURL=\(baseURL), endpoint=\(endpoint)", category: .network)
-            throw APIError.serverError(message: "Неверный URL")
+            logger.error("Invalid URL: baseURL=\(baseURL), endpoint=\(endpoint)", category: .network)
+            throw APIError.serverError(message: "Invalid URL")
         }
         
         return url
@@ -119,7 +117,7 @@ class NetworkService {
                 request.httpBody = try JSONEncoder().encode(body)
                 logger.debug("Body размер: \(request.httpBody?.count ?? 0) байт", category: .network)
             } catch {
-                logger.error("Ошибка кодирования body в JSON: \(error)", category: .network)
+                logger.error("Error кодирования body в JSON: \(error)", category: .network)
                 throw APIError.decodingError(error)
             }
         }
@@ -138,7 +136,7 @@ class NetworkService {
                 
                 guard let httpResponse = response as? HTTPURLResponse else {
                     logger.error("Ответ не является HTTPURLResponse", category: .network)
-                    throw APIError.serverError(message: "Не HTTP ответ")
+                    throw APIError.serverError(message: "Non-HTTP response")
                 }
                 
                 let statusCode = httpResponse.statusCode
@@ -222,7 +220,7 @@ class NetworkService {
                         logger.info("Запрос успешен: \(endpoint)", category: .network)
                         return decoded
                     } catch {
-                        logger.error("Ошибка декодирования JSON: \(error)", category: .network)
+                        logger.error("Error декодирования JSON: \(error)", category: .network)
                         throw APIError.decodingError(error)
                     }
                     
@@ -276,7 +274,7 @@ class NetworkService {
                 if case .unauthorized = error {
                     throw error
                 }
-                if case .serverError(let message) = error, message == "Не HTTP ответ" {
+                if case .serverError(let message) = error, message == "Non-HTTP response" {
                     throw error
                 }
                 
@@ -383,7 +381,8 @@ class NetworkService {
             body.append("Content-Type: application/octet-stream\r\n\r\n".data(using: .utf8)!)
             body.append(data)
             body.append("\r\n".data(using: .utf8)!)
-            body.append("--\(boundary)--\r\n".data(using: .utf8)!) // Закрывающий boundary
+            body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+
             
             request.httpBody = body
             
@@ -392,7 +391,7 @@ class NetworkService {
                 
                 guard let httpResponse = response as? HTTPURLResponse else {
                     logger.error("Ответ не является HTTPURLResponse", category: .network)
-                    throw APIError.serverError(message: "Не HTTP ответ")
+                    throw APIError.serverError(message: "Non-HTTP response")
                 }
                 
                 let statusCode = httpResponse.statusCode
@@ -486,7 +485,7 @@ class NetworkService {
         let trimmedBookmarkId = bookmarkId.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedBookmarkId.isEmpty else {
             logger.error("downloadFile: пустой bookmarkId", category: .network)
-            throw APIError.serverError(message: "Неверный ID закладки")
+            throw APIError.serverError(message: "Invalid bookmark ID")
         }
         
         let uuidPattern = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
@@ -516,7 +515,7 @@ class NetworkService {
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 logger.error("downloadFile: ответ не является HTTPURLResponse для bookmarkId=\(trimmedBookmarkId)", category: .network)
-                throw APIError.serverError(message: "Не HTTP ответ")
+                throw APIError.serverError(message: "Non-HTTP response")
             }
             
             let statusCode = httpResponse.statusCode
@@ -548,9 +547,9 @@ class NetworkService {
                 return data
                 
             case 404:
-                logger.error("Файл не найден (404): bookmarkId=\(trimmedBookmarkId), endpoint=\(endpoint), URL=\(url.absoluteString), userId=\(userId ?? "отсутствует")", category: .network)
+                logger.error("File not found (404): bookmarkId=\(trimmedBookmarkId), endpoint=\(endpoint), URL=\(url.absoluteString), userId=\(userId ?? "отсутствует")", category: .network)
                 logger.error("Диагностика 404: возможно файл не был загружен на сервер или был удален, проверьте наличие файла для bookmarkId=\(trimmedBookmarkId)", category: .network)
-                throw APIError.serverError(message: "Файл не найден")
+                throw APIError.serverError(message: "File not found")
                 
             case 401:
                 logger.error("401 Unauthorized при download: bookmarkId=\(trimmedBookmarkId), endpoint=\(endpoint), userId=\(userId ?? "отсутствует")", category: .network)
@@ -561,7 +560,7 @@ class NetworkService {
                 throw APIError.httpError(statusCode: statusCode)
                 
             case 500...599:
-                let errorMessage = "Ошибка сервера при download (возможно, проблема с кодировкой имени файла): bookmarkId=\(trimmedBookmarkId), endpoint=\(endpoint)"
+                let errorMessage = "Error сервера при download (возможно, проблема с кодировкой имени файла): bookmarkId=\(trimmedBookmarkId), endpoint=\(endpoint)"
                 logger.error(errorMessage, category: .network)
                 throw APIError.httpError(statusCode: statusCode)
                 
@@ -571,14 +570,13 @@ class NetworkService {
             }
         } catch let error as APIError {
             let requestDuration = Date().timeIntervalSince(requestStartTime)
-            logger.error("Ошибка download файла (APIError): bookmarkId=\(trimmedBookmarkId), endpoint=\(endpoint), ошибка: \(error), время запроса: \(String(format: "%.2f", requestDuration))с", category: .network)
+            logger.error("Error download файла (APIError): bookmarkId=\(trimmedBookmarkId), endpoint=\(endpoint), ошибка: \(error), время запроса: \(String(format: "%.2f", requestDuration))с", category: .network)
             throw error
         } catch {
             let requestDuration = Date().timeIntervalSince(requestStartTime)
             let nsError = error as NSError
-            logger.error("Ошибка download файла: bookmarkId=\(trimmedBookmarkId), endpoint=\(endpoint), домен: \(nsError.domain), код: \(nsError.code), описание: \(nsError.localizedDescription), время запроса: \(String(format: "%.2f", requestDuration))с", category: .network)
+            logger.error("Error download файла: bookmarkId=\(trimmedBookmarkId), endpoint=\(endpoint), домен: \(nsError.domain), код: \(nsError.code), описание: \(nsError.localizedDescription), время запроса: \(String(format: "%.2f", requestDuration))с", category: .network)
             throw APIError.networkError(error)
         }
     }
 }
-

@@ -2,8 +2,6 @@
 //  PersistenceControllerTests.swift
 //  VoiceBookmarksShareExtensionTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -23,5 +21,4 @@ final class PersistenceControllerTests: XCTestCase {
         XCTAssertNotNil(PersistenceController.sharedForExtension.container.persistentStoreDescriptions.first)
     }
 }
-
 

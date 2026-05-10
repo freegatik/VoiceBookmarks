@@ -2,14 +2,11 @@
 //  WebViewUITests.swift
 //  VoiceBookmarksUITests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
 import XCTest
 
-// UI тесты WebView: отображение файлов, навигация, кнопки sharing/сохранения/удаления
 final class WebViewUITests: XCTestCase {
     
     var app: XCUIApplication!
@@ -28,17 +25,16 @@ final class WebViewUITests: XCTestCase {
         super.tearDown()
     }
     
-    // Вспомогательная функция: ждет появления папок с таймаутом
     func waitForFolders(timeout: TimeInterval = 15.0) -> (folders: XCUIElementQuery, hasFolders: Bool) {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         if !searchTab.isSelected {
             searchTab.tap()
         }
         
         sleep(1)
         
-        let loadingMessage = app.staticTexts["Загрузка папок..."]
-        let emptyStateMessage = app.staticTexts["Нет папок"]
+        let loadingMessage = app.staticTexts["Loading folders..."]
+        let emptyStateMessage = app.staticTexts["No folders"]
         let progressIndicators = app.progressIndicators
         
         if loadingMessage.waitForExistence(timeout: 3.0) || progressIndicators.count > 0 {
@@ -54,8 +50,8 @@ final class WebViewUITests: XCTestCase {
         var hasFolders = folders.count > 0
         
         if !hasFolders {
-            let selfReflectionFolder = app.staticTexts["Саморефлексия"].firstMatch
-            let tasksFolder = app.staticTexts["Задачи"].firstMatch
+            let selfReflectionFolder = app.staticTexts["Self-reflection"].firstMatch
+            let tasksFolder = app.staticTexts["Tasks"].firstMatch
             hasFolders = selfReflectionFolder.exists || tasksFolder.exists
         }
         
@@ -65,8 +61,8 @@ final class WebViewUITests: XCTestCase {
             hasFolders = folders.count > 0
             
             if !hasFolders {
-                let selfReflectionFolder = app.staticTexts["Саморефлексия"].firstMatch
-                let tasksFolder = app.staticTexts["Задачи"].firstMatch
+                let selfReflectionFolder = app.staticTexts["Self-reflection"].firstMatch
+                let tasksFolder = app.staticTexts["Tasks"].firstMatch
                 hasFolders = selfReflectionFolder.exists || tasksFolder.exists
             }
         }
@@ -76,7 +72,6 @@ final class WebViewUITests: XCTestCase {
         return (folders, hasFolders && !isEmpty)
     }
     
-    // Вспомогательная функция: ждет появления файлов с таймаутом
     func waitForFiles(timeout: TimeInterval = 10.0) -> XCUIElementQuery {
         sleep(1)
         
@@ -84,9 +79,9 @@ final class WebViewUITests: XCTestCase {
         var hasFiles = files.count > 0
         
         if !hasFiles {
-            let noteFile = app.staticTexts["Заметка о цели"].firstMatch
-            let audioFile = app.staticTexts["Аудио идея.m4a"].firstMatch
-            let noteDescription = app.staticTexts["Краткое описание заметки"].firstMatch
+            let noteFile = app.staticTexts["Goal note"].firstMatch
+            let audioFile = app.staticTexts["Audio idea.m4a"].firstMatch
+            let noteDescription = app.staticTexts["Short note description"].firstMatch
             hasFiles = noteFile.exists || audioFile.exists || noteDescription.exists
         }
         
@@ -96,8 +91,8 @@ final class WebViewUITests: XCTestCase {
             hasFiles = files.count > 0
             
             if !hasFiles {
-                let noteFile = app.staticTexts["Заметка о цели"].firstMatch
-                let audioFile = app.staticTexts["Аудио идея.m4a"].firstMatch
+                let noteFile = app.staticTexts["Goal note"].firstMatch
+                let audioFile = app.staticTexts["Audio idea.m4a"].firstMatch
                 hasFiles = noteFile.exists || audioFile.exists
             }
         }
@@ -105,10 +100,9 @@ final class WebViewUITests: XCTestCase {
         return files
     }
     
-    // Проверяет открытие файла из FileList
     func testOpenFileFromList() {
-        let searchTab = app.tabBars.buttons["Поиск"]
-        XCTAssertTrue(searchTab.exists, "Вкладка Поиск должна существовать")
+        let searchTab = app.tabBars.buttons["Search"]
+        XCTAssertTrue(searchTab.exists, "Search tab should exist")
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -125,9 +119,8 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что элементы Navigation bar присутствуют
     func testNavigationBarElements() {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         if searchTab.exists {
             searchTab.tap()
             
@@ -138,8 +131,6 @@ final class WebViewUITests: XCTestCase {
                 if files.count > 0 {
                     files.firstMatch.tap()
                     
-                    let closeButton = app.navigationBars.buttons["Закрыть"]
-                    XCTAssertTrue(closeButton.exists, "Кнопка Закрыть должна существовать")
                     let closeButton = UITestInteractions.webCloseButton(in: app)
                     XCTAssertTrue(closeButton.waitForExistence(timeout: 5), "Кнопка Close должна существовать")
                     
@@ -150,9 +141,8 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что Menu button открывает popover
     func testMenuButtonOpensPopover() {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         if searchTab.exists {
             searchTab.tap()
             
@@ -167,8 +157,8 @@ final class WebViewUITests: XCTestCase {
                     if menuButton.exists {
                         menuButton.tap()
                         
-                        let shareButton = app.buttons["Поделиться"]
-                        let deleteButton = app.buttons["Удалить"]
+                        let shareButton = app.buttons["Share"]
+                        let deleteButton = app.buttons["Delete"]
                         
                         XCTAssertTrue(shareButton.exists || deleteButton.exists, "Меню должно содержать действия")
                     }
@@ -177,9 +167,8 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что Close button закрывает WebView
     func testCloseButtonDismisses() {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         if searchTab.exists {
             searchTab.tap()
             
@@ -190,8 +179,6 @@ final class WebViewUITests: XCTestCase {
                 if files.count > 0 {
                     files.firstMatch.tap()
                     
-                    let closeButton = app.navigationBars.buttons["Закрыть"]
-                    if closeButton.exists {
                     let closeButton = UITestInteractions.webCloseButton(in: app)
                     if closeButton.waitForExistence(timeout: 3) {
                         closeButton.tap()
@@ -204,9 +191,8 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что Share action открывает sheet
     func testShareActionOpensSheet() {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         if searchTab.exists {
             searchTab.tap()
             
@@ -221,7 +207,7 @@ final class WebViewUITests: XCTestCase {
                     if menuButton.exists {
                         menuButton.tap()
                         
-                        let shareButton = app.buttons["Поделиться"]
+                        let shareButton = app.buttons["Share"]
                         if shareButton.exists {
                             shareButton.tap()
                             
@@ -234,9 +220,8 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что Delete action показывает confirmation dialog
     func testDeleteActionShowsConfirmation() {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         if searchTab.exists {
             searchTab.tap()
             
@@ -251,15 +236,15 @@ final class WebViewUITests: XCTestCase {
                     if menuButton.exists {
                         menuButton.tap()
                         
-                        let deleteButton = app.buttons["Удалить"]
+                        let deleteButton = app.buttons["Delete"]
                         if deleteButton.exists {
                             deleteButton.tap()
                             
-                            let confirmDialog = app.alerts["Удалить закладку?"]
+                            let confirmDialog = app.alerts["Delete bookmark?"]
                             XCTAssertTrue(confirmDialog.exists, "Confirmation dialog должен появиться")
                             
-                            let confirmButton = app.alerts.buttons["Удалить"]
-                            let cancelButton = app.alerts.buttons["Отмена"]
+                            let confirmButton = app.alerts.buttons["Delete"]
+                            let cancelButton = app.alerts.buttons["Cancel"]
                             XCTAssertTrue(confirmButton.exists || cancelButton.exists, "Dialog должен содержать кнопки")
                         }
                     }
@@ -268,10 +253,9 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что вкладка "Добавить" отображается
     func testAddTabDisplay() {
-        let addTab = app.tabBars.buttons["Добавить"]
-        XCTAssertTrue(addTab.exists, "Вкладка 'Добавить' должна существовать")
+        let addTab = app.tabBars.buttons["Add"]
+        XCTAssertTrue(addTab.exists, "Add tab should exist")
         
         if !addTab.isSelected {
             addTab.tap()
@@ -281,44 +265,41 @@ final class WebViewUITests: XCTestCase {
         XCTAssertTrue(screen.exists, "Экран добавления должен отображаться")
     }
     
-    // Проверяет, что переключение между вкладками "Добавить" и "Поиск" работает
     func testTabSwitchingBetweenAddAndSearch() {
-        let addTab = app.tabBars.buttons["Добавить"]
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let addTab = app.tabBars.buttons["Add"]
+        let searchTab = app.tabBars.buttons["Search"]
         
-        XCTAssertTrue(addTab.exists, "Вкладка 'Добавить' должна существовать")
-        XCTAssertTrue(searchTab.exists, "Вкладка 'Поиск' должна существовать")
+        XCTAssertTrue(addTab.exists, "Add tab should exist")
+        XCTAssertTrue(searchTab.exists, "Вкладка 'Search' должна существовать")
         
         addTab.tap()
-        XCTAssertTrue(addTab.isSelected || app.otherElements.firstMatch.exists, "Вкладка 'Добавить' должна быть активна")
+        XCTAssertTrue(addTab.isSelected || app.otherElements.firstMatch.exists, "Вкладка 'Add' должна быть активна")
         
         searchTab.tap()
-        XCTAssertTrue(searchTab.isSelected || app.scrollViews.firstMatch.exists, "Вкладка 'Поиск' должна быть активна")
+        XCTAssertTrue(searchTab.isSelected || app.scrollViews.firstMatch.exists, "Вкладка 'Search' должна быть активна")
         
         addTab.tap()
-        XCTAssertTrue(addTab.isSelected || app.otherElements.firstMatch.exists, "Вкладка 'Добавить' должна быть активна")
+        XCTAssertTrue(addTab.isSelected || app.otherElements.firstMatch.exists, "Вкладка 'Add' должна быть активна")
     }
     
-    // Проверяет, что обе вкладки доступны
     func testBothTabsAreAccessible() {
-        let addTab = app.tabBars.buttons["Добавить"]
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let addTab = app.tabBars.buttons["Add"]
+        let searchTab = app.tabBars.buttons["Search"]
         
-        XCTAssertTrue(addTab.waitForExistence(timeout: 5), "Вкладка 'Добавить' должна появиться")
-        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Вкладка 'Поиск' должна появиться")
+        XCTAssertTrue(addTab.waitForExistence(timeout: 5), "Вкладка 'Add' должна появиться")
+        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Вкладка 'Search' должна появиться")
         
         addTab.tap()
         let addScreenExists = app.otherElements.firstMatch.exists
-        XCTAssertTrue(addScreenExists, "Экран 'Добавить' должен отображаться")
+        XCTAssertTrue(addScreenExists, "Экран 'Add' должен отображаться")
         
         searchTab.tap()
         let searchScreenExists = app.scrollViews.firstMatch.exists || app.navigationBars.firstMatch.exists
-        XCTAssertTrue(searchScreenExists, "Экран 'Поиск' должен отображаться")
+        XCTAssertTrue(searchScreenExists, "Экран 'Search' должен отображаться")
     }
     
-    // Проверяет, что WebView отображает разные типы контента
     func testWebViewDisplaysDifferentContentTypes() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -337,9 +318,8 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что WebView показывает LoadingView при загрузке
     func testWebViewShowsLoadingView() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -358,9 +338,8 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что WebView отображает HTML файлы корректно
     func testWebViewDisplaysHTMLFiles() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -379,9 +358,8 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что HTML файлы определяются по расширению (.html, .htm)
     func testHTMLFilesDetectedByExtension() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -400,9 +378,8 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что HTML файлы определяются по содержимому (<!doctype html>)
     func testHTMLFilesDetectedByContent() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -421,9 +398,8 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что HTML файлы с URL в content загружаются с сервера
     func testHTMLFilesWithURLInContentLoadsFromServer() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -442,9 +418,8 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что HTML файлы без fileUrl создают локальный файл из content
     func testHTMLFilesWithoutFileUrlCreatesLocalFile() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -463,9 +438,8 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что WebView обрабатывает URL в content
     func testWebViewHandlesURLInContent() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -484,9 +458,8 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что WebView загружает HTML с URL из content
     func testWebViewLoadsHTMLFromURLInContent() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -505,9 +478,8 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что WebView показывает ErrorStateView при ошибке
     func testWebViewShowsErrorState() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -519,7 +491,7 @@ final class WebViewUITests: XCTestCase {
                 files.firstMatch.tap()
                 
                 let navBar = app.navigationBars.firstMatch
-                let errorText = app.staticTexts["Ошибка"]
+                let errorText = app.staticTexts["Error"]
                 
                 if navBar.waitForExistence(timeout: 3) {
                     XCTAssertTrue(navBar.exists || errorText.exists, "WebView должен поддерживать ErrorStateView")
@@ -528,9 +500,8 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что свайп вправо в WebView возвращает к предыдущему списку
     func testSwipeRightInWebViewReturnsBack() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let (folders, hasFolders) = waitForFolders(timeout: 15.0)
@@ -544,8 +515,8 @@ final class WebViewUITests: XCTestCase {
         
         var hasFiles = files.count > 0
         if !hasFiles {
-            let noteFile = app.staticTexts["Заметка о цели"].firstMatch
-            let audioFile = app.staticTexts["Аудио идея.m4a"].firstMatch
+            let noteFile = app.staticTexts["Goal note"].firstMatch
+            let audioFile = app.staticTexts["Audio idea.m4a"].firstMatch
             hasFiles = noteFile.exists || audioFile.exists
         }
         
@@ -556,8 +527,8 @@ final class WebViewUITests: XCTestCase {
         if files.count > 0 {
             files.firstMatch.tap()
         } else {
-            let noteFile = app.staticTexts["Заметка о цели"].firstMatch
-            let audioFile = app.staticTexts["Аудио идея.m4a"].firstMatch
+            let noteFile = app.staticTexts["Goal note"].firstMatch
+            let audioFile = app.staticTexts["Audio idea.m4a"].firstMatch
             if noteFile.exists {
                 noteFile.tap()
             } else if audioFile.exists {
@@ -583,27 +554,15 @@ final class WebViewUITests: XCTestCase {
         XCTAssertTrue(previousNavBar.exists, "После свайпа вправо должен вернуться к предыдущему экрану")
     }
     
-    // Проверяет, что WebView обрабатывает команды
     func testWebViewHandlesCommandContent() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
-        let searchField = app.textFields["Поиск..."]
+        let searchField = app.textFields["Search..."]
         if searchField.waitForExistence(timeout: 3) {
             searchField.tap()
             searchField.typeText("command query")
             
-            let searchButton = app.buttons.matching(identifier: "magnifyingglass").firstMatch
-            if searchButton.exists {
-                searchButton.tap()
-                
-                let webViewNavBar = app.navigationBars.firstMatch
-                if webViewNavBar.waitForExistence(timeout: 5) {
-                    let closeButton = webViewNavBar.buttons["Закрыть"]
-                    if closeButton.exists {
-                        XCTAssertTrue(closeButton.exists, "WebView с командой должен открыться")
-                    }
-                }
             UITestInteractions.submitFolderSearch(app: app, searchField: searchField)
             
             let webViewNavBar = app.navigationBars.firstMatch
@@ -614,9 +573,8 @@ final class WebViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что после сохранения страницы возврат к списку элементов
     func testAfterSavingReturnsToList() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let (folders, hasFolders) = waitForFolders(timeout: 15.0)
@@ -630,8 +588,8 @@ final class WebViewUITests: XCTestCase {
         
         var hasFiles = files.count > 0
         if !hasFiles {
-            let noteFile = app.staticTexts["Заметка о цели"].firstMatch
-            let audioFile = app.staticTexts["Аудио идея.m4a"].firstMatch
+            let noteFile = app.staticTexts["Goal note"].firstMatch
+            let audioFile = app.staticTexts["Audio idea.m4a"].firstMatch
             hasFiles = noteFile.exists || audioFile.exists
         }
         
@@ -642,8 +600,8 @@ final class WebViewUITests: XCTestCase {
         if files.count > 0 {
             files.firstMatch.tap()
         } else {
-            let noteFile = app.staticTexts["Заметка о цели"].firstMatch
-            let audioFile = app.staticTexts["Аудио идея.m4a"].firstMatch
+            let noteFile = app.staticTexts["Goal note"].firstMatch
+            let audioFile = app.staticTexts["Audio idea.m4a"].firstMatch
             if noteFile.exists {
                 noteFile.tap()
             } else if audioFile.exists {
@@ -667,7 +625,7 @@ final class WebViewUITests: XCTestCase {
         sleep(1)
         let documentPicker = app.sheets.firstMatch
         if documentPicker.waitForExistence(timeout: 2) {
-            let cancelButton = app.buttons["Отмена"]
+            let cancelButton = app.buttons["Cancel"]
             if cancelButton.exists {
                 cancelButton.tap()
             } else {
@@ -682,4 +640,3 @@ final class WebViewUITests: XCTestCase {
         XCTAssertTrue(listNavBar.exists, "После сохранения/отмены должен вернуться к списку элементов")
     }
 }
-

@@ -7,7 +7,7 @@
 Откройте `VoiceBookmarks/Utils/Constants.swift` и замените:
 
 ```swift
-static let baseURL = "https://your-api-server.com"
+static let baseURL = "https://minds.myapp.fund/weaviate"
 ```
 
 на адрес вашего API сервера.
@@ -94,7 +94,7 @@ let url = URL(string: "yourapp://share-extension")
 
 ```swift
 func testConstants_API_BaseURL() {
-    XCTAssertEqual(Constants.API.baseURL, "https://your-api-server.com")
+    XCTAssertEqual(Constants.API.baseURL, "https://minds.myapp.fund/weaviate")
 }
 
 func testConstants_Keychain_Service() {

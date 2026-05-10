@@ -2,8 +2,6 @@
 //  FolderCacheServiceTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -74,7 +72,8 @@ final class FolderCacheServiceTests: XCTestCase {
         let folders = [Folder(name: "Test")]
         sut.saveFolders(folders)
         
-        let expiredTime = Date().timeIntervalSince1970 - 7200 // 2 часа назад
+        let expiredTime = Date().timeIntervalSince1970 - 7200
+
         UserDefaults.standard.set(expiredTime, forKey: "cached_folders_expiration")
         
         let cached = sut.getCachedFolders()
@@ -148,8 +147,7 @@ final class FolderCacheServiceTests: XCTestCase {
         
         let cached = sut.getCachedFolders()
         XCTAssertNotNil(cached)
-        XCTAssertEqual(cached?[0].displayName, "Саморефлексия")
-        XCTAssertEqual(cached?[1].displayName, "Без категории")
+        XCTAssertEqual(cached?[0].displayName, "Self-reflection")
+        XCTAssertEqual(cached?[1].displayName, "Uncategorized")
     }
 }
-

@@ -2,8 +2,6 @@
 //  ShareViewModel.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -147,7 +145,7 @@ class ShareViewModel: ObservableObject {
                     logger.info("Файл скопирован в временную директорию: \(tempFileURL!.path)", category: .ui)
                 }
             } catch {
-                logger.error("Ошибка чтения файла для копирования: \(error)", category: .ui)
+                logger.error("Error чтения файла для копирования: \(error)", category: .ui)
                 tempFileURL = nil
             }
             
@@ -165,7 +163,7 @@ class ShareViewModel: ObservableObject {
                         }
                     }
                 } catch {
-                    logger.error("Ошибка чтения текстового файла: \(error)", category: .ui)
+                    logger.error("Error чтения текстового файла: \(error)", category: .ui)
                 }
             } else if ["jpg", "jpeg", "png"].contains(ext) {
                 do {
@@ -179,7 +177,7 @@ class ShareViewModel: ObservableObject {
                         }
                     }
                 } catch {
-                    logger.error("Ошибка чтения изображения: \(error)", category: .ui)
+                    logger.error("Error чтения изображения: \(error)", category: .ui)
                 }
             } else if ext == "url" {
                 do {
@@ -193,7 +191,7 @@ class ShareViewModel: ObservableObject {
                         }
                     }
                 } catch {
-                    logger.error("Ошибка чтения URL файла: \(error)", category: .ui)
+                    logger.error("Error чтения URL файла: \(error)", category: .ui)
                 }
             } else {
                 await MainActor.run {
@@ -354,14 +352,15 @@ class ShareViewModel: ObservableObject {
             } catch {
                 let sessionId = currentPressSessionId
                 
-                logger.warning("Ошибка при начале записи (ShareViewModel): \(error)", category: .speech)
+                logger.warning("Error при начале записи (ShareViewModel): \(error)", category: .speech)
                 
                 if let apiError = error as? APIError,
                    case .serverError(let message) = apiError,
                    message.contains("Запись уже активна") {
                     logger.warning("Обнаружена ошибка 'Запись уже активна' (ShareViewModel), принудительно сбрасываем состояние", category: .speech)
                     speechService.cancelRecording()
-                    try? await Task.sleep(nanoseconds: 500_000_000) // 500мс для полного сброса
+                    try? await Task.sleep(nanoseconds: 500_000_000)
+
                     
                     if sessionId == currentPressSessionId,
                        !hasRetriedStartForSession {
@@ -414,8 +413,8 @@ class ShareViewModel: ObservableObject {
             } catch {
                             await MainActor.run {
                                 isRecording = false
-                                logger.error("Ошибка автоматического перезапуска записи: \(error)", category: .speech)
-                    toast = .error("Ошибка записи голоса")
+                                logger.error("Error автоматического перезапуска записи: \(error)", category: .speech)
+                    toast = .error("Error записи голоса")
                             }
                         }
                     } else {
@@ -427,14 +426,15 @@ class ShareViewModel: ObservableObject {
                         
                         await MainActor.run {
                     isRecording = false
-                logger.error("Ошибка начала записи: \(error)", category: .speech)
-                            toast = .error("Ошибка записи голоса")
+                logger.error("Error начала записи: \(error)", category: .speech)
+                            toast = .error("Error записи голоса")
                         }
                     }
                 } else {
-                    logger.warning("Ошибка распознавания (не 'Запись уже активна'), пытаемся перезапустить запись (ShareViewModel)", category: .speech)
+                    logger.warning("Error распознавания (не 'Запись уже активна'), пытаемся перезапустить запись (ShareViewModel)", category: .speech)
                     speechService.cancelRecording()
-                    try? await Task.sleep(nanoseconds: 200_000_000) // 200мс
+                    try? await Task.sleep(nanoseconds: 200_000_000)
+
                     
                     if sessionId == currentPressSessionId,
                        !hasRetriedStartForSession {
@@ -487,15 +487,15 @@ class ShareViewModel: ObservableObject {
                         } catch {
                             await MainActor.run {
                                 isRecording = false
-                                logger.error("Ошибка автоматического перезапуска записи после ошибки распознавания: \(error)", category: .speech)
-                    toast = .error("Ошибка записи голоса")
+                                logger.error("Error автоматического перезапуска записи после ошибки распознавания: \(error)", category: .speech)
+                    toast = .error("Error записи голоса")
                             }
                         }
                     } else {
                         await MainActor.run {
                     isRecording = false
-                            logger.error("Ошибка начала записи: \(error)", category: .speech)
-                            toast = .error("Ошибка записи голоса")
+                            logger.error("Error начала записи: \(error)", category: .speech)
+                            toast = .error("Error записи голоса")
                         }
                     }
                 }
@@ -657,7 +657,8 @@ class ShareViewModel: ObservableObject {
             Task {
                 var attempts = 0
                 while isProcessingLongPressEnd && attempts < 20 {
-                    try? await Task.sleep(nanoseconds: 100_000_000) // 100мс
+                    try? await Task.sleep(nanoseconds: 100_000_000)
+
                     attempts += 1
                 }
                 await MainActor.run {
@@ -944,7 +945,7 @@ class ShareViewModel: ObservableObject {
                                     offlineQueue.updateQueuedItem(filePath: fileURL.path, voiceNote: note, summary: nil)
                                 }
                                 isUploadingContent = false
-                                GlobalToastManager.shared.showSuccess(updated ? "Заметка добавлена к файлу в очереди" : "Контент уже в очереди на загрузку")
+                                GlobalToastManager.shared.showSuccess(updated ? "Заметка добавлена к файлу в очереди" : "Content is already queued на загрузку")
                                 return
                             } else {
                                 isUploadingContent = false
@@ -967,7 +968,7 @@ class ShareViewModel: ObservableObject {
                                     isFileFromShareExtension = true
                                     logger.info("Файл скопирован из contentPreview: \(previewFileURL.path) -> \(tempURL.path), размер: \(fileData.count) байт", category: .fileOperation)
                                 } catch {
-                                    logger.error("Ошибка копирования файла из contentPreview: \(error)", category: .fileOperation)
+                                    logger.error("Error копирования файла из contentPreview: \(error)", category: .fileOperation)
                                     throw APIError.serverError(message: "Не удалось скопировать файл из contentPreview: \(error.localizedDescription)")
                                 }
                             } else {
@@ -1036,7 +1037,7 @@ class ShareViewModel: ObservableObject {
                     let hasContentPreview = await MainActor.run { contentPreview != nil }
                     if hasContentPreview {
                         logger.error("contentToUpload == nil, но contentPreview != nil", category: .fileOperation)
-                        throw APIError.serverError(message: "Ошибка: файл был выбран, но contentToUpload потерялся. Не создаем текстовый файл из voiceNote.")
+                        throw APIError.serverError(message: "Error: файл был выбран, но contentToUpload потерялся. Не создаем текстовый файл из voiceNote.")
                     }
                     
                     logger.info("Создание текстовой заметки из голоса", category: .fileOperation)
@@ -1156,12 +1157,12 @@ class ShareViewModel: ObservableObject {
                 if isTimeout {
                     fallback = "Таймаут при загрузке \"\(fileNameForNotification)\". Файл добавлен в очередь и будет загружен автоматически при улучшении соединения."
                 } else {
-                    fallback = "Ошибка загрузки \"\(fileNameForNotification)\": \(error.localizedDescription). Файл добавлен в очередь."
+                    fallback = "Error загрузки \"\(fileNameForNotification)\": \(error.localizedDescription). Файл добавлен в очередь."
                 }
                 
                 let message = friendlyErrorMessage(for: error, fallback: fallback)
                 GlobalToastManager.shared.showError(message)
-                logger.error("Ошибка загрузки контента: \(error)", category: .fileOperation)
+                logger.error("Error загрузки контента: \(error)", category: .fileOperation)
                 
                 if isTimeout {
                     logger.info("Таймаут при загрузке, файл должен быть добавлен в очередь автоматически", category: .fileOperation)
@@ -1282,4 +1283,3 @@ class ShareViewModel: ObservableObject {
     }
     
 }
-

@@ -2,8 +2,6 @@
 //  ShareViewModelTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -665,7 +663,8 @@ final class ShareViewModelTests: XCTestCase {
         let testPersistence = PersistenceController.preview
         var attempts = 0
         while !testPersistence.isReady && attempts < 100 {
-            try? await Task.sleep(nanoseconds: 10_000_000) // 0.01 секунды
+            try? await Task.sleep(nanoseconds: 10_000_000)
+
             attempts += 1
         }
         
@@ -758,7 +757,8 @@ final class ShareViewModelTests: XCTestCase {
         sut.contentPreview = mockClipboard.mockContent
         
         sut.uploadContent(voiceNote: nil)
-        sut.uploadContent(voiceNote: nil) // Повторный вызов
+        sut.uploadContent(voiceNote: nil)
+
         
         try? await Task.sleep(nanoseconds: 500_000_000)
         
@@ -1105,7 +1105,8 @@ final class ShareViewModelTests: XCTestCase {
     
     @MainActor
     func testShareViewModel_UploadContent_HandlesSaveFileError() async {
-        let content = ClipboardContent(type: .text, text: nil, url: nil, image: nil) // Нет текста
+        let content = ClipboardContent(type: .text, text: nil, url: nil, image: nil)
+
         sut.contentPreview = content
         
         sut.uploadContent(voiceNote: nil)
@@ -1148,7 +1149,8 @@ final class ShareViewModelTests: XCTestCase {
         let testPersistence = PersistenceController.preview
         var attempts1 = 0
         while !testPersistence.isReady && attempts1 < 100 {
-            try? await Task.sleep(nanoseconds: 10_000_000) // 0.01 секунды
+            try? await Task.sleep(nanoseconds: 10_000_000)
+
             attempts1 += 1
         }
         
@@ -1185,7 +1187,8 @@ final class ShareViewModelTests: XCTestCase {
         let testPersistence = PersistenceController.preview
         var attempts2 = 0
         while !testPersistence.isReady && attempts2 < 100 {
-            try? await Task.sleep(nanoseconds: 10_000_000) // 0.01 секунды
+            try? await Task.sleep(nanoseconds: 10_000_000)
+
             attempts2 += 1
         }
         
@@ -1216,7 +1219,8 @@ final class ShareViewModelTests: XCTestCase {
         mockClipboard.mockContent = ClipboardContent(type: .text, text: "test", url: nil, image: nil)
         sut.contentPreview = mockClipboard.mockContent
         
-        sut.uploadContent(voiceNote: "   ") // Пустая строка после trim
+        sut.uploadContent(voiceNote: "   ")
+
         
         try? await Task.sleep(nanoseconds: 500_000_000)
         
@@ -1252,12 +1256,14 @@ final class ShareViewModelTests: XCTestCase {
         let mockNetwork = MockNetworkService()
         let mockFileService = FileService.shared
         let mockBookmarkService = MockBookmarkService(networkService: mockNetwork, fileService: mockFileService)
-        mockBookmarkService.mockCreateResponse = false // Возвращает false
+        mockBookmarkService.mockCreateResponse = false
+
         
         let testPersistence = PersistenceController.preview
         var attempts3 = 0
         while !testPersistence.isReady && attempts3 < 100 {
-            try? await Task.sleep(nanoseconds: 10_000_000) // 0.01 секунды
+            try? await Task.sleep(nanoseconds: 10_000_000)
+
             attempts3 += 1
         }
         
@@ -1324,12 +1330,12 @@ final class ShareViewModelTests: XCTestCase {
     }
     
     func testShareViewModel_HandleGestureEnded_IgnoresSmallGestures() async {
-        sut.handleGestureEnded(translation: CGSize(width: 0, height: 10)) // Меньше 30px
+        sut.handleGestureEnded(translation: CGSize(width: 0, height: 10))
+
         
         try? await Task.sleep(nanoseconds: 100_000_000)
         
         XCTAssertNotNil(sut)
     }
 }
-
 

@@ -2,8 +2,6 @@
 //  SearchServiceMock.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -25,12 +23,12 @@ final class SearchServiceMock: SearchService {
         let demoBookmarks: [Bookmark] = [
             Bookmark(
                 id: UUID().uuidString,
-                fileName: "Заметка о цели",
+                fileName: "Goal note",
                 contentType: .text,
                 category: "SelfReflection",
                 voiceNote: nil,
                 fileUrl: nil,
-                summary: "Краткое описание заметки",
+                summary: "Short note description",
                 content: nil,
                 contentHash: nil,
                 timestamp: Date(),
@@ -39,7 +37,7 @@ final class SearchServiceMock: SearchService {
             ),
             Bookmark(
                 id: UUID().uuidString,
-                fileName: "Аудио идея.m4a",
+                fileName: "Audio idea.m4a",
                 contentType: .audio,
                 category: "SelfReflection",
                 voiceNote: nil,
@@ -99,5 +97,4 @@ final class SearchServiceMock: SearchService {
         )
     }
 }
-
 

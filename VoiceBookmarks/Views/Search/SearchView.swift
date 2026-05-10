@@ -2,8 +2,6 @@
 //  SearchView.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -18,4 +16,3 @@ struct SearchView: View {
         FolderListView(viewModel: viewModel, bookmarkService: bookmarkService)
     }
 }
-

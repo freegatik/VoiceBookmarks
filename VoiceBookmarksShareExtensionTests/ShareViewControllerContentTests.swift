@@ -2,8 +2,6 @@
 //  ShareViewControllerContentTests.swift
 //  VoiceBookmarksShareExtensionTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -85,7 +83,7 @@ final class ShareViewControllerContentTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Initial state set")
         DispatchQueue.main.async {
             XCTAssertTrue(vc.shareExtensionViewModel?.isLoading ?? false)
-            XCTAssertEqual(vc.shareExtensionViewModel?.statusMessage, "Добавление контента...")
+            XCTAssertEqual(vc.shareExtensionViewModel?.statusMessage, "Adding content...")
             XCTAssertFalse(vc.shareExtensionViewModel?.showSuccess ?? true)
             XCTAssertFalse(vc.shareExtensionViewModel?.showError ?? true)
             expectation.fulfill()
@@ -96,11 +94,11 @@ final class ShareViewControllerContentTests: XCTestCase {
     func testShareViewController_UpdateStatus_IntermediateState_OnlyUpdatesMessage() {
         let vc = ShareViewController()
         _ = vc.view
-        vc.shareExtensionViewModel?.updateStatus(message: "Обработка изображения...", isSuccess: false)
+        vc.shareExtensionViewModel?.updateStatus(message: "Processing image...", isSuccess: false)
         
         let expectation = XCTestExpectation(description: "Intermediate state set")
         DispatchQueue.main.async {
-            XCTAssertEqual(vc.shareExtensionViewModel?.statusMessage, "Обработка изображения...")
+            XCTAssertEqual(vc.shareExtensionViewModel?.statusMessage, "Processing image...")
             XCTAssertTrue(vc.shareExtensionViewModel?.isLoading ?? false)
             XCTAssertFalse(vc.shareExtensionViewModel?.showSuccess ?? true)
             XCTAssertFalse(vc.shareExtensionViewModel?.showError ?? true)
@@ -127,4 +125,3 @@ final class ShareViewControllerContentTests: XCTestCase {
         XCTAssertNotNil(vc)
     }
 }
-

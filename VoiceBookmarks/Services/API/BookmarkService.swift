@@ -2,8 +2,6 @@
 //  BookmarkService.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -74,7 +72,7 @@ class BookmarkService {
                 fileData = try Data(contentsOf: effectiveFileURL)
             }
         } catch {
-            logger.error("Ошибка чтения файла: \(error)", category: .fileOperation)
+            logger.error("Error чтения файла: \(error)", category: .fileOperation)
             throw error
         }
         
@@ -154,7 +152,7 @@ class BookmarkService {
             do {
                 decoded = try JSONDecoder().decode(CreateResponse.self, from: responseData)
             } catch {
-                logger.error("Ошибка декодирования ответа API при создании закладки: \(error)", category: .network)
+                logger.error("Error декодирования ответа API при создании закладки: \(error)", category: .network)
                 logger.error("Ответ сервера (первые 500 символов): \(String(data: responseData.prefix(500), encoding: .utf8) ?? "не удалось декодировать")", category: .network)
                 throw APIError.decodingError(error)
             }
@@ -200,7 +198,7 @@ class BookmarkService {
                 let nsError = error as NSError
                 errorDetails = "unknownError: domain=\(nsError.domain), code=\(nsError.code), description=\(nsError.localizedDescription)"
             }
-            logger.error("Ошибка создания закладки: fileName=\(fileName), размер=\(fileData.count) байт, contentType=\(contentTypeToSend.rawValue), ошибка: \(errorDetails)", category: .fileOperation)
+            logger.error("Error создания закладки: fileName=\(fileName), размер=\(fileData.count) байт, contentType=\(contentTypeToSend.rawValue), ошибка: \(errorDetails)", category: .fileOperation)
             throw error
         }
     }
@@ -208,7 +206,8 @@ class BookmarkService {
     
     /// Проверяет доступность файла после создания закладки (опционально, в фоне)
     private func verifyFileAvailability(bookmarkId: String, fileName: String) async {
-        try? await Task.sleep(nanoseconds: 2_500_000_000) // 2.5 секунды
+        try? await Task.sleep(nanoseconds: 2_500_000_000)
+
         
         do {
             let _ = try await networkService.downloadFile(bookmarkId: bookmarkId)
@@ -233,8 +232,7 @@ class BookmarkService {
             method: "DELETE"
         )
         
-        logger.info("Закладка удалена: \(response.success)", category: .network)
+        logger.info("Bookmark deleted: \(response.success)", category: .network)
         return response.success
     }
 }
-

@@ -2,8 +2,6 @@
 //  Constants.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -14,7 +12,7 @@ enum Constants {
     
     
     enum API {
-        static let baseURL = "https://your-api-server.com"
+        static let baseURL = "https://minds.myapp.fund/weaviate"
         static let timeout: TimeInterval = 30
         static let retryCount = 3
         static let retryDelay: TimeInterval = 1

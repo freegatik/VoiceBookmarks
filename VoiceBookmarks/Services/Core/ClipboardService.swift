@@ -2,8 +2,6 @@
 //  ClipboardService.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -98,7 +96,8 @@ class ClipboardService: ClipboardServiceProtocol {
             } else if typeLower.contains("webp") {
                 return "webp"
             }
-            return "jpg" // fallback для изображений
+            return "jpg"
+
         }
         
         if typeLower.contains("movie") || typeLower.contains("video") || typeIdentifier.hasPrefix("public.movie") {
@@ -109,7 +108,8 @@ class ClipboardService: ClipboardServiceProtocol {
             } else if typeLower.contains("m4v") {
                 return "m4v"
             }
-            return "mp4" // fallback для видео
+            return "mp4"
+
         }
         
         if typeLower.contains("audio") || typeIdentifier.hasPrefix("public.audio") {
@@ -124,7 +124,8 @@ class ClipboardService: ClipboardServiceProtocol {
             } else if typeLower.contains("flac") {
                 return "flac"
             }
-            return "m4a" // fallback для аудио
+            return "m4a"
+
         }
         
         if typeLower.contains("text") || typeIdentifier.hasPrefix("public.text") {
@@ -137,7 +138,8 @@ class ClipboardService: ClipboardServiceProtocol {
             } else if typeLower.contains("rtf") {
                 return "rtf"
             }
-            return "txt" // fallback для текста
+            return "txt"
+
         }
         
         if typeLower.contains("document") {
@@ -284,7 +286,7 @@ class ClipboardService: ClipboardServiceProtocol {
                     if let data = fileData {
                         var originalFileName: String? = nil
                         
-                        logger.debug("Поиск имени файла в item, доступные типы: \(Array(item.keys))", category: .storage)
+                        logger.debug("Search имени файла в item, доступные типы: \(Array(item.keys))", category: .storage)
                         
                         for (otherType, otherValue) in item {
                             logger.debug("Проверка типа для имени файла: \(otherType), тип значения: \(type(of: otherValue))", category: .storage)
@@ -431,7 +433,7 @@ class ClipboardService: ClipboardServiceProtocol {
             let fileURL = await withCheckedContinuation { (continuation: CheckedContinuation<URL?, Never>) in
                 provider.loadFileRepresentation(forTypeIdentifier: preferredType) { url, error in
                     if let error = error {
-                        LoggerService.shared.warning("Ошибка загрузки файла через loadFileRepresentation: \(error)", category: .storage)
+                        LoggerService.shared.warning("Error загрузки файла через loadFileRepresentation: \(error)", category: .storage)
                         continuation.resume(returning: nil)
                         return
                     }
@@ -447,7 +449,7 @@ class ClipboardService: ClipboardServiceProtocol {
             let data = await withCheckedContinuation { (continuation: CheckedContinuation<Data?, Never>) in
                 provider.loadItem(forTypeIdentifier: preferredType, options: nil) { item, error in
                     if let error = error {
-                        LoggerService.shared.warning("Ошибка загрузки файла через loadItem: \(error)", category: .storage)
+                        LoggerService.shared.warning("Error загрузки файла через loadItem: \(error)", category: .storage)
                         continuation.resume(returning: nil)
                         return
                     }
@@ -517,4 +519,3 @@ class ClipboardService: ClipboardServiceProtocol {
         #endif
     }
 }
-

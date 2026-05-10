@@ -2,8 +2,6 @@
 //  SpeechServiceTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -249,7 +247,7 @@ final class SpeechServiceTests: XCTestCase {
             try await mock.startRecordingForUnitTests { _ in }
             XCTFail("Должна была быть выброшена ошибка")
         } catch {
-            XCTAssertTrue(true, "Ошибка выброшена правильно")
+            XCTAssertTrue(true, "Error выброшена правильно")
         }
     }
     
@@ -804,4 +802,3 @@ extension MockSpeechService {
         try await startRecording(onPartialResult: onPartialResult, taskHint: nil, timeoutNoSpeech: nil)
     }
 }
-

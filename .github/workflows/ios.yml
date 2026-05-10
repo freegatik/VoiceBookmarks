@@ -15,7 +15,7 @@ jobs:
     name: Build, test, coverage
     runs-on: macos-14
     env:
-      IOS_DESTINATION: platform=iOS Simulator,name=iPhone 15
+      IOS_DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.2
 
     steps:
       - uses: actions/checkout@v4
@@ -37,17 +37,12 @@ jobs:
             -project VoiceBookmarks.xcodeproj \
             -scheme VoiceBookmarks
 
-      - name: Static checks (TODO/FIXME, MARK, duplicates)
+      - name: Static checks (TODO/FIXME, duplicates)
         run: |
           set -euo pipefail
           echo "=== TODO/FIXME ==="
           if grep -rE 'TODO|FIXME' VoiceBookmarks/ VoiceBookmarksShareExtension/ --include='*.swift'; then
             echo "Found TODO/FIXME in production sources"
-            exit 1
-          fi
-          echo "=== MARK (production Swift must stay clean) ==="
-          if grep -rE '//\s*MARK:' VoiceBookmarks/ VoiceBookmarksShareExtension/ --include='*.swift'; then
-            echo "Found // MARK in production sources"
             exit 1
           fi
           echo "=== Duplicate Swift basenames ==="

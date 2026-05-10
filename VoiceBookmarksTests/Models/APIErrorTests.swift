@@ -2,8 +2,6 @@
 //  APIErrorTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -14,36 +12,36 @@ final class APIErrorTests: XCTestCase {
     
     func testAPIError_NoData_ErrorDescription() {
         let error = APIError.noData
-        XCTAssertEqual(error.errorDescription, "Нет данных от сервера")
+        XCTAssertEqual(error.errorDescription, "No data from server")
     }
     
     func testAPIError_Unauthorized_ErrorDescription() {
         let error = APIError.unauthorized
-        XCTAssertEqual(error.errorDescription, "Ошибка авторизации")
+        XCTAssertEqual(error.errorDescription, "Authorization error")
     }
     
     func testAPIError_ServerError_ErrorDescription() {
         let message = "Internal server error"
         let error = APIError.serverError(message: message)
-        XCTAssertEqual(error.errorDescription, "Ошибка сервера: \(message)")
+        XCTAssertEqual(error.errorDescription, "Server error: \(message)")
     }
     
     func testAPIError_HttpError_ErrorDescription() {
         let statusCode = 404
         let error = APIError.httpError(statusCode: statusCode)
-        XCTAssertEqual(error.errorDescription, "HTTP ошибка \(statusCode)")
+        XCTAssertEqual(error.errorDescription, "HTTP error \(statusCode)")
     }
     
     func testAPIError_DecodingError_ErrorDescription() {
         let underlyingError = NSError(domain: "Test", code: 1)
         let error = APIError.decodingError(underlyingError)
-        XCTAssertEqual(error.errorDescription, "Ошибка парсинга JSON")
+        XCTAssertEqual(error.errorDescription, "JSON parsing error")
     }
     
     func testAPIError_NetworkError_ErrorDescription() {
         let underlyingError = NSError(domain: "Test", code: 1)
         let error = APIError.networkError(underlyingError)
-        XCTAssertEqual(error.errorDescription, "Ошибка сети")
+        XCTAssertEqual(error.errorDescription, "Network error")
     }
     
     func testAPIError_ConformsToLocalizedError() {
@@ -67,4 +65,3 @@ final class APIErrorTests: XCTestCase {
         }
     }
 }
-

@@ -2,8 +2,6 @@
 //  FileServiceTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -371,7 +369,8 @@ final class FileServiceTests: XCTestCase {
         let url = createTestFile(size: 1000, extension: "txt")
         
         let result = try sut.validateFile(at: url)
-        XCTAssertTrue(result.isValid || !result.isValid) // Проверяем что результат есть
+        XCTAssertTrue(result.isValid || !result.isValid)
+
         
         sut.deleteFile(at: url)
     }
@@ -446,4 +445,3 @@ final class FileServiceTests: XCTestCase {
         }
     }
 }
-

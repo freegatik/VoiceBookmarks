@@ -30,8 +30,10 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
 
-# Скрипты для разработки (могут содержать чувствительные данные)
-Scripts/
+# Скрипты для разработки (могут содержать чувствительные данные); CI под Scripts/ci/ в репозитории
+Scripts/*
+!Scripts/ci/
+!Scripts/ci/**
 
 # Документация и инструкции (могут содержать конфиденциальную информацию)
 instruction.md

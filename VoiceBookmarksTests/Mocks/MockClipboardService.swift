@@ -2,8 +2,6 @@
 //  MockClipboardService.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -14,7 +12,8 @@ class MockClipboardService: ClipboardServiceProtocol {
     
     var mockContent: ClipboardContent?
     var hasContentValue: Bool = false
-    var hasContentResult: Bool = false  // Алиас для hasContentValue для удобства
+    var hasContentResult: Bool = false
+
     var clearClipboardCalled = false
     
     func getClipboardContent() -> ClipboardContent? {
@@ -36,4 +35,3 @@ class MockClipboardService: ClipboardServiceProtocol {
         hasContentResult = false
     }
 }
-

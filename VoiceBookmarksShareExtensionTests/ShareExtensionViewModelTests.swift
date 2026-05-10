@@ -2,8 +2,6 @@
 //  ShareExtensionViewModelTests.swift
 //  VoiceBookmarksShareExtensionTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -26,7 +24,7 @@ final class ShareExtensionViewModelTests: XCTestCase {
     
     func testShareExtensionViewModel_InitialState() {
         XCTAssertTrue(sut.isLoading)
-        XCTAssertEqual(sut.statusMessage, "Добавление контента...")
+        XCTAssertEqual(sut.statusMessage, "Adding content...")
         XCTAssertFalse(sut.showSuccess)
         XCTAssertFalse(sut.showError)
         XCTAssertNil(sut.errorMessage)
@@ -51,11 +49,11 @@ final class ShareExtensionViewModelTests: XCTestCase {
     func testShareExtensionViewModel_UpdateStatus_Error() {
         let expectation = XCTestExpectation(description: "Status updated")
         
-        sut.updateStatus(message: "Ошибка", isSuccess: false)
+        sut.updateStatus(message: "Error", isSuccess: false)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             XCTAssertFalse(self.sut.isLoading)
-            XCTAssertEqual(self.sut.statusMessage, "Ошибка")
+            XCTAssertEqual(self.sut.statusMessage, "Error")
             XCTAssertFalse(self.sut.showSuccess)
             XCTAssertTrue(self.sut.showError)
             expectation.fulfill()

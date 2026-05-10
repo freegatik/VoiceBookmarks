@@ -2,8 +2,6 @@
 //  ErrorStateViewTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -21,10 +19,10 @@ final class ErrorStateViewTests: XCTestCase {
     
     func testErrorStateView_DifferentMessages() {
         let messages = [
-            "Ошибка загрузки",
+            "Error загрузки",
             "Не удалось подключиться",
             "Произошла ошибка",
-            "Ошибка сети"
+            "Error сети"
         ]
         
         for message in messages {
@@ -82,4 +80,3 @@ final class ErrorStateViewTests: XCTestCase {
         XCTAssertTrue(retryCalled, "Callback должен быть вызван")
     }
 }
-

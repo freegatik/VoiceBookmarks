@@ -2,8 +2,6 @@
 //  ConstantsTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -13,7 +11,7 @@ import XCTest
 final class ConstantsTests: XCTestCase {
     
     func testConstants_API_BaseURL() {
-        XCTAssertEqual(Constants.API.baseURL, "https://your-api-server.com")
+        XCTAssertEqual(Constants.API.baseURL, "https://minds.myapp.fund/weaviate")
     }
     
     func testConstants_API_Timeout() {
@@ -192,4 +190,3 @@ final class ConstantsTests: XCTestCase {
         XCTAssertEqual(Constants.Categories.defaultCategory, "Uncategorised")
     }
 }
-

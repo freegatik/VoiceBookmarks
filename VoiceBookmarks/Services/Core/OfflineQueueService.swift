@@ -2,8 +2,6 @@
 //  OfflineQueueService.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -118,7 +116,7 @@ class OfflineQueueService {
                 }
                 return false
             } catch {
-                localLogger.error("Ошибка fetch при поиске дубликата по хешу: \(error)", category: .offline)
+                localLogger.error("Error fetch при поиске дубликата по хешу: \(error)", category: .offline)
                 return false
             }
         }
@@ -180,7 +178,7 @@ class OfflineQueueService {
                     return false
                 }
             } catch {
-                checkLogger.error("Ошибка проверки файла в Core Data очереди: \(error)", category: .offline)
+                checkLogger.error("Error проверки файла в Core Data очереди: \(error)", category: .offline)
                 return false
             }
         }
@@ -212,7 +210,7 @@ class OfflineQueueService {
                 return false
             }
         } catch {
-            logger.error("Ошибка проверки дубликатов в очереди: \(error)", category: .offline)
+            logger.error("Error проверки дубликатов в очереди: \(error)", category: .offline)
         }
         
         if let contentHash = computeHashOfFile(atPath: filePath) {
@@ -235,7 +233,7 @@ class OfflineQueueService {
                     }
                 }
             } catch {
-                logger.error("Ошибка проверки дубликата по хешу в Core Data: \(error)", category: .offline)
+                logger.error("Error проверки дубликата по хешу в Core Data: \(error)", category: .offline)
             }
         }
         
@@ -270,7 +268,7 @@ class OfflineQueueService {
             
             return true
         } catch {
-            logger.error("Ошибка сохранения в очередь: \(error)", category: .offline)
+            logger.error("Error сохранения в очередь: \(error)", category: .offline)
             return false
         }
     }
@@ -340,7 +338,7 @@ class OfflineQueueService {
             logger.info("Элемент обновлен в Core Data: \(filePath)", category: .offline)
             return true
         } catch {
-            logger.error("Ошибка обновления элемента в Core Data: \(error.localizedDescription)", category: .offline)
+            logger.error("Error обновления элемента в Core Data: \(error.localizedDescription)", category: .offline)
             return false
         }
     }
@@ -454,14 +452,14 @@ class OfflineQueueService {
                         try context.save()
                         processLogger.info("Удалено \(failedItems.count) элементов из очереди", category: .offline)
                     } catch {
-                        processLogger.error("Ошибка удаления элементов: \(error.localizedDescription)", category: .offline)
+                        processLogger.error("Error удаления элементов: \(error.localizedDescription)", category: .offline)
                     }
                 }
             }
                 
                 return items
             } catch {
-                processLogger.error("Ошибка получения данных очереди: \(error)", category: .offline)
+                processLogger.error("Error получения данных очереди: \(error)", category: .offline)
                 return []
             }
         }
@@ -542,7 +540,7 @@ class OfflineQueueService {
                             
                             return true
                         } catch {
-                            updateLogger.error("Ошибка удаления из очереди: \(error.localizedDescription)", category: .offline)
+                            updateLogger.error("Error удаления из очереди: \(error.localizedDescription)", category: .offline)
                             return false
                         }
                     } else {
@@ -563,7 +561,7 @@ class OfflineQueueService {
                             
                             updateLogger.warning("Загрузка не удалась, попытка \(newAttempts)/3", category: .offline)
                         } catch {
-                            updateLogger.error("Ошибка обновления попыток: \(error.localizedDescription)", category: .offline)
+                            updateLogger.error("Error обновления попыток: \(error.localizedDescription)", category: .offline)
                         }
                         return false
                     }
@@ -594,11 +592,11 @@ class OfflineQueueService {
                             try context.save()
                         }
                     } catch {
-                        errorLogger.error("Ошибка обновления после ошибки загрузки: \(error.localizedDescription)", category: .offline)
+                        errorLogger.error("Error обновления после ошибки загрузки: \(error.localizedDescription)", category: .offline)
                 }
                 }
                 
-                logger.error("Ошибка загрузки: \(error)", category: .offline)
+                logger.error("Error загрузки: \(error)", category: .offline)
                 
                 let fileName = URL(fileURLWithPath: item.filePath).lastPathComponent
                 let nsError = error as NSError
@@ -622,7 +620,7 @@ class OfflineQueueService {
                 logger.info("Task отменен во время sleep", category: .offline)
                 return
         } catch {
-                logger.warning("Ошибка sleep: \(error.localizedDescription)", category: .offline)
+                logger.warning("Error sleep: \(error.localizedDescription)", category: .offline)
             }
         }
         
@@ -669,7 +667,7 @@ class OfflineQueueService {
                         continue
                     }
                 } catch {
-                    migrationLogger.error("Ошибка проверки существующего элемента: \(error)", category: .offline)
+                    migrationLogger.error("Error проверки существующего элемента: \(error)", category: .offline)
                     continue
                 }
                 
@@ -720,7 +718,7 @@ class OfflineQueueService {
                 
                 return migratedCount
             } catch {
-                migrationLogger.error("Ошибка сохранения мигрированных элементов: \(error)", category: .offline)
+                migrationLogger.error("Error сохранения мигрированных элементов: \(error)", category: .offline)
                 return 0
             }
         }
@@ -762,7 +760,7 @@ class OfflineQueueService {
             }
             
         } catch {
-            logger.error("Ошибка retry: \(error)", category: .offline)
+            logger.error("Error retry: \(error)", category: .offline)
         }
     }
     
@@ -806,7 +804,7 @@ class OfflineQueueService {
             
             logger.info("Элемент удален из очереди", category: .offline)
         } catch {
-            logger.error("Ошибка удаления: \(error)", category: .offline)
+            logger.error("Delete failed: \(error)", category: .offline)
         }
     }
     
@@ -828,7 +826,7 @@ class OfflineQueueService {
         do {
             return try context.fetch(fetchRequest)
         } catch {
-            logger.error("Ошибка fetch очереди: \(error)", category: .offline)
+            logger.error("Error fetch очереди: \(error)", category: .offline)
             return []
         }
     }
@@ -850,7 +848,7 @@ class OfflineQueueService {
         do {
             return try context.count(for: fetchRequest)
         } catch {
-            logger.error("Ошибка подсчета очереди: \(error)", category: .offline)
+            logger.error("Error подсчета очереди: \(error)", category: .offline)
             return 0
         }
     }

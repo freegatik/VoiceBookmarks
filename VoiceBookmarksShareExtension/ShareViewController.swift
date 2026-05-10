@@ -2,8 +2,6 @@
 //  ShareViewController.swift
 //  VoiceBookmarksShareExtension
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -66,7 +64,7 @@ class ShareViewController: UIViewController {
         self.shareExtensionViewModel = viewModel
         
         viewModel.isLoading = true
-        viewModel.statusMessage = "Добавление контента..."
+        viewModel.statusMessage = "Adding content..."
         viewModel.showSuccess = false
         viewModel.showError = false
         
@@ -94,7 +92,7 @@ class ShareViewController: UIViewController {
     /// Проверяет оба источника контекста (extensionContextForRequest и extensionContext)
     private func extractSharedContent() {
         shareExtensionViewModel?.isLoading = true
-        shareExtensionViewModel?.updateStatus(message: "Обработка контента...", isSuccess: false)
+        shareExtensionViewModel?.updateStatus(message: "Processing content...", isSuccess: false)
         
         let extensionContext = extensionContextForRequest ?? self.extensionContext
         
@@ -102,14 +100,14 @@ class ShareViewController: UIViewController {
             logger.error("Extension context недоступен", category: .fileOperation)
             logger.error("extensionContextForRequest: \(extensionContextForRequest != nil ? "есть" : "nil")", category: .fileOperation)
             logger.error("self.extensionContext: \(self.extensionContext != nil ? "есть" : "nil")", category: .fileOperation)
-            shareExtensionViewModel?.showError("Ошибка доступа к контенту")
+            shareExtensionViewModel?.showError("Error доступа к контенту")
             showErrorAndClose()
             return
         }
         
         guard !extensionContext.inputItems.isEmpty else {
             logger.error("Нет inputItems в extension context", category: .fileOperation)
-            shareExtensionViewModel?.showError("Нет контента для добавления")
+            shareExtensionViewModel?.showError("No content to add")
             showErrorAndClose()
             return
         }
@@ -125,52 +123,52 @@ class ShareViewController: UIViewController {
             
             for (_, itemProvider) in attachments.enumerated() {
         if itemProvider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
-            shareExtensionViewModel?.updateStatus(message: "Обработка изображения...", isSuccess: false)
+            shareExtensionViewModel?.updateStatus(message: "Processing image...", isSuccess: false)
             handleImage(itemProvider)
                     foundItem = true
                     return
         } else if itemProvider.hasItemConformingToTypeIdentifier(UTType.movie.identifier) {
-            shareExtensionViewModel?.updateStatus(message: "Обработка видео...", isSuccess: false)
+            shareExtensionViewModel?.updateStatus(message: "Processing video...", isSuccess: false)
             handleVideo(itemProvider)
                     foundItem = true
                     return
         } else if itemProvider.hasItemConformingToTypeIdentifier(UTType.audio.identifier) {
-            shareExtensionViewModel?.updateStatus(message: "Обработка аудио...", isSuccess: false)
+            shareExtensionViewModel?.updateStatus(message: "Processing audio...", isSuccess: false)
             handleAudio(itemProvider, preferredIdentifier: UTType.audio.identifier)
                     foundItem = true
                     return
                 } else if itemProvider.hasItemConformingToTypeIdentifier("public.audio") {
-                    shareExtensionViewModel?.updateStatus(message: "Обработка аудио...", isSuccess: false)
+                    shareExtensionViewModel?.updateStatus(message: "Processing audio...", isSuccess: false)
                     handleAudio(itemProvider, preferredIdentifier: "public.audio")
                     foundItem = true
                     return
         } else if itemProvider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
-            shareExtensionViewModel?.updateStatus(message: "Обработка ссылки...", isSuccess: false)
+            shareExtensionViewModel?.updateStatus(message: "Processing link...", isSuccess: false)
             handleURL(itemProvider)
                     foundItem = true
                     return
                 } else if itemProvider.hasItemConformingToTypeIdentifier("public.url") {
-                    shareExtensionViewModel?.updateStatus(message: "Обработка ссылки...", isSuccess: false)
+                    shareExtensionViewModel?.updateStatus(message: "Processing link...", isSuccess: false)
                     handleURL(itemProvider)
                     foundItem = true
                     return
         } else if itemProvider.hasItemConformingToTypeIdentifier(UTType.text.identifier) {
-            shareExtensionViewModel?.updateStatus(message: "Обработка текста...", isSuccess: false)
+            shareExtensionViewModel?.updateStatus(message: "Processing text...", isSuccess: false)
             handleText(itemProvider)
                     foundItem = true
                     return
                 } else if itemProvider.hasItemConformingToTypeIdentifier("public.plain-text") {
-                    shareExtensionViewModel?.updateStatus(message: "Обработка текста...", isSuccess: false)
+                    shareExtensionViewModel?.updateStatus(message: "Processing text...", isSuccess: false)
                     handleText(itemProvider)
                     foundItem = true
                     return
         } else if itemProvider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
-            shareExtensionViewModel?.updateStatus(message: "Обработка файла...", isSuccess: false)
+            shareExtensionViewModel?.updateStatus(message: "Processing file...", isSuccess: false)
             handleFile(itemProvider)
                     foundItem = true
                     return
                 } else if itemProvider.hasItemConformingToTypeIdentifier("public.file-url") {
-                    shareExtensionViewModel?.updateStatus(message: "Обработка файла...", isSuccess: false)
+                    shareExtensionViewModel?.updateStatus(message: "Processing file...", isSuccess: false)
                     handleFile(itemProvider)
                     foundItem = true
                     return
@@ -204,9 +202,9 @@ class ShareViewController: UIViewController {
         itemProvider.loadItem(forTypeIdentifier: typeIdentifier, options: options) { item, error in
             DispatchQueue.main.async {
             if let error = error {
-                self.logger.error("Ошибка загрузки изображения: \(error.localizedDescription)", category: .fileOperation)
+                self.logger.error("Error загрузки изображения: \(error.localizedDescription)", category: .fileOperation)
                 self.shareExtensionViewModel?.isLoading = false
-                self.shareExtensionViewModel?.showError("Ошибка загрузки изображения: \(error.localizedDescription)")
+                self.shareExtensionViewModel?.showError("Error загрузки изображения: \(error.localizedDescription)")
                 self.showErrorAndClose()
                 return
             }
@@ -268,9 +266,9 @@ class ShareViewController: UIViewController {
         itemProvider.loadItem(forTypeIdentifier: typeIdentifier, options: options) { item, error in
             DispatchQueue.main.async {
             if let error = error {
-                self.logger.error("Ошибка загрузки видео: \(error.localizedDescription)", category: .fileOperation)
+                self.logger.error("Error загрузки видео: \(error.localizedDescription)", category: .fileOperation)
                 self.shareExtensionViewModel?.isLoading = false
-                self.shareExtensionViewModel?.showError("Ошибка загрузки видео: \(error.localizedDescription)")
+                self.shareExtensionViewModel?.showError("Error загрузки видео: \(error.localizedDescription)")
                 self.showErrorAndClose()
                 return
             }
@@ -326,7 +324,7 @@ class ShareViewController: UIViewController {
                     }
                 }
             } catch {
-                self.logger.error("Ошибка чтения аудио из временного файла: \(error.localizedDescription)", category: .fileOperation)
+                self.logger.error("Error чтения аудио из временного файла: \(error.localizedDescription)", category: .fileOperation)
                 self.loadAudioItem(itemProvider: itemProvider, typeIdentifier: audioIdentifier)
             }
         }
@@ -338,9 +336,9 @@ class ShareViewController: UIViewController {
         itemProvider.loadItem(forTypeIdentifier: typeIdentifier, options: options) { item, error in
             DispatchQueue.main.async {
                 if let error = error {
-                    self.logger.error("Ошибка загрузки аудио: \(error.localizedDescription)", category: .fileOperation)
+                    self.logger.error("Error загрузки аудио: \(error.localizedDescription)", category: .fileOperation)
                     self.shareExtensionViewModel?.isLoading = false
-                    self.shareExtensionViewModel?.showError("Ошибка загрузки аудио: \(error.localizedDescription)")
+                    self.shareExtensionViewModel?.showError("Error загрузки аудио: \(error.localizedDescription)")
                     self.showErrorAndClose()
                     return
                 }
@@ -398,9 +396,9 @@ class ShareViewController: UIViewController {
         itemProvider.loadItem(forTypeIdentifier: typeIdentifier, options: nil) { item, error in
             DispatchQueue.main.async {
             if let error = error {
-                self.logger.error("Ошибка загрузки URL: \(error.localizedDescription)", category: .fileOperation)
+                self.logger.error("Error загрузки URL: \(error.localizedDescription)", category: .fileOperation)
                 self.shareExtensionViewModel?.isLoading = false
-                self.shareExtensionViewModel?.showError("Ошибка загрузки URL: \(error.localizedDescription)")
+                self.shareExtensionViewModel?.showError("Error загрузки URL: \(error.localizedDescription)")
                 self.showErrorAndClose()
                 return
             }
@@ -492,9 +490,9 @@ class ShareViewController: UIViewController {
         itemProvider.loadItem(forTypeIdentifier: typeIdentifier, options: nil) { item, error in
             DispatchQueue.main.async {
             if let error = error {
-                self.logger.error("Ошибка загрузки текста: \(error.localizedDescription)", category: .fileOperation)
+                self.logger.error("Error загрузки текста: \(error.localizedDescription)", category: .fileOperation)
                 self.shareExtensionViewModel?.isLoading = false
-                self.shareExtensionViewModel?.showError("Ошибка загрузки текста: \(error.localizedDescription)")
+                self.shareExtensionViewModel?.showError("Error загрузки текста: \(error.localizedDescription)")
                 self.showErrorAndClose()
                 return
             }
@@ -547,9 +545,9 @@ class ShareViewController: UIViewController {
         itemProvider.loadItem(forTypeIdentifier: typeIdentifier, options: options) { item, error in
             DispatchQueue.main.async {
             if let error = error {
-                self.logger.error("Ошибка загрузки файла: \(error.localizedDescription)", category: .fileOperation)
+                self.logger.error("Error загрузки файла: \(error.localizedDescription)", category: .fileOperation)
                 self.shareExtensionViewModel?.isLoading = false
-                self.shareExtensionViewModel?.showError("Ошибка загрузки файла: \(error.localizedDescription)")
+                self.shareExtensionViewModel?.showError("Error загрузки файла: \(error.localizedDescription)")
                 self.showErrorAndClose()
                 return
             }
@@ -601,7 +599,7 @@ class ShareViewController: UIViewController {
                         SharedUserDefaults.clearLastSharedItem()
                         self.shareExtensionViewModel?.isLoading = false
                         self.shareExtensionViewModel?.updateStatus(
-                            message: "Контент уже в очереди",
+                            message: "Content is already queued",
                             isSuccess: true
                         )
                         self.showSuccessAndClose()
@@ -635,7 +633,7 @@ class ShareViewController: UIViewController {
                         SharedUserDefaults.requestShareTabSelection()
                         self.shareExtensionViewModel?.isLoading = false
                         self.shareExtensionViewModel?.updateStatus(
-                            message: "Контент успешно добавлен",
+                            message: "Content added successfully",
                             isSuccess: true
                         )
                         self.showSuccessAndClose()
@@ -650,7 +648,7 @@ class ShareViewController: UIViewController {
                 
             } catch {
                 print("[SHARE EXT] ОШИБКА копирования: \(error.localizedDescription)")
-                self.logger.error("Ошибка копирования файла: \(error.localizedDescription)", category: .fileOperation)
+                self.logger.error("Error копирования файла: \(error.localizedDescription)", category: .fileOperation)
                 self.logger.error("Детали ошибки: \(error)", category: .fileOperation)
                 
                 if hasAccess {
@@ -661,8 +659,8 @@ class ShareViewController: UIViewController {
                     self.shareExtensionViewModel?.isLoading = false
                     
                     let userMessage = error.localizedDescription.contains("App Group") 
-                        ? "Ошибка доступа к хранилищу. Попробуйте еще раз."
-                        : "Ошибка обработки файла: \(error.localizedDescription)"
+                        ? "Error доступа к хранилищу. Попробуйте еще раз."
+                        : "Error обработки файла: \(error.localizedDescription)"
                     
                     self.shareExtensionViewModel?.showError(userMessage)
                     self.showErrorAndClose()
@@ -822,4 +820,3 @@ class ShareViewController: UIViewController {
         }
     }
 }
-

@@ -2,14 +2,11 @@
 //  VoiceBookmarksUITests.swift
 //  VoiceBookmarksUITests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
 import XCTest
 
-// UI тесты основного функционала: запуск приложения, Tab Bar, навигация, базовые сценарии
 final class VoiceBookmarksUITests: XCTestCase {
     
     var app: XCUIApplication!
@@ -26,44 +23,41 @@ final class VoiceBookmarksUITests: XCTestCase {
         app = nil
     }
 
-    // Проверяет, что приложение запускается и показывает Tab Bar с двумя вкладками (Добавить, Поиск)
     @MainActor
     func testAppLaunchesWithTabBar() throws {
         let tabBar = app.tabBars.firstMatch
         XCTAssertTrue(tabBar.waitForExistence(timeout: 10), "Tab Bar должен появиться при запуске")
         
-        let addTab = app.tabBars.buttons["Добавить"]
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let addTab = app.tabBars.buttons["Add"]
+        let searchTab = app.tabBars.buttons["Search"]
         
-        XCTAssertTrue(addTab.exists, "Вкладка 'Добавить' должна существовать")
-        XCTAssertTrue(searchTab.exists, "Вкладка 'Поиск' должна существовать")
+        XCTAssertTrue(addTab.exists, "Add tab should exist")
+        XCTAssertTrue(searchTab.exists, "Вкладка 'Search' должна существовать")
     }
     
-    // Проверяет, что переключение между вкладками работает корректно
     @MainActor
     func testTabSwitching() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
-        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Вкладка Поиск должна существовать")
+        let searchTab = app.tabBars.buttons["Search"]
+        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Search tab should exist")
         searchTab.tap()
         
         let navBar = app.navigationBars.firstMatch
         if navBar.waitForExistence(timeout: 2) {
-            let title = navBar.staticTexts["Папки"]
-            XCTAssertTrue(title.exists || app.scrollViews.firstMatch.waitForExistence(timeout: 2), "Экран папок должен отображаться с заголовком 'Папки'")
+            let title = navBar.staticTexts["Folders"]
+            XCTAssertTrue(title.exists || app.scrollViews.firstMatch.waitForExistence(timeout: 2), "Экран папок должен отображаться с заголовком 'Folders'")
         } else {
             XCTAssertTrue(app.scrollViews.firstMatch.waitForExistence(timeout: 2), "Экран папок должен отображаться")
         }
         
-        let addTab = app.tabBars.buttons["Добавить"]
+        let addTab = app.tabBars.buttons["Add"]
         addTab.tap()
         
         XCTAssertTrue(app.otherElements.firstMatch.exists, "Экран добавления должен отображаться")
     }
     
-    // Проверяет, что экран ShareView (экран добавления) отображается корректно
     @MainActor
     func testShareViewDisplay() throws {
-        let addTab = app.tabBars.buttons["Добавить"]
+        let addTab = app.tabBars.buttons["Add"]
         if !addTab.isSelected {
             addTab.tap()
         }
@@ -72,36 +66,34 @@ final class VoiceBookmarksUITests: XCTestCase {
         XCTAssertTrue(screen.exists, "Экран добавления должен отображаться")
     }
     
-    // Проверяет, что экран FolderListView (экран папок) отображается с заголовком "Папки"
     @MainActor
     func testFolderListViewDisplay() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
-        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Вкладка Поиск должна существовать")
+        let searchTab = app.tabBars.buttons["Search"]
+        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Search tab should exist")
         searchTab.tap()
         
-        let navBar = app.navigationBars["Папки"]
+        let navBar = app.navigationBars["Folders"]
         if navBar.waitForExistence(timeout: 3) {
-            XCTAssertTrue(navBar.exists, "Заголовок 'Папки' должен отображаться")
+            XCTAssertTrue(navBar.exists, "Заголовок 'Folders' должен отображаться")
         }
         
         let screen = app.scrollViews.firstMatch
         XCTAssertTrue(screen.waitForExistence(timeout: 3) || app.staticTexts.firstMatch.waitForExistence(timeout: 2), "Экран папок должен отображаться")
     }
     
-    // Проверяет, что папки отображаются с пользовательскими именами (displayName: "Саморефлексия" вместо "SelfReflection")
     @MainActor
     func testFoldersDisplayUserFriendlyNames() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
-        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Вкладка Поиск должна существовать")
+        let searchTab = app.tabBars.buttons["Search"]
+        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Search tab should exist")
         searchTab.tap()
         
         let foldersList = app.scrollViews.firstMatch
         XCTAssertTrue(foldersList.waitForExistence(timeout: 5), "Список папок должен загрузиться")
         
-        let selfReflectionFolder = app.staticTexts["Саморефлексия"]
-        let tasksFolder = app.staticTexts["Задачи"]
-        let projectResourcesFolder = app.staticTexts["Ресурсы проекта"]
-        let uncategorisedFolder = app.staticTexts["Без категории"]
+        let selfReflectionFolder = app.staticTexts["Self-reflection"]
+        let tasksFolder = app.staticTexts["Tasks"]
+        let projectResourcesFolder = app.staticTexts["Project resources"]
+        let uncategorisedFolder = app.staticTexts["Uncategorized"]
         
         _ = selfReflectionFolder.waitForExistence(timeout: 1) || 
             tasksFolder.waitForExistence(timeout: 1) || 
@@ -111,7 +103,6 @@ final class VoiceBookmarksUITests: XCTestCase {
         XCTAssertTrue(foldersList.exists, "Список папок должен отображаться")
     }
     
-    // Проверяет производительность запуска приложения (измеряет время запуска через XCTApplicationLaunchMetric)
     @MainActor
     func testLaunchPerformance() throws {
         measure(metrics: [XCTApplicationLaunchMetric()]) {
@@ -119,74 +110,69 @@ final class VoiceBookmarksUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что обе вкладки (Добавить, Поиск) работают независимо (не влияют друг на друга)
     @MainActor
     func testBothTabsWorkIndependently() throws {
-        let addTab = app.tabBars.buttons["Добавить"]
-        XCTAssertTrue(addTab.exists, "Вкладка 'Добавить' должна существовать")
+        let addTab = app.tabBars.buttons["Add"]
+        XCTAssertTrue(addTab.exists, "Add tab should exist")
         addTab.tap()
         
         let addScreen = app.otherElements.firstMatch
-        XCTAssertTrue(addScreen.waitForExistence(timeout: 2), "Экран 'Добавить' должен появиться")
+        XCTAssertTrue(addScreen.waitForExistence(timeout: 2), "Экран 'Add' должен появиться")
         
-        let searchTab = app.tabBars.buttons["Поиск"]
-        XCTAssertTrue(searchTab.exists, "Вкладка 'Поиск' должна существовать")
+        let searchTab = app.tabBars.buttons["Search"]
+        XCTAssertTrue(searchTab.exists, "Вкладка 'Search' должна существовать")
         searchTab.tap()
         
         let searchScreen = app.scrollViews.firstMatch
-        XCTAssertTrue(searchScreen.exists || app.navigationBars.firstMatch.exists, "Экран 'Поиск' должен отображаться")
+        XCTAssertTrue(searchScreen.exists || app.navigationBars.firstMatch.exists, "Экран 'Search' должен отображаться")
         addTab.tap()
-        XCTAssertTrue(addScreen.exists, "Экран 'Добавить' должен снова отображаться")
+        XCTAssertTrue(addScreen.exists, "Экран 'Add' должен снова отображаться")
     }
     
-    // Проверяет навигацию между вкладками: переключение работает корректно, состояние сохраняется
     @MainActor
     func testTabNavigation() throws {
-        let addTab = app.tabBars.buttons["Добавить"]
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let addTab = app.tabBars.buttons["Add"]
+        let searchTab = app.tabBars.buttons["Search"]
         
         addTab.tap()
-        XCTAssertTrue(addTab.isSelected || app.otherElements.firstMatch.exists, "Вкладка 'Добавить' активна")
+        XCTAssertTrue(addTab.isSelected || app.otherElements.firstMatch.exists, "Вкладка 'Add' активна")
         
         searchTab.tap()
-        XCTAssertTrue(searchTab.isSelected || app.scrollViews.firstMatch.exists, "Вкладка 'Поиск' активна")
+        XCTAssertTrue(searchTab.isSelected || app.scrollViews.firstMatch.exists, "Вкладка 'Search' активна")
         
         addTab.tap()
-        XCTAssertTrue(addTab.isSelected || app.otherElements.firstMatch.exists, "Вкладка 'Добавить' снова активна")
+        XCTAssertTrue(addTab.isSelected || app.otherElements.firstMatch.exists, "Вкладка 'Add' снова активна")
         
         searchTab.tap()
-        XCTAssertTrue(searchTab.isSelected || app.scrollViews.firstMatch.exists, "Вкладка 'Поиск' снова активна")
+        XCTAssertTrue(searchTab.isSelected || app.scrollViews.firstMatch.exists, "Вкладка 'Search' снова активна")
     }
     
-    // Проверяет, что поле поиска существует на экране папок (плейсхолдер "Поиск...")
     @MainActor
     func testSearchFieldExists() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
-        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Вкладка Поиск должна существовать")
+        let searchTab = app.tabBars.buttons["Search"]
+        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Search tab should exist")
             searchTab.tap()
             
-        let searchField = app.textFields["Поиск..."]
+        let searchField = app.textFields["Search..."]
         XCTAssertTrue(searchField.waitForExistence(timeout: 5), "Поле поиска должно отображаться")
     }
     
-    // Проверяет, что заголовок "Папки" отображается на экране поиска (вкладка "Поиск", но заголовок "Папки")
     @MainActor
     func testFoldersTitle() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
-        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Вкладка Поиск должна существовать")
+        let searchTab = app.tabBars.buttons["Search"]
+        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Search tab should exist")
             searchTab.tap()
             
-        let navBar = app.navigationBars["Папки"]
-        XCTAssertTrue(navBar.waitForExistence(timeout: 5), "Заголовок 'Папки' должен отображаться")
+        let navBar = app.navigationBars["Folders"]
+        XCTAssertTrue(navBar.waitForExistence(timeout: 5), "Заголовок 'Folders' должен отображаться")
     }
     
-    // Проверяет полный путь пользователя: запуск → вкладка Поиск → открытие папки → открытие файла → просмотр в WebView
     func testFullUserJourneyFromLaunchToFileView() throws {
         let tabBar = app.tabBars.firstMatch
         XCTAssertTrue(tabBar.waitForExistence(timeout: 5), "Приложение должно запуститься")
         
-        let searchTab = app.tabBars.buttons["Поиск"]
-        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Вкладка Поиск должна существовать")
+        let searchTab = app.tabBars.buttons["Search"]
+        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Search tab should exist")
         searchTab.tap()
         
         sleep(2)
@@ -198,8 +184,8 @@ final class VoiceBookmarksUITests: XCTestCase {
         var hasFolders = folders.count > 0
         
         if !hasFolders {
-            let selfReflectionFolder = app.staticTexts["Саморефлексия"].firstMatch
-            let tasksFolder = app.staticTexts["Задачи"].firstMatch
+            let selfReflectionFolder = app.staticTexts["Self-reflection"].firstMatch
+            let tasksFolder = app.staticTexts["Tasks"].firstMatch
             hasFolders = selfReflectionFolder.exists || tasksFolder.exists
         }
         
@@ -208,8 +194,8 @@ final class VoiceBookmarksUITests: XCTestCase {
             sleep(1)
             hasFolders = folders.count > 0
             if !hasFolders {
-                let selfReflectionFolder = app.staticTexts["Саморефлексия"].firstMatch
-                let tasksFolder = app.staticTexts["Задачи"].firstMatch
+                let selfReflectionFolder = app.staticTexts["Self-reflection"].firstMatch
+                let tasksFolder = app.staticTexts["Tasks"].firstMatch
                 hasFolders = selfReflectionFolder.exists || tasksFolder.exists
             }
         }
@@ -232,7 +218,6 @@ final class VoiceBookmarksUITests: XCTestCase {
         
         let navBar = app.navigationBars.firstMatch
         XCTAssertTrue(navBar.waitForExistence(timeout: 5), "WebView должен открыться")
-        let closeButton = app.navigationBars.buttons["Закрыть"]
         let closeButton = UITestInteractions.webCloseButton(in: app)
         if closeButton.waitForExistence(timeout: 2) {
             closeButton.tap()
@@ -242,13 +227,12 @@ final class VoiceBookmarksUITests: XCTestCase {
         }
     }
     
-    // Проверяет работу поля поиска - ввод текста и выполнение поиска
     func testSearchFieldInputAndExecution() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
-        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Вкладка Поиск должна существовать")
+        let searchTab = app.tabBars.buttons["Search"]
+        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Search tab should exist")
         searchTab.tap()
         
-        let searchField = app.textFields["Поиск..."]
+        let searchField = app.textFields["Search..."]
         XCTAssertTrue(searchField.waitForExistence(timeout: 5), "Поле поиска должно появиться")
         
         searchField.tap()
@@ -279,13 +263,12 @@ final class VoiceBookmarksUITests: XCTestCase {
         let resultExists = app.scrollViews.firstMatch.waitForExistence(timeout: 5) || 
                           app.staticTexts.firstMatch.waitForExistence(timeout: 5) ||
                           app.progressIndicators.firstMatch.waitForExistence(timeout: 3)
-        XCTAssertTrue(resultExists, "Поиск должен выполниться и показать результаты или загрузку")
+        XCTAssertTrue(resultExists, "Search должен выполниться и показать результаты или загрузку")
     }
     
-    // Проверяет работу жестов на экране добавления
     func testShareViewGestures() throws {
-        let addTab = app.tabBars.buttons["Добавить"]
-        XCTAssertTrue(addTab.waitForExistence(timeout: 5), "Вкладка Добавить должна существовать")
+        let addTab = app.tabBars.buttons["Add"]
+        XCTAssertTrue(addTab.waitForExistence(timeout: 5), "Вкладка Add должна существовать")
         addTab.tap()
         
         let screen = app.otherElements.firstMatch
@@ -301,10 +284,9 @@ final class VoiceBookmarksUITests: XCTestCase {
         }
     }
     
-    // Проверяет открытие папки и навигацию к файлам
     func testFolderOpeningAndFileNavigation() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
-        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Вкладка Поиск должна существовать")
+        let searchTab = app.tabBars.buttons["Search"]
+        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Search tab should exist")
         searchTab.tap()
         
         sleep(2)
@@ -316,8 +298,8 @@ final class VoiceBookmarksUITests: XCTestCase {
         var hasFolders = folders.count > 0
         
         if !hasFolders {
-            let selfReflectionFolder = app.staticTexts["Саморефлексия"].firstMatch
-            let tasksFolder = app.staticTexts["Задачи"].firstMatch
+            let selfReflectionFolder = app.staticTexts["Self-reflection"].firstMatch
+            let tasksFolder = app.staticTexts["Tasks"].firstMatch
             hasFolders = selfReflectionFolder.exists || tasksFolder.exists
         }
         let start = Date()
@@ -325,8 +307,8 @@ final class VoiceBookmarksUITests: XCTestCase {
             sleep(1)
             hasFolders = folders.count > 0
             if !hasFolders {
-                let selfReflectionFolder = app.staticTexts["Саморефлексия"].firstMatch
-                let tasksFolder = app.staticTexts["Задачи"].firstMatch
+                let selfReflectionFolder = app.staticTexts["Self-reflection"].firstMatch
+                let tasksFolder = app.staticTexts["Tasks"].firstMatch
                 hasFolders = selfReflectionFolder.exists || tasksFolder.exists
             }
         }
@@ -344,10 +326,9 @@ final class VoiceBookmarksUITests: XCTestCase {
         XCTAssertTrue(fileListExists || emptyStateExists, "Должен отобразиться список файлов или пустое состояние после открытия папки")
     }
     
-    // Проверяет состояние загрузки на экране папок
     func testLoadingStateOnFolderScreen() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
-        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Вкладка Поиск должна существовать")
+        let searchTab = app.tabBars.buttons["Search"]
+        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Search tab should exist")
         searchTab.tap()
         
         let hasContent = app.scrollViews.firstMatch.waitForExistence(timeout: 2)
@@ -358,22 +339,21 @@ final class VoiceBookmarksUITests: XCTestCase {
         XCTAssertTrue(hasContent || hasLoading, "Должно быть состояние загрузки или контент на экране папок")
     }
     
-    // Проверяет, что вкладки сохраняют состояние при переключении
     func testTabStatePersistence() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
-        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Вкладка Поиск должна существовать")
+        let searchTab = app.tabBars.buttons["Search"]
+        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Search tab should exist")
         searchTab.tap()
         
         let foldersScrollView = app.scrollViews.firstMatch
         XCTAssertTrue(foldersScrollView.waitForExistence(timeout: 10), "Список папок должен загрузиться")
         let initialFoldersCount = app.scrollViews.buttons.count
         
-        let addTab = app.tabBars.buttons["Добавить"]
-        XCTAssertTrue(addTab.waitForExistence(timeout: 5), "Вкладка Добавить должна существовать")
+        let addTab = app.tabBars.buttons["Add"]
+        XCTAssertTrue(addTab.waitForExistence(timeout: 5), "Вкладка Add должна существовать")
         addTab.tap()
         
         let addScreen = app.otherElements.firstMatch
-        XCTAssertTrue(addScreen.waitForExistence(timeout: 2), "Экран Добавить должен появиться")
+        XCTAssertTrue(addScreen.waitForExistence(timeout: 2), "Экран Add должен появиться")
         
         searchTab.tap()
         
@@ -383,13 +363,12 @@ final class VoiceBookmarksUITests: XCTestCase {
         XCTAssertTrue(abs(currentFoldersCount - initialFoldersCount) <= 1, "Состояние экрана должно сохраниться при переключении вкладок")
     }
     
-    // Проверяет работу кнопки поиска (не только TextField, но и кнопка)
     func testSearchButtonFunctionality() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
-        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Вкладка Поиск должна существовать")
+        let searchTab = app.tabBars.buttons["Search"]
+        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Search tab should exist")
         searchTab.tap()
         
-        let searchField = app.textFields["Поиск..."]
+        let searchField = app.textFields["Search..."]
         XCTAssertTrue(searchField.waitForExistence(timeout: 5), "Поле поиска должно появиться")
         
         searchField.tap()
@@ -411,7 +390,7 @@ final class VoiceBookmarksUITests: XCTestCase {
                     let resultExists = app.scrollViews.firstMatch.waitForExistence(timeout: 5) || 
                                       app.staticTexts.firstMatch.waitForExistence(timeout: 5) ||
                                       app.progressIndicators.firstMatch.waitForExistence(timeout: 3)
-                    XCTAssertTrue(resultExists, "Поиск должен выполниться после нажатия кнопки")
+                    XCTAssertTrue(resultExists, "Search должен выполниться после нажатия кнопки")
                     break
                 }
             }
@@ -421,14 +400,13 @@ final class VoiceBookmarksUITests: XCTestCase {
             searchField.typeText("\n")
             let resultExists = app.scrollViews.firstMatch.waitForExistence(timeout: 5) || 
                               app.staticTexts.firstMatch.waitForExistence(timeout: 5)
-            XCTAssertTrue(resultExists, "Поиск должен выполниться через submit")
+            XCTAssertTrue(resultExists, "Search должен выполниться через submit")
         }
     }
     
-    // Проверяет, что иконки папок отображаются
     func testFolderIconsDisplay() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
-        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Вкладка Поиск должна существовать")
+        let searchTab = app.tabBars.buttons["Search"]
+        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Search tab should exist")
         searchTab.tap()
         
         sleep(2)
@@ -440,8 +418,8 @@ final class VoiceBookmarksUITests: XCTestCase {
         var hasFolders = folderButtons.count > 0
         
         if !hasFolders {
-            let selfReflectionFolder = app.staticTexts["Саморефлексия"].firstMatch
-            let tasksFolder = app.staticTexts["Задачи"].firstMatch
+            let selfReflectionFolder = app.staticTexts["Self-reflection"].firstMatch
+            let tasksFolder = app.staticTexts["Tasks"].firstMatch
             hasFolders = selfReflectionFolder.exists || tasksFolder.exists
         }
         
@@ -450,8 +428,8 @@ final class VoiceBookmarksUITests: XCTestCase {
             sleep(1)
             hasFolders = folderButtons.count > 0
             if !hasFolders {
-                let selfReflectionFolder = app.staticTexts["Саморефлексия"].firstMatch
-                let tasksFolder = app.staticTexts["Задачи"].firstMatch
+                let selfReflectionFolder = app.staticTexts["Self-reflection"].firstMatch
+                let tasksFolder = app.staticTexts["Tasks"].firstMatch
                 hasFolders = selfReflectionFolder.exists || tasksFolder.exists
             }
         }
@@ -468,10 +446,7 @@ final class VoiceBookmarksUITests: XCTestCase {
         XCTAssertTrue(folderText.waitForExistence(timeout: 2) || firstFolder.label.count > 0, "Папка должна содержать текст (название) или иметь label")
     }
     
-    // Проверяет производительность переключения между вкладками
     func testTabSwitchingPerformance() throws {
-        let addTab = app.tabBars.buttons["Добавить"]
-        let searchTab = app.tabBars.buttons["Поиск"]
         #if VOICEBOOKMARKS_CI
         throw XCTSkip("Tab switching performance is unstable on GitHub-hosted simulators.")
         #else
@@ -487,10 +462,9 @@ final class VoiceBookmarksUITests: XCTestCase {
         #endif
     }
     
-    // Проверяет отображение пустого состояния на экране папок
     func testEmptyStateOnFolderScreen() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
-        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Вкладка Поиск должна существовать")
+        let searchTab = app.tabBars.buttons["Search"]
+        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Search tab should exist")
         searchTab.tap()
         
         let foldersScrollView = app.scrollViews.firstMatch
@@ -505,20 +479,19 @@ final class VoiceBookmarksUITests: XCTestCase {
         XCTAssertTrue(hasFolders || hasEmptyState || navBar.exists, "Должно быть либо отображение папок, либо пустое состояние, либо навигационная панель")
     }
     
-    // Проверяет корректность дизайна поля поиска
     func testSearchFieldDesign() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
-        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Вкладка Поиск должна существовать")
+        let searchTab = app.tabBars.buttons["Search"]
+        XCTAssertTrue(searchTab.waitForExistence(timeout: 5), "Search tab should exist")
         searchTab.tap()
         
-        let searchField = app.textFields["Поиск..."]
+        let searchField = app.textFields["Search..."]
         XCTAssertTrue(searchField.waitForExistence(timeout: 5), "Поле поиска должно появиться")
         
         XCTAssertTrue(searchField.exists, "Поле поиска должно быть видимым")
         XCTAssertTrue(searchField.isHittable, "Поле поиска должно быть доступно для взаимодействия")
         
         let placeholder = searchField.placeholderValue ?? ""
-        XCTAssertTrue(placeholder.contains("Поиск") || placeholder.contains("поиск"), "Поле поиска должно иметь placeholder")
+        XCTAssertTrue(placeholder.contains("Search") || placeholder.contains("поиск"), "Поле поиска должно иметь placeholder")
         
         let allButtons = app.buttons.allElementsBoundByIndex
         var searchButtonFound = false

@@ -2,17 +2,6 @@
 //  Bookmark.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
-import Foundation
-
-/// Модель закладки: нормализация типа контента (по расширению и содержимому), приоритет voiceNote над summary
-/// 
-/// Архитектура:
-/// - Автоматическая нормализация типа контента при инициализации
-/// - Определение типа по расширению файла (fileName, fileUrl) и содержимому (data URLs, HTML теги)
-/// - Приоритет voiceNote над summary в displayDescription
-/// - Вычисляемые свойства для UI (displayDescription, dynamicHeight)
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -35,8 +24,7 @@ struct Bookmark: Codable, Identifiable {
     let distance: Double?
     
     
-    /// Отображаемое описание: voiceNote имеет приоритет над summary
-    /// Используется для отображения в UI (голосовая заметка важнее автоматического summary)
+    /// User-visible caption: `voiceNote` wins over `summary` when present.
     var displayDescription: String {
         if let voiceNote = voiceNote, !voiceNote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return voiceNote
@@ -44,8 +32,7 @@ struct Bookmark: Codable, Identifiable {
         return summary ?? ""
     }
     
-    /// Динамическая высота карточки закладки в UI
-    /// Рассчитывается на основе типа контента, размера иконки и наличия описания
+    /// Estimated row height from icon size and optional description text.
     var dynamicHeight: CGFloat {
         let baseHeight: CGFloat = 80
         let iconHeight = contentType.iconSize
@@ -102,7 +89,7 @@ struct Bookmark: Codable, Identifiable {
     }
     
     
-    /// Декодирование из JSON с нормализацией типа контента
+    /// Decodes JSON and normalizes `ContentType`.
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -136,8 +123,7 @@ struct Bookmark: Codable, Identifiable {
     }
     
     
-    /// Нормализует тип контента: сначала по расширению файла, затем по содержимому (data URLs, HTML теги)
-    /// Это обеспечивает правильное определение типа даже если сервер вернул неверный тип
+    /// Normalizes stored type using filename/url first, then payload heuristics (data URLs, HTML).
     private static func normalizeContentType(
         rawType: ContentType,
         fileName: String,
@@ -163,8 +149,7 @@ struct Bookmark: Codable, Identifiable {
         return rawType
     }
     
-    /// Определяет тип контента по расширениям из fileName и fileUrl (проверяет оба)
-    /// Проверяет расширения в обоих источниках для более точного определения
+    /// Infers type from extensions present in `fileName` and `fileUrl`.
     private static func bestTypeFromExtensions(fileName: String, fileUrl: String?) -> ContentType {
         var extensionsToCheck: [String] = []
         
@@ -195,8 +180,7 @@ struct Bookmark: Codable, Identifiable {
         return .file
     }
     
-    /// Определяет тип контента по содержимому: data URLs (data:image/, data:audio/, data:video/) или HTML теги (<img>, <audio>, <video>)
-    /// Используется как fallback когда расширение файла не помогает определить тип
+    /// Fallback type detection from inline content (data URLs, `<img>` / `<audio>` / `<video>` hints).
     private static func inferTypeFromContent(_ content: String?) -> ContentType? {
         guard let contentLowercased = content?.lowercased() else { return nil }
         

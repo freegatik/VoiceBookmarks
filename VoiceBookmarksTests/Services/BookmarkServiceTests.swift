@@ -2,8 +2,6 @@
 //  BookmarkServiceTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -140,7 +138,8 @@ final class BookmarkServiceTests: XCTestCase {
         
         mockFile.mockValidationResult = FileValidationResult(
             isValid: true,
-            contentType: .text, // HTML файлы могут определяться как text
+            contentType: .text,
+
             fileSize: 100,
             errorMessage: nil
         )
@@ -216,4 +215,3 @@ final class BookmarkServiceTests: XCTestCase {
         try? FileManager.default.removeItem(at: testURL)
     }
 }
-

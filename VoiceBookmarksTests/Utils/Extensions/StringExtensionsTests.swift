@@ -2,8 +2,6 @@
 //  StringExtensionsTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -106,7 +104,8 @@ final class StringExtensionsTests: XCTestCase {
         let height = string.height(withConstrainedWidth: width, font: font)
         
         XCTAssertGreaterThan(height, 0)
-        XCTAssertLessThan(height, 50) // Короткая строка должна быть невысокой
+        XCTAssertLessThan(height, 50)
+
     }
     
     func testString_Height_LongString() {
@@ -116,7 +115,8 @@ final class StringExtensionsTests: XCTestCase {
         
         let height = string.height(withConstrainedWidth: width, font: font)
         
-        XCTAssertGreaterThan(height, 50) // Длинная строка должна быть высокой
+        XCTAssertGreaterThan(height, 50)
+
     }
     
     func testString_Height_EmptyString() {
@@ -136,7 +136,8 @@ final class StringExtensionsTests: XCTestCase {
         
         let height = string.height(withConstrainedWidth: width, font: font)
         
-        XCTAssertGreaterThan(height, 50) // Многострочная строка должна быть высокой
+        XCTAssertGreaterThan(height, 50)
+
     }
     
     func testString_Height_DifferentFontSizes() {
@@ -152,4 +153,3 @@ final class StringExtensionsTests: XCTestCase {
         XCTAssertGreaterThan(largeHeight, smallHeight)
     }
 }
-

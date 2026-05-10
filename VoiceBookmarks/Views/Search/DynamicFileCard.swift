@@ -2,8 +2,6 @@
 //  DynamicFileCard.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -48,7 +46,7 @@ struct DynamicFileCard: View {
                                 Image(systemName: "sparkles")
                                     .font(.caption2)
                                     .foregroundColor(.gold)
-                                Text("Описание:")
+                                Text("Description:")
                                     .font(.caption)
                                     .fontWeight(.semibold)
                                     .foregroundColor(.appSecondaryText)
@@ -67,7 +65,7 @@ struct DynamicFileCard: View {
                                 Image(systemName: "mic.fill")
                                     .font(.caption2)
                                     .foregroundColor(.gold)
-                                Text("Заметка:")
+                                Text("Note:")
                                     .font(.caption)
                                     .fontWeight(.semibold)
                                     .foregroundColor(.appSecondaryText)
@@ -87,7 +85,7 @@ struct DynamicFileCard: View {
                             Image(systemName: "mic.fill")
                                 .font(.caption2)
                                 .foregroundColor(.gold)
-                            Text("Заметка:")
+                            Text("Note:")
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.appSecondaryText)
@@ -107,7 +105,7 @@ struct DynamicFileCard: View {
                                 Image(systemName: "sparkles")
                                     .font(.caption2)
                                     .foregroundColor(.gold)
-                                Text("Описание:")
+                                Text("Description:")
                                     .font(.caption)
                                     .fontWeight(.semibold)
                                     .foregroundColor(.appSecondaryText)
@@ -127,7 +125,7 @@ struct DynamicFileCard: View {
                             Image(systemName: "mic.fill")
                                 .font(.caption2)
                                 .foregroundColor(.gold)
-                            Text("Заметка:")
+                            Text("Note:")
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.appSecondaryText)
@@ -146,7 +144,7 @@ struct DynamicFileCard: View {
                             Image(systemName: "sparkles")
                                 .font(.caption2)
                                 .foregroundColor(.gold)
-                            Text("Описание:")
+                            Text("Description:")
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.appSecondaryText)
@@ -164,7 +162,7 @@ struct DynamicFileCard: View {
                             Image(systemName: "mic.fill")
                                 .font(.caption2)
                                 .foregroundColor(.gold.opacity(0.7))
-                            Text("Заметка:")
+                            Text("Note:")
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.appSecondaryText.opacity(0.7))
@@ -255,5 +253,4 @@ struct DynamicFileCard: View {
         return !summary.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 }
-
 

@@ -2,8 +2,6 @@
 //  MockNetworkService.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -49,7 +47,8 @@ class MockNetworkService: NetworkService {
             do {
                 let jsonData = try JSONSerialization.data(withJSONObject: dict)
                 let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601  // Критично для Bookmark.timestamp
+                decoder.dateDecodingStrategy = .iso8601
+
                 return try decoder.decode(T.self, from: jsonData)
             } catch let decodingError as DecodingError {
                 switch decodingError {
@@ -136,4 +135,3 @@ class MockNetworkService: NetworkService {
         """.data(using: .utf8) ?? Data()
     }
 }
-

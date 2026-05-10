@@ -2,8 +2,6 @@
 //  SearchViewModel.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -67,7 +65,7 @@ class SearchViewModel: ObservableObject {
         loadFoldersTask = Task {
             await MainActor.run {
                 isLoading = true
-                loadingMessage = "Загрузка папок..."
+                loadingMessage = "Loading folders..."
             }
             
             do {
@@ -86,7 +84,7 @@ class SearchViewModel: ObservableObject {
             await MainActor.run {
                     isLoading = false
                     loadingMessage = nil
-                    logger.error("Ошибка загрузки папок: \(error)", category: .network)
+                    logger.error("Error загрузки папок: \(error)", category: .network)
                     toast = .error("Не удалось загрузить папки: \(error.localizedDescription)")
                 }
             }
@@ -125,7 +123,7 @@ class SearchViewModel: ObservableObject {
             await MainActor.run {
                 isLoading = false
                 loadingMessage = nil
-                logger.error("Ошибка загрузки файлов для папки: \(error)", category: .network)
+                logger.error("Error загрузки файлов для папки: \(error)", category: .network)
                 toast = .error("Не удалось загрузить файлы: \(error.localizedDescription)")
             }
         }
@@ -207,7 +205,8 @@ class SearchViewModel: ObservableObject {
                             category: b.category,
                             voiceNote: b.voiceNote,
                             fileUrl: b.fileUrl ?? existing.fileUrl,
-                            summary: summary, // Сохраняем summary из existing
+                            summary: summary,
+
                             content: b.content ?? existing.content,
                             contentHash: b.contentHash ?? existing.contentHash,
                             timestamp: b.timestamp > existing.timestamp ? b.timestamp : existing.timestamp,
@@ -229,7 +228,8 @@ class SearchViewModel: ObservableObject {
                             category: b.category,
                             voiceNote: b.voiceNote,
                             fileUrl: b.fileUrl ?? existing.fileUrl,
-                            summary: summary, // Сохраняем summary из existing
+                            summary: summary,
+
                             content: b.content ?? existing.content,
                             contentHash: b.contentHash ?? existing.contentHash,
                             timestamp: b.timestamp > existing.timestamp ? b.timestamp : existing.timestamp,
@@ -253,7 +253,8 @@ class SearchViewModel: ObservableObject {
                                 category: isExistingNewer ? existing.category : b.category,
                                 voiceNote: isExistingNewer ? existing.voiceNote : b.voiceNote,
                                 fileUrl: isExistingNewer ? (existing.fileUrl ?? b.fileUrl) : (b.fileUrl ?? existing.fileUrl),
-                                summary: summary, // Сохраняем summary из b
+                                summary: summary,
+
                                 content: isExistingNewer ? (existing.content ?? b.content) : (b.content ?? existing.content),
                                 contentHash: isExistingNewer ? (existing.contentHash ?? b.contentHash) : (b.contentHash ?? existing.contentHash),
                                 timestamp: isExistingNewer ? existing.timestamp : b.timestamp,
@@ -286,7 +287,8 @@ class SearchViewModel: ObservableObject {
                             category: isExistingNewer ? existing.category : b.category,
                             voiceNote: voiceNoteToUse,
                             fileUrl: isExistingNewer ? (existing.fileUrl ?? b.fileUrl) : (b.fileUrl ?? existing.fileUrl),
-                            summary: summary, // Сохраняем summary из b
+                            summary: summary,
+
                             content: isExistingNewer ? (existing.content ?? b.content) : (b.content ?? existing.content),
                             contentHash: isExistingNewer ? (existing.contentHash ?? b.contentHash) : (b.contentHash ?? existing.contentHash),
                             timestamp: isExistingNewer ? existing.timestamp : b.timestamp,
@@ -385,7 +387,8 @@ class SearchViewModel: ObservableObject {
                 let sessionId = currentPressSessionId
                 recordingWatchdogTask?.cancel()
                 recordingWatchdogTask = Task {
-                    try? await Task.sleep(nanoseconds: 2_500_000_000) // Увеличено с 1.5с до 2.5с для более стабильной работы
+                    try? await Task.sleep(nanoseconds: 2_500_000_000)
+
                     let shouldRetry = await MainActor.run {
                         !receivedPartialForSession && isRecording && !hasRetriedStartForSession && sessionId == currentPressSessionId
                     }
@@ -401,7 +404,8 @@ class SearchViewModel: ObservableObject {
                             isRecording = false
                         }
                         
-                        try? await Task.sleep(nanoseconds: 500_000_000) // Увеличено с 300мс до 500мс
+                        try? await Task.sleep(nanoseconds: 500_000_000)
+
                         
                         do {
                             try await speechService.startRecording(
@@ -442,7 +446,8 @@ class SearchViewModel: ObservableObject {
                                message.contains("Запись уже активна") {
                                 logger.warning("Watchdog: ошибка 'Запись уже активна' при перезапуске (folder), повторная попытка", category: .speech)
                                 speechService.cancelRecording()
-                                try? await Task.sleep(nanoseconds: 200_000_000) // 200мс
+                                try? await Task.sleep(nanoseconds: 200_000_000)
+
                                 
                                 if sessionId == currentPressSessionId {
                                     do {
@@ -496,7 +501,7 @@ class SearchViewModel: ObservableObject {
                             } else {
                             await MainActor.run {
                                 isRecording = false
-                                logger.error("Ошибка перезапуска записи: \(error)", category: .speech)
+                                logger.error("Error перезапуска записи: \(error)", category: .speech)
                                 }
                             }
                         }
@@ -516,7 +521,8 @@ class SearchViewModel: ObservableObject {
                    message.contains("Запись уже активна") {
                     logger.warning("Обнаружена ошибка 'Запись уже активна' (folder), принудительно сбрасываем состояние", category: .speech)
                     speechService.cancelRecording()
-                    try? await Task.sleep(nanoseconds: 500_000_000) // 500мс для полного сброса
+                    try? await Task.sleep(nanoseconds: 500_000_000)
+
                     
                     let shouldRetry = await MainActor.run {
                         sessionId == currentPressSessionId && !hasRetriedStartForSession
@@ -618,7 +624,7 @@ class SearchViewModel: ObservableObject {
                                     } catch {
                                         await MainActor.run {
                                             isRecording = false
-                                            logger.error("Ошибка перезапуска записи: \(error)", category: .speech)
+                                            logger.error("Error перезапуска записи: \(error)", category: .speech)
                                         }
                                     }
                                 }
@@ -628,7 +634,7 @@ class SearchViewModel: ObservableObject {
                         } catch {
                             await MainActor.run {
                                 isRecording = false
-                                logger.error("Ошибка автоматического перезапуска записи: \(error)", category: .speech)
+                                logger.error("Error автоматического перезапуска записи: \(error)", category: .speech)
                                 toast = .error("Не удалось начать запись: \(error.localizedDescription)")
                             }
                         }
@@ -641,13 +647,14 @@ class SearchViewModel: ObservableObject {
                         
                         await MainActor.run {
                             isRecording = false
-                            logger.error("Ошибка начала записи: \(error)", category: .speech)
+                            logger.error("Error начала записи: \(error)", category: .speech)
                         }
                     }
                 } else {
-                    logger.warning("Ошибка распознавания (не 'Запись уже активна'), пытаемся перезапустить запись (folder)", category: .speech)
+                    logger.warning("Error распознавания (не 'Запись уже активна'), пытаемся перезапустить запись (folder)", category: .speech)
                     speechService.cancelRecording()
-                    try? await Task.sleep(nanoseconds: 200_000_000) // 200мс
+                    try? await Task.sleep(nanoseconds: 200_000_000)
+
                     
                     let shouldRetry = await MainActor.run {
                         sessionId == currentPressSessionId && !hasRetriedStartForSession
@@ -749,7 +756,7 @@ class SearchViewModel: ObservableObject {
                                     } catch {
                                         await MainActor.run {
                                             isRecording = false
-                                            logger.error("Ошибка перезапуска записи: \(error)", category: .speech)
+                                            logger.error("Error перезапуска записи: \(error)", category: .speech)
                                         }
                                     }
                                 }
@@ -759,14 +766,14 @@ class SearchViewModel: ObservableObject {
                         } catch {
                             await MainActor.run {
                                 isRecording = false
-                                logger.error("Ошибка автоматического перезапуска записи после ошибки распознавания: \(error)", category: .speech)
+                                logger.error("Error автоматического перезапуска записи после ошибки распознавания: \(error)", category: .speech)
                                 toast = .error("Не удалось начать запись: \(error.localizedDescription)")
                             }
                         }
                     } else {
                         await MainActor.run {
                             isRecording = false
-                            logger.error("Ошибка начала записи: \(error)", category: .speech)
+                            logger.error("Error начала записи: \(error)", category: .speech)
                             toast = .error("Не удалось начать запись: \(error.localizedDescription)")
                         }
                     }
@@ -881,7 +888,8 @@ class SearchViewModel: ObservableObject {
                 let sessionId = currentPressSessionId
                 recordingWatchdogTask?.cancel()
                 recordingWatchdogTask = Task {
-                    try? await Task.sleep(nanoseconds: 2_500_000_000) // Увеличено с 1.5с до 2.5с для более стабильной работы
+                    try? await Task.sleep(nanoseconds: 2_500_000_000)
+
                     let shouldRetry = await MainActor.run {
                         !receivedPartialForSession && isRecording && !hasRetriedStartForSession && sessionId == currentPressSessionId
                     }
@@ -897,7 +905,8 @@ class SearchViewModel: ObservableObject {
                             isRecording = false
                         }
                         
-                        try? await Task.sleep(nanoseconds: 500_000_000) // Увеличено с 300мс до 500мс
+                        try? await Task.sleep(nanoseconds: 500_000_000)
+
                         
                         do {
                             try await speechService.startRecording(
@@ -938,7 +947,8 @@ class SearchViewModel: ObservableObject {
                                message.contains("Запись уже активна") {
                                 logger.warning("Watchdog: ошибка 'Запись уже активна' при перезапуске (bookmark), повторная попытка", category: .speech)
                                 speechService.cancelRecording()
-                                try? await Task.sleep(nanoseconds: 200_000_000) // 200мс
+                                try? await Task.sleep(nanoseconds: 200_000_000)
+
                                 
                                 if sessionId == currentPressSessionId {
                                     do {
@@ -992,7 +1002,7 @@ class SearchViewModel: ObservableObject {
                             } else {
                             await MainActor.run {
                                 isRecording = false
-                                logger.error("Ошибка перезапуска записи: \(error)", category: .speech)
+                                logger.error("Error перезапуска записи: \(error)", category: .speech)
                                 }
                             }
                         }
@@ -1012,7 +1022,8 @@ class SearchViewModel: ObservableObject {
                    message.contains("Запись уже активна") {
                     logger.warning("Обнаружена ошибка 'Запись уже активна' (bookmark), принудительно сбрасываем состояние", category: .speech)
                     speechService.cancelRecording()
-                    try? await Task.sleep(nanoseconds: 500_000_000) // 500мс для полного сброса
+                    try? await Task.sleep(nanoseconds: 500_000_000)
+
                     
                     let shouldRetry = await MainActor.run {
                         sessionId == currentPressSessionId && !hasRetriedStartForSession
@@ -1114,7 +1125,7 @@ class SearchViewModel: ObservableObject {
                                     } catch {
                                         await MainActor.run {
                                             isRecording = false
-                                            logger.error("Ошибка перезапуска записи: \(error)", category: .speech)
+                                            logger.error("Error перезапуска записи: \(error)", category: .speech)
                                         }
                                     }
                                 }
@@ -1124,7 +1135,7 @@ class SearchViewModel: ObservableObject {
                         } catch {
                             await MainActor.run {
                                 isRecording = false
-                                logger.error("Ошибка автоматического перезапуска записи: \(error)", category: .speech)
+                                logger.error("Error автоматического перезапуска записи: \(error)", category: .speech)
                                 toast = .error("Не удалось начать запись: \(error.localizedDescription)")
                             }
                         }
@@ -1137,13 +1148,14 @@ class SearchViewModel: ObservableObject {
                         
                         await MainActor.run {
                             isRecording = false
-                            logger.error("Ошибка начала записи: \(error)", category: .speech)
+                            logger.error("Error начала записи: \(error)", category: .speech)
                         }
                     }
                 } else {
-                    logger.warning("Ошибка распознавания (не 'Запись уже активна'), пытаемся перезапустить запись (bookmark)", category: .speech)
+                    logger.warning("Error распознавания (не 'Запись уже активна'), пытаемся перезапустить запись (bookmark)", category: .speech)
                     speechService.cancelRecording()
-                    try? await Task.sleep(nanoseconds: 200_000_000) // 200мс
+                    try? await Task.sleep(nanoseconds: 200_000_000)
+
                     
                     let shouldRetry = await MainActor.run {
                         sessionId == currentPressSessionId && !hasRetriedStartForSession
@@ -1245,7 +1257,7 @@ class SearchViewModel: ObservableObject {
                                     } catch {
                                         await MainActor.run {
                                             isRecording = false
-                                            logger.error("Ошибка перезапуска записи: \(error)", category: .speech)
+                                            logger.error("Error перезапуска записи: \(error)", category: .speech)
                                         }
                                     }
                                 }
@@ -1255,14 +1267,14 @@ class SearchViewModel: ObservableObject {
                         } catch {
                             await MainActor.run {
                                 isRecording = false
-                                logger.error("Ошибка автоматического перезапуска записи после ошибки распознавания: \(error)", category: .speech)
+                                logger.error("Error автоматического перезапуска записи после ошибки распознавания: \(error)", category: .speech)
                                 toast = .error("Не удалось начать запись: \(error.localizedDescription)")
                             }
                         }
                     } else {
                         await MainActor.run {
                             isRecording = false
-                            logger.error("Ошибка начала записи: \(error)", category: .speech)
+                            logger.error("Error начала записи: \(error)", category: .speech)
                             toast = .error("Не удалось начать запись: \(error.localizedDescription)")
                         }
                     }
@@ -1383,7 +1395,7 @@ class SearchViewModel: ObservableObject {
     }
     
     func cancelRecording() {
-        logger.info("Отмена записи", category: .speech)
+        logger.info("Cancel записи", category: .speech)
         speechService.cancelRecording()
         Task { @MainActor in
             isRecording = false
@@ -1445,8 +1457,8 @@ class SearchViewModel: ObservableObject {
             } catch {
                 await MainActor.run {
                     isLoading = false
-                    logger.error("Ошибка поиска: \(error)", category: .network)
-                    toast = .error("Ошибка поиска: \(error.localizedDescription)")
+                    logger.error("Error поиска: \(error)", category: .network)
+                    toast = .error("Error поиска: \(error.localizedDescription)")
                 }
             }
         }
@@ -1466,8 +1478,8 @@ class SearchViewModel: ObservableObject {
             }
         } catch {
             await MainActor.run {
-                logger.error("Ошибка выполнения команды: \(error)", category: .network)
-                toast = .error("Ошибка выполнения команды: \(error.localizedDescription)")
+                logger.error("Error выполнения команды: \(error)", category: .network)
+                toast = .error("Error выполнения команды: \(error.localizedDescription)")
             }
         }
     }
@@ -1497,4 +1509,3 @@ class SearchViewModel: ObservableObject {
         commandHTML = nil
     }
 }
-

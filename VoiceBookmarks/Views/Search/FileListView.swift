@@ -2,8 +2,6 @@
 //  FileListView.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -39,7 +37,7 @@ struct FileListView: View {
     var body: some View {
         mainContent
             .background(Color.appBackground)
-        .navigationTitle("Файлы")
+        .navigationTitle("Files")
         .navigationBarTitleDisplayMode(.inline)
         .simultaneousGesture(
             DragGesture(minimumDistance: 50)
@@ -62,7 +60,8 @@ struct FileListView: View {
                     }
                 }
         )
-        .offset(x: dragOffset.width > 0 ? min(dragOffset.width, 100) : 0) // Ограничиваем offset до 100px
+        .offset(x: dragOffset.width > 0 ? min(dragOffset.width, 100) : 0)
+
         .sheet(isPresented: $showWebView) {
             if let bookmark = bookmarkToView {
                 WebContentView(
@@ -77,16 +76,16 @@ struct FileListView: View {
             ShareSheet(items: itemsToShare)
         }
         .confirmationDialog(
-            "Удалить закладку?",
+            "Delete bookmark?",
             isPresented: $showDeleteConfirmation,
             titleVisibility: .visible
         ) {
-            Button("Удалить", role: .destructive) {
+            Button("Delete", role: .destructive) {
                 confirmDelete()
             }
-            Button("Отмена", role: .cancel) {}
+            Button("Cancel", role: .cancel) {}
         } message: {
-            Text("Это действие нельзя отменить")
+            Text("This action cannot be undone")
         }
         .confirmationDialog(
             "",
@@ -97,18 +96,18 @@ struct FileListView: View {
             titleVisibility: .hidden
         ) {
             if let bookmark = showPopoverForBookmark {
-                Button("Посмотреть") {
+                Button("View") {
                     bookmarkToView = bookmark
                     showPopoverForBookmark = nil
                     showWebView = true
                 }
                 
-                Button("Поделиться") {
+                Button("Share") {
                     shareBookmark(bookmark)
                     showPopoverForBookmark = nil
                 }
                 
-                Button("Удалить", role: .destructive) {
+                Button("Delete", role: .destructive) {
                     deleteBookmark(bookmark)
                     showPopoverForBookmark = nil
                 }
@@ -170,7 +169,7 @@ struct FileListView: View {
                     }
                     viewModel.searchResults.removeAll { $0.id == bookmark.id }
                     BookmarkCacheService.shared.clearCache(for: folder.fullPath)
-                    viewModel.toast = .success("Закладка удалена")
+                    viewModel.toast = .success("Bookmark deleted")
                     bookmarkToDelete = nil
                     
                     if displayedBookmarks.isEmpty {
@@ -179,7 +178,7 @@ struct FileListView: View {
                 }
             } catch {
                 await MainActor.run {
-                    viewModel.toast = .error("Ошибка удаления: \(error.localizedDescription)")
+                    viewModel.toast = .error("Delete failed: \(error.localizedDescription)")
                 }
             }
         }
@@ -189,7 +188,7 @@ struct FileListView: View {
     private var mainContent: some View {
         if displayedBookmarks.isEmpty {
             EmptyStateView(
-                message: folder.hasChildren ? "Эта папка содержит только подпапки. Откройте подпапку для просмотра файлов." : "Файлы не найдены",
+                message: folder.hasChildren ? "Эта папка содержит только подпапки. Откройте подпапку для просмотра файлов." : "Files не найдены",
                 icon: folder.hasChildren ? "folder.fill" : "doc.badge.gearshape"
             )
         } else {
@@ -281,4 +280,3 @@ struct FileListView: View {
     
     private func handleBookmarkPressChange(pressing: Bool, bookmark: Bookmark) { }
 }
-

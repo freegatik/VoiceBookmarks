@@ -2,8 +2,6 @@
 //  MainTabView.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -48,14 +46,14 @@ struct MainTabView: View {
             ShareView(viewModel: shareViewModel)
                 .tabItem {
                     Image(systemName: "plus")
-                    Text("Добавить")
+                    Text("Add")
                 }
                 .tag(0)
             
             SearchView(viewModel: searchViewModel, bookmarkService: bookmarkService)
                 .tabItem {
                     Image(systemName: "magnifyingglass")
-                    Text("Поиск")
+                    Text("Search")
                 }
                 .tag(1)
         }
@@ -78,5 +76,4 @@ struct MainTabView: View {
         .preferredColorScheme(.light)
     }
 }
-
 

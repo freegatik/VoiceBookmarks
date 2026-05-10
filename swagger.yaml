@@ -24,8 +24,10 @@ info:
     url: https://your-api-server.com/
 
 servers:
+  - url: https://minds.myapp.fund/weaviate
+    description: Production API
   - url: https://your-api-server.com
-    description: Production сервер (замените на ваш API сервер)
+    description: Placeholder / local override (see Constants.swift)
 
 tags:
   - name: Auth

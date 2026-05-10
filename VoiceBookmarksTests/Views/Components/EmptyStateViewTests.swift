@@ -2,8 +2,6 @@
 //  EmptyStateViewTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -25,7 +23,7 @@ final class EmptyStateViewTests: XCTestCase {
     }
     
     func testEmptyStateView_UsesCorrectParameters() {
-        let message = "Файлы не найдены"
+        let message = "Files не найдены"
         let icon = "doc.badge.gearshape"
         
         let view = EmptyStateView(
@@ -47,8 +45,8 @@ final class EmptyStateViewTests: XCTestCase {
     
     func testEmptyStateView_DifferentMessages() {
         let messages = [
-            "Файлы не найдены",
-            "Нет папок",
+            "Files не найдены",
+            "No folders",
             "Пусто",
             "Нет результатов"
         ]
@@ -79,4 +77,3 @@ final class EmptyStateViewTests: XCTestCase {
         }
     }
 }
-

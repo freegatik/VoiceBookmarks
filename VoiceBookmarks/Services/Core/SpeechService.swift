@@ -2,8 +2,6 @@
 //  SpeechService.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -45,28 +43,42 @@ class SpeechService: SpeechServiceProtocol, @unchecked Sendable {
     var state: RecordingState = .idle
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
-    private var recognitionTimer: TimerProtocol? // Таймер отсутствия речи
-    private var maxDurationTimer: TimerProtocol? // Таймер максимальной длительности
+    private var recognitionTimer: TimerProtocol?
+
+    private var maxDurationTimer: TimerProtocol?
+
     private var partialResultCallback: ((String) -> Void)?
     private var finalTranscription: String = ""
     private var currentTimeoutNoSpeech: TimeInterval = Constants.Speech.timeoutNoSpeech
-    private var hasReceivedAnyResult: Bool = false // Флаг получения хотя бы одного результата
-    private var gracePeriodTimer: TimerProtocol? // Таймер grace period перед запуском основного таймера
-    private var firstResultBuffer: String? // Буфер для первого результата
-    private var firstResultBufferTask: Task<Void, Never>? // Задача ожидания следующего результата
-    private var gracePeriodStartTime: Date? // Время начала grace period
-    private var pauseExtensionCount: Int = 0 // Счетчик продлений таймера при паузах
-    private let maxPauseExtensions: Int = 10 // Максимальное количество продлений таймера (10 * timeout = общая пауза)
+    private var hasReceivedAnyResult: Bool = false
+
+    private var gracePeriodTimer: TimerProtocol?
+
+    private var firstResultBuffer: String?
+
+    private var firstResultBufferTask: Task<Void, Never>?
+
+    private var gracePeriodStartTime: Date?
+
+    private var pauseExtensionCount: Int = 0
+
+    private let maxPauseExtensions: Int = 10
+
     private let timerFactory: TimerFactoryProtocol
     private var isTapInstalled = false
     private var isUsingOnDeviceRecognition = false
-    private var forceServerRecognition = false // Принудительно использовать серверное распознавание
+    private var forceServerRecognition = false
+
     private var isCancellingOrStopping = false
-    private var isPrewarming = false // Флаг для отслеживания прогрева audioEngine
+    private var isPrewarming = false
+
     private var sessionDeactivateTask: Task<Void, Never>?
-    private var onDeviceFailureCooldownUntil: Date? // Cooldown после ошибок on-device распознавания
-    private var isRestarting = false // Защита от множественных вызовов restartRecognition
-    private var isStartingTask = false // Защита от множественных вызовов startRecognitionTask
+    private var onDeviceFailureCooldownUntil: Date?
+
+    private var isRestarting = false
+
+    private var isStartingTask = false
+
     
     private init(timerFactory: TimerFactoryProtocol = TimerFactory()) {
         self.timerFactory = timerFactory
@@ -146,7 +158,7 @@ class SpeechService: SpeechServiceProtocol, @unchecked Sendable {
             try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
             try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
         } catch {
-            logger.error("Ошибка настройки аудио сессии: \(error)", category: .speech)
+            logger.error("Error настройки аудио сессии: \(error)", category: .speech)
             state = .idle
             throw APIError.serverError(message: "Не удалось настроить аудио сессию")
         }
@@ -185,7 +197,7 @@ class SpeechService: SpeechServiceProtocol, @unchecked Sendable {
         do {
             try audioEngine.start()
         } catch {
-            logger.error("Ошибка запуска audioEngine: \(error)", category: .speech)
+            logger.error("Error запуска audioEngine: \(error)", category: .speech)
             state = .idle
             recognitionRequest = nil
             recognitionTask = nil
@@ -198,7 +210,8 @@ class SpeechService: SpeechServiceProtocol, @unchecked Sendable {
         startRecognitionTask(onPartialResult: onPartialResult)
         
         hasReceivedAnyResult = false
-        pauseExtensionCount = 0 // Сбрасываем счетчик продлений при начале новой записи
+        pauseExtensionCount = 0
+
         firstResultBuffer = nil
         firstResultBufferTask?.cancel()
         firstResultBufferTask = nil
@@ -218,7 +231,8 @@ class SpeechService: SpeechServiceProtocol, @unchecked Sendable {
         defer {
             state = .idle
             isCancellingOrStopping = false
-            pauseExtensionCount = 0 // Сбрасываем счетчик продлений при остановке записи
+            pauseExtensionCount = 0
+
             logger.debug("stopRecording: состояние сброшено в idle", category: .speech)
         }
         
@@ -255,7 +269,7 @@ class SpeechService: SpeechServiceProtocol, @unchecked Sendable {
         return finalResult
     }
     
-    /// Отмена записи: остановка всех таймеров, очистка ресурсов
+    /// Cancel записи: остановка всех таймеров, очистка ресурсов
     func cancelRecording() {
         guard state != .idle else {
             recognitionTimer?.invalidate()
@@ -363,7 +377,8 @@ class SpeechService: SpeechServiceProtocol, @unchecked Sendable {
     func prewarmAudioEngine() async {
         if state != .idle { return }
         if isCancellingOrStopping { return }
-        if isPrewarming { return } // Предотвращаем параллельный prewarm
+        if isPrewarming { return }
+
         isPrewarming = true
         defer {
             isPrewarming = false
@@ -471,18 +486,18 @@ class SpeechService: SpeechServiceProtocol, @unchecked Sendable {
             self.isStartingTask = false
             
             if let error = error as NSError? {
-                self.logger.warning("Ошибка распознавания речи получена: \(error.localizedDescription), код: \(error.code), domain: \(error.domain)", category: .speech)
+                self.logger.warning("Error распознавания речи получена: \(error.localizedDescription), код: \(error.code), domain: \(error.domain)", category: .speech)
                 
                 if self.handleRecognitionError(error, onPartialResult: onPartialResult) {
                     return
                 }
                 
                 let isCriticalError = error.domain == "kAFAssistantErrorDomain" && (error.code == 1100 || error.code == 1101 || error.code == 1102)
-                self.logger.error("Ошибка распознавания речи не обработана: \(error.localizedDescription), код: \(error.code), критическая: \(isCriticalError)", category: .speech)
+                self.logger.error("Error распознавания речи не обработана: \(error.localizedDescription), код: \(error.code), критическая: \(isCriticalError)", category: .speech)
                 
                 if isCriticalError && self.state != .idle {
                     if error.code == 1101 && self.isUsingOnDeviceRecognition {
-                        self.logger.warning("Ошибка 1101 через обычный handler, переключаемся на сервер", category: .speech)
+                        self.logger.warning("Error 1101 через обычный handler, переключаемся на сервер", category: .speech)
                         self.onDeviceFailureCooldownUntil = Date().addingTimeInterval(60)
                         self.forceServerRecognition = true
                         DispatchQueue.main.async {
@@ -536,7 +551,8 @@ class SpeechService: SpeechServiceProtocol, @unchecked Sendable {
                             let logger = self.logger
                             
                             self.firstResultBufferTask = Task { @MainActor [weak self] in
-                                try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5 секунды
+                                try? await Task.sleep(nanoseconds: 1_500_000_000)
+
                                 guard let self = self, let buffered = bufferedText else { return }
                                 logger.info("Таймаут буферизации первого результата, передаем: '\(buffered.prefix(50))...'", category: .speech)
                                 self.firstResultBuffer = nil
@@ -588,7 +604,7 @@ class SpeechService: SpeechServiceProtocol, @unchecked Sendable {
         logger.info("Обработка ошибки распознавания: domain=\(domain), code=\(code), state=\(state), isUsingOnDeviceRecognition=\(isUsingOnDeviceRecognition), hasReceivedAnyResult=\(hasReceivedAnyResult)", category: .speech)
         
         if isCancellingOrStopping {
-            logger.debug("Ошибка получена во время отмены/остановки записи, игнорируем", category: .speech)
+            logger.debug("Error получена во время отмены/остановки записи, игнорируем", category: .speech)
             return true
         }
         
@@ -606,9 +622,9 @@ class SpeechService: SpeechServiceProtocol, @unchecked Sendable {
             if code == 1110 {
                 if hasReceivedAnyResult {
                     resetRecognitionTimer(resetPauseCount: false)
-                    logger.debug("Ошибка 1110 (пауза в речи): продлеваем таймер, запись продолжается", category: .speech)
+                    logger.debug("Error 1110 (пауза в речи): продлеваем таймер, запись продолжается", category: .speech)
                 } else {
-                    logger.debug("Ошибка 1110 (пауза в речи): продолжаем ожидание первого слова (grace period)", category: .speech)
+                    logger.debug("Error 1110 (пауза в речи): продолжаем ожидание первого слова (grace period)", category: .speech)
                 }
                 return true
             }
@@ -623,22 +639,22 @@ class SpeechService: SpeechServiceProtocol, @unchecked Sendable {
                     }
                     return true
                 } else if state == .recording {
-                    logger.debug("Ошибка 1101 во время записи (не on-device): продолжаем запись", category: .speech)
+                    logger.debug("Error 1101 во время записи (не on-device): продолжаем запись", category: .speech)
                     return true
                 } else {
                     onDeviceFailureCooldownUntil = Date().addingTimeInterval(60)
-                    logger.debug("Ошибка 1101 (запись не активна): устанавливаем cooldown", category: .speech)
+                    logger.debug("Error 1101 (запись не активна): устанавливаем cooldown", category: .speech)
                     return true
                 }
             }
         }
         
         if error.localizedDescription.contains("canceled") {
-            logger.debug("Ошибка отмены распознавания, игнорируем", category: .speech)
+            logger.debug("Error отмены распознавания, игнорируем", category: .speech)
             return true
         }
         
-        logger.warning("Ошибка распознавания не обработана: domain=\(domain), code=\(code), description=\(error.localizedDescription)", category: .speech)
+        logger.warning("Error распознавания не обработана: domain=\(domain), code=\(code), description=\(error.localizedDescription)", category: .speech)
         return false
     }
     
@@ -699,7 +715,7 @@ class SpeechService: SpeechServiceProtocol, @unchecked Sendable {
             }
             
             if let error = error {
-                self.logger.error("Ошибка офлайн recognition: \(error.localizedDescription)", category: .speech)
+                self.logger.error("Error офлайн recognition: \(error.localizedDescription)", category: .speech)
                 Task {
                     await self.handleRecognitionError(error: error)
                 }
@@ -793,4 +809,3 @@ class SpeechService: SpeechServiceProtocol, @unchecked Sendable {
     }
     
 }
-

@@ -2,8 +2,6 @@
 //  AudioPreviewView.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -30,14 +28,14 @@ struct AudioPreviewView: View {
     var body: some View {
         VStack(spacing: 16) {
             if playerManager.isLoading && !playerManager.isLoaded {
-                LoadingView(message: "Загрузка аудио...")
+                LoadingView(message: "Loading audio...")
                     .frame(height: 120)
             } else if let error = playerManager.loadError {
                 VStack(spacing: 8) {
                     Image(systemName: "exclamationmark.triangle")
                         .font(.system(size: 24))
                         .foregroundColor(.error)
-                    Text("Ошибка загрузки аудио")
+                    Text("Error загрузки аудио")
                         .font(.body)
                         .foregroundColor(.appText)
                     Text(error.localizedDescription)
@@ -108,7 +106,8 @@ struct AudioPreviewView: View {
                 
                 if let attributes = try? FileManager.default.attributesOfItem(atPath: currentURL.path),
                    let fileSize = attributes[.size] as? Int {
-                    let minAudioSize: Int = 1024 // 1 КБ
+                    let minAudioSize: Int = 1024
+
                     if fileSize < minAudioSize {
                         logger.error("Аудио файл слишком маленький (\(fileSize) байт), возможно поврежден: \(currentURL.path)", category: .webview)
                         let error = NSError(domain: "AudioPreviewView", code: -11829, userInfo: [NSLocalizedDescriptionKey: "Аудио файл поврежден или слишком маленький"])
@@ -141,7 +140,8 @@ struct AudioPreviewView: View {
                     
                     if let attributes = try? FileManager.default.attributesOfItem(atPath: newURL.path),
                        let fileSize = attributes[.size] as? Int {
-                        let minAudioSize: Int = 1024 // 1 КБ
+                        let minAudioSize: Int = 1024
+
                         if fileSize < minAudioSize {
                             logger.error("Аудио файл слишком маленький (\(fileSize) байт), возможно поврежден: \(newURL.path)", category: .webview)
                             let error = NSError(domain: "AudioPreviewView", code: -11829, userInfo: [NSLocalizedDescriptionKey: "Аудио файл поврежден или слишком маленький"])
@@ -221,7 +221,7 @@ class AudioPlayerManager: NSObject, ObservableObject {
             try audioSession.setActive(true, options: [])
             logger.info("Аудио сессия успешно настроена для воспроизведения", category: .webview)
         } catch {
-            logger.error("Ошибка настройки аудио сессии: \(error)", category: .webview)
+            logger.error("Error настройки аудио сессии: \(error)", category: .webview)
         }
         #endif
         
@@ -278,7 +278,7 @@ class AudioPlayerManager: NSObject, ObservableObject {
             
         case .failed:
             let error = item.error ?? NSError(domain: "AudioPreviewView", code: -1, userInfo: [NSLocalizedDescriptionKey: "Неизвестная ошибка загрузки"])
-            logger.error("Ошибка загрузки AVPlayerItem: \(error)", category: .webview)
+            logger.error("Error загрузки AVPlayerItem: \(error)", category: .webview)
             
             if let nsError = error as NSError? {
                 logger.error("Детали ошибки: domain=\(nsError.domain), code=\(nsError.code), description=\(nsError.localizedDescription)", category: .webview)

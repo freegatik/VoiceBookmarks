@@ -2,8 +2,6 @@
 //  SearchService.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -40,7 +38,7 @@ class SearchService {
                     )
                     let hierarchicalFolders = buildFolderHierarchy(from: response.folders)
                     FolderCacheService.shared.saveFolders(hierarchicalFolders)
-                    logger.info("Папки обновлены в фоне: \(hierarchicalFolders.count)", category: .network)
+                    logger.info("Folders обновлены в фоне: \(hierarchicalFolders.count)", category: .network)
                 } catch {
                     logger.warning("Не удалось обновить папки в фоне: \(error)", category: .network)
                 }
@@ -65,7 +63,7 @@ class SearchService {
             return hierarchicalFolders
             
         } catch {
-            logger.error("Ошибка загрузки папок с сервера: \(error)", category: .network)
+            logger.error("Error загрузки папок с сервера: \(error)", category: .network)
             throw error
         }
     }
@@ -255,13 +253,13 @@ class SearchService {
             }
             
         } catch {
-            logger.error("Ошибка поиска: \(error)", category: .network)
+            logger.error("Error поиска: \(error)", category: .network)
             throw error
         }
     }
     
     func searchInFolder(folderId: String, query: String) async throws -> [Bookmark] {
-        logger.info("Поиск в папке \(folderId): \(query)", category: .network)
+        logger.info("Search в папке \(folderId): \(query)", category: .network)
         
         let response = try await search(query: query, folderId: folderId)
         
@@ -392,14 +390,15 @@ class SearchService {
             )
             
         } catch {
-            logger.error("Ошибка выполнения команды: \(error)", category: .network)
+            logger.error("Error выполнения команды: \(error)", category: .network)
             throw error
         }
     }
     
     struct CategoryBookmarksResult {
         let bookmarks: [Bookmark]
-        let actualCategory: String  // Правильное название категории, которое вернул сервер
+        let actualCategory: String
+
     }
     
     func getBookmarksForFolder(category: String) async throws -> CategoryBookmarksResult {
@@ -474,7 +473,7 @@ class SearchService {
                 }
             }
             
-            logger.error("Ошибка загрузки закладок для папки: \(error)", category: .network)
+            logger.error("Error загрузки закладок для папки: \(error)", category: .network)
             throw error
         }
     }
@@ -489,4 +488,3 @@ protocol SearchServiceProviding {
 }
 
 extension SearchService: SearchServiceProviding {}
-

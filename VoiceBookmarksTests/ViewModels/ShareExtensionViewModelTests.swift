@@ -2,8 +2,6 @@
 //  ShareExtensionViewModelTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -30,7 +28,7 @@ final class ShareExtensionViewModelTests: XCTestCase {
     
     func testShareExtensionViewModel_Init_DefaultValues() {
         XCTAssertTrue(sut.isLoading)
-        XCTAssertEqual(sut.statusMessage, "Добавление контента...")
+        XCTAssertEqual(sut.statusMessage, "Adding content...")
         XCTAssertFalse(sut.showSuccess)
         XCTAssertFalse(sut.showError)
         XCTAssertNil(sut.errorMessage)
@@ -59,11 +57,11 @@ final class ShareExtensionViewModelTests: XCTestCase {
     }
     
     func testShareExtensionViewModel_UpdateStatus_Failure() {
-        sut.updateStatus(message: "Обработка контента...", isSuccess: false)
+        sut.updateStatus(message: "Processing content...", isSuccess: false)
         
         let expectation = expectation(description: "Message updated")
         DispatchQueue.main.async {
-            XCTAssertEqual(self.sut.statusMessage, "Обработка контента...")
+            XCTAssertEqual(self.sut.statusMessage, "Processing content...")
             XCTAssertTrue(self.sut.isLoading)
             XCTAssertFalse(self.sut.showSuccess)
             XCTAssertFalse(self.sut.showError)
@@ -99,7 +97,7 @@ final class ShareExtensionViewModelTests: XCTestCase {
     
     func testShareExtensionViewModel_ShowError_DifferentMessages() {
         let messages = [
-            "Ошибка сети",
+            "Error сети",
             "Файл слишком большой",
             "Неверный формат",
             "Не удалось загрузить"
@@ -150,14 +148,14 @@ final class ShareExtensionViewModelTests: XCTestCase {
     }
     
     func testShareExtensionViewModel_UpdateStatus_MultipleCalls() {
-        sut.updateStatus(message: "Обработка контента...", isSuccess: false)
-        sut.updateStatus(message: "Обработка изображения...", isSuccess: false)
-        sut.updateStatus(message: "Контент успешно добавлен", isSuccess: true)
+        sut.updateStatus(message: "Processing content...", isSuccess: false)
+        sut.updateStatus(message: "Processing image...", isSuccess: false)
+        sut.updateStatus(message: "Content added successfully", isSuccess: true)
         
         let expectation = expectation(description: "Final status applied")
         DispatchQueue.main.async {
             XCTAssertTrue(self.sut.showSuccess)
-            XCTAssertEqual(self.sut.statusMessage, "Контент успешно добавлен")
+            XCTAssertEqual(self.sut.statusMessage, "Content added successfully")
             XCTAssertFalse(self.sut.isLoading)
             XCTAssertFalse(self.sut.showError)
             expectation.fulfill()
@@ -208,20 +206,20 @@ final class ShareExtensionViewModelTests: XCTestCase {
     func testShareExtensionViewModel_IntermediateStates_KeepLoading() {
         XCTAssertTrue(sut.isLoading)
         
-        sut.updateStatus(message: "Обработка контента...", isSuccess: false)
+        sut.updateStatus(message: "Processing content...", isSuccess: false)
         let expectation1 = expectation(description: "Intermediate state 1")
         DispatchQueue.main.async {
             XCTAssertTrue(self.sut.isLoading)
-            XCTAssertEqual(self.sut.statusMessage, "Обработка контента...")
+            XCTAssertEqual(self.sut.statusMessage, "Processing content...")
             expectation1.fulfill()
         }
         wait(for: [expectation1], timeout: 1.0)
         
-        sut.updateStatus(message: "Обработка изображения...", isSuccess: false)
+        sut.updateStatus(message: "Processing image...", isSuccess: false)
         let expectation2 = expectation(description: "Intermediate state 2")
         DispatchQueue.main.async {
             XCTAssertTrue(self.sut.isLoading)
-            XCTAssertEqual(self.sut.statusMessage, "Обработка изображения...")
+            XCTAssertEqual(self.sut.statusMessage, "Processing image...")
             expectation2.fulfill()
         }
         wait(for: [expectation2], timeout: 1.0)
@@ -237,16 +235,15 @@ final class ShareExtensionViewModelTests: XCTestCase {
     }
     
     func testShareExtensionViewModel_IntermediateStates_NoFlags() {
-        sut.updateStatus(message: "Обработка видео...", isSuccess: false)
+        sut.updateStatus(message: "Processing video...", isSuccess: false)
         let expectation = expectation(description: "No flags set")
         DispatchQueue.main.async {
             XCTAssertFalse(self.sut.showSuccess)
             XCTAssertFalse(self.sut.showError)
             XCTAssertTrue(self.sut.isLoading)
-            XCTAssertEqual(self.sut.statusMessage, "Обработка видео...")
+            XCTAssertEqual(self.sut.statusMessage, "Processing video...")
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1.0)
     }
 }
-

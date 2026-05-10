@@ -2,8 +2,6 @@
 //  VoiceBookmarksApp.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -95,7 +93,7 @@ struct VoiceBookmarksApp: App {
                 let userId = try await authService.getOrCreateUserId()
                 LoggerService.shared.info("UserId получен: \(userId)", category: .auth)
             } catch {
-                LoggerService.shared.error("Ошибка получения userId: \(error)", category: .auth)
+                LoggerService.shared.error("Error получения userId: \(error)", category: .auth)
             }
         }
         
@@ -257,4 +255,3 @@ struct AppContentView: View {
         globalToastWorkItem = nil
     }
 }
-

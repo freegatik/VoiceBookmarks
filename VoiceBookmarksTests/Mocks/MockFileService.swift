@@ -2,8 +2,6 @@
 //  MockFileService.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -65,4 +63,3 @@ class MockFileService: FileServiceProtocol {
         return originalName
     }
 }
-

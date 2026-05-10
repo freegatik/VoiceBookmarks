@@ -2,8 +2,6 @@
 //  TextPostProcessor.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -476,7 +474,8 @@ class TextPostProcessor {
         var fixedWords: [String] = []
         var currentPhraseLength = 0
         var currentPhraseWords: [String] = []
-        let maxPhraseLength = 25 // Уменьшено для более частой расстановки точек
+        let maxPhraseLength = 25
+
         
         for (index, word) in words.enumerated() {
             let cleanedWord = word.trimmingCharacters(in: .punctuationCharacters)

@@ -2,8 +2,6 @@
 //  QuickLookPreviewView.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -60,7 +58,8 @@ struct QuickLookPreviewView: UIViewControllerRepresentable {
                     try data.write(to: tempURL)
                     await MainActor.run {
                         context.coordinator.fileURL = tempURL
-                        context.coordinator.isTemporaryFile = true // Помечаем для удаления при закрытии
+                        context.coordinator.isTemporaryFile = true
+
                         controller.reloadData()
                         onLoadFinish()
                     }
@@ -107,7 +106,7 @@ struct QuickLookPreviewView: UIViewControllerRepresentable {
                 try FileManager.default.removeItem(at: fileURL)
                 logger?.info("Временный файл QuickLook удален: \(fileURL.lastPathComponent)", category: .fileOperation)
             } catch {
-                logger?.error("Ошибка удаления временного файла QuickLook: \(error.localizedDescription)", category: .fileOperation)
+                logger?.error("Error удаления временного файла QuickLook: \(error.localizedDescription)", category: .fileOperation)
             }
         }
     }

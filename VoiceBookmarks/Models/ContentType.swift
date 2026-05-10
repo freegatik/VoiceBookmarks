@@ -2,17 +2,6 @@
 //  ContentType.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
-import Foundation
-import CoreGraphics
-
-/// Тип контента: текст, аудио, видео, изображение, файл (иконки и размеры для UI)
-/// 
-/// Архитектура:
-/// - Определение типа по расширению файла (fromFileExtension)
-/// - UI свойства: иконки (iconName), размеры иконок (iconSize), минимальная высота карточки (cardMinHeight)
-/// - Поддержка различных форматов для каждого типа контента
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -29,8 +18,7 @@ enum ContentType: String, Codable {
     case file
     
     
-    /// Определяет тип контента по расширению файла
-    /// Поддерживает широкий спектр форматов для каждого типа
+    /// Maps a file extension to a content type.
     static func fromFileExtension(_ ext: String) -> ContentType {
         let lowercased = ext.lowercased()
         let imageExtensions = ["jpg", "jpeg", "png", "heic", "heif", "gif", "bmp", "tiff", "tif", "webp"]
@@ -55,7 +43,6 @@ enum ContentType: String, Codable {
     }
     
     
-    /// Имя иконки SF Symbols для отображения в UI
     var iconName: String {
         switch self {
         case .text: return "doc.text"
@@ -66,7 +53,6 @@ enum ContentType: String, Codable {
         }
     }
     
-    /// Размер иконки в пикселях (зависит от типа контента)
     var iconSize: CGFloat {
         switch self {
         case .text: return 32
@@ -77,7 +63,6 @@ enum ContentType: String, Codable {
         }
     }
     
-    /// Минимальная высота карточки в UI (зависит от типа контента)
     var cardMinHeight: CGFloat {
         switch self {
         case .text: return 96

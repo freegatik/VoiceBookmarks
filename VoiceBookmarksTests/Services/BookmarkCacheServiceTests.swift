@@ -2,8 +2,6 @@
 //  BookmarkCacheServiceTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -88,7 +86,8 @@ final class BookmarkCacheServiceTests: XCTestCase {
         let testBookmarks = createTestBookmarks(count: 1, category: "SelfReflection")
         sut.saveBookmarks(testBookmarks, for: "SelfReflection")
         
-        let expiredTime = Date().timeIntervalSince1970 - 400 // 400 секунд назад
+        let expiredTime = Date().timeIntervalSince1970 - 400
+
         UserDefaults.standard.set(expiredTime, forKey: "cached_bookmarks_expiration_SelfReflection")
         
         let cached = sut.getCachedBookmarks(for: "SelfReflection")
@@ -207,7 +206,8 @@ final class BookmarkCacheServiceTests: XCTestCase {
         let testBookmarks = createTestBookmarks(count: 1, category: "SelfReflection")
         sut.saveBookmarks(testBookmarks, for: "SelfReflection")
         
-        let recentTime = Date().timeIntervalSince1970 - 60 // 1 минута назад
+        let recentTime = Date().timeIntervalSince1970 - 60
+
         UserDefaults.standard.set(recentTime, forKey: "cached_bookmarks_expiration_SelfReflection")
         
         let cached = sut.getCachedBookmarks(for: "SelfReflection")
@@ -290,4 +290,3 @@ final class BookmarkCacheServiceTests: XCTestCase {
         return bookmarks
     }
 }
-

@@ -2,14 +2,11 @@
 //  FileListViewUITests.swift
 //  VoiceBookmarksUITests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
 import XCTest
 
-// UI тесты списка файлов: загрузка файлов в папке, тап на файл, отображение карточек
 final class FileListViewUITests: XCTestCase {
     
     var app: XCUIApplication!
@@ -22,14 +19,14 @@ final class FileListViewUITests: XCTestCase {
         app.launch()
         sleep(1)
         
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
         let _ = folders.firstMatch.waitForExistence(timeout: 10)
         if folders.count > 0 {
             folders.firstMatch.tap()
-            _ = app.navigationBars["Файлы"].waitForExistence(timeout: 5)
+            _ = app.navigationBars["Files"].waitForExistence(timeout: 5)
         }
     }
     
@@ -38,7 +35,6 @@ final class FileListViewUITests: XCTestCase {
         super.tearDown()
     }
     
-    // Вспомогательная функция: ждет появления файлов с таймаутом
     func waitForFiles(timeout: TimeInterval = 15.0) -> XCUIElementQuery {
         sleep(2)
         
@@ -46,9 +42,9 @@ final class FileListViewUITests: XCTestCase {
         var hasFiles = files.count > 0
         
         if !hasFiles {
-            let noteFile = app.staticTexts["Заметка о цели"].firstMatch
-            let audioFile = app.staticTexts["Аудио идея.m4a"].firstMatch
-            let noteDescription = app.staticTexts["Краткое описание заметки"].firstMatch
+            let noteFile = app.staticTexts["Goal note"].firstMatch
+            let audioFile = app.staticTexts["Audio idea.m4a"].firstMatch
+            let noteDescription = app.staticTexts["Short note description"].firstMatch
             let audioDescription = app.staticTexts["Черновик голосовой заметки"].firstMatch
             hasFiles = noteFile.exists || audioFile.exists || noteDescription.exists || audioDescription.exists
         }
@@ -59,8 +55,8 @@ final class FileListViewUITests: XCTestCase {
             hasFiles = files.count > 0
             
             if !hasFiles {
-                let noteFile = app.staticTexts["Заметка о цели"].firstMatch
-                let audioFile = app.staticTexts["Аудио идея.m4a"].firstMatch
+                let noteFile = app.staticTexts["Goal note"].firstMatch
+                let audioFile = app.staticTexts["Audio idea.m4a"].firstMatch
                 hasFiles = noteFile.exists || audioFile.exists
             }
         }
@@ -68,9 +64,8 @@ final class FileListViewUITests: XCTestCase {
         return files
     }
     
-    // Проверяет отображение списка файлов в папке
     func testFileListDisplaysBookmarks() throws {
-        let navBar = app.navigationBars["Файлы"]
+        let navBar = app.navigationBars["Files"]
         if navBar.waitForExistence(timeout: 3) {
             XCTAssertTrue(navBar.exists, "Список файлов должен отображаться")
             
@@ -79,7 +74,6 @@ final class FileListViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что тап на файл открывает его в WebView
     func testTapOnFileOpensInWebView() throws {
         let files = app.scrollViews.buttons
         if files.count > 0 {
@@ -89,23 +83,20 @@ final class FileListViewUITests: XCTestCase {
             if navBar.waitForExistence(timeout: 3) {
                 XCTAssertTrue(navBar.exists, "WebView должен открыться после тапа на файл")
                 
-                let closeButton = navBar.buttons["Закрыть"]
-                XCTAssertTrue(closeButton.exists, "Кнопка 'Закрыть' должна присутствовать")
                 let closeButton = UITestInteractions.webCloseButton(in: app)
                 XCTAssertTrue(closeButton.waitForExistence(timeout: 5), "Кнопка 'Close' должна присутствовать")
             }
         }
     }
     
-    // Проверяет context menu на файле
     func testFileContextMenuActions() throws {
         let files = app.scrollViews.buttons
         if files.count > 0 {
             files.firstMatch.press(forDuration: 1.0)
             
-            let viewAction = app.buttons["Посмотреть"]
-            let shareAction = app.buttons["Поделиться"]
-            let deleteAction = app.buttons["Удалить"]
+            let viewAction = app.buttons["View"]
+            let shareAction = app.buttons["Share"]
+            let deleteAction = app.buttons["Delete"]
             
             let hasMenuActions = viewAction.exists || shareAction.exists || deleteAction.exists
             if hasMenuActions {
@@ -114,34 +105,30 @@ final class FileListViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет динамические карточки файлов - разные иконки
     func testDynamicFileCardIcons() throws {
         let files = app.scrollViews.buttons
         if files.count > 0 {
-            XCTAssertTrue(files.firstMatch.exists, "Файлы должны отображаться с иконками")
+            XCTAssertTrue(files.firstMatch.exists, "Files должны отображаться с иконками")
         }
     }
     
-    // Проверяет пустое состояние для пустой папки
     func testEmptyStateForEmptyFolder() throws {
-        let navBar = app.navigationBars["Файлы"]
+        let navBar = app.navigationBars["Files"]
         if navBar.exists {
-            let emptyMessage = app.staticTexts["Файлы не найдены"]
+            let emptyMessage = app.staticTexts["Files не найдены"]
             let filesList = app.scrollViews.firstMatch
             
             XCTAssertTrue(filesList.exists || emptyMessage.exists, "Должно отображаться либо файлы, либо пустое состояние")
         }
     }
     
-    // Проверяет, что разные типы контента отображаются с разными иконками
     func testDifferentContentTypesDisplayIcons() throws {
         let files = app.scrollViews.buttons
         if files.count > 0 {
-            XCTAssertTrue(files.firstMatch.exists, "Файлы должны отображаться с иконками согласно типу контента")
+            XCTAssertTrue(files.firstMatch.exists, "Files должны отображаться с иконками согласно типу контента")
         }
     }
     
-    // Проверяет, что карточки файлов имеют динамическую высоту
     func testDynamicFileCardHeights() throws {
         let files = app.scrollViews.buttons
         if files.count > 0 {
@@ -149,19 +136,18 @@ final class FileListViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что свайп вправо возвращает к предыдущему списку (как браузер "назад")
     func testSwipeRightReturnsToPreviousList() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
         guard folders.firstMatch.waitForExistence(timeout: 15) else {
-            throw XCTSkip("Папки не загрузились для открытия FileListView")
+            throw XCTSkip("Folders не загрузились для открытия FileListView")
         }
         
         folders.firstMatch.tap()
         
-        let navBar = app.navigationBars["Файлы"]
+        let navBar = app.navigationBars["Files"]
         guard navBar.waitForExistence(timeout: 5) else {
             throw XCTSkip("FileListView не открылся")
         }
@@ -175,7 +161,7 @@ final class FileListViewUITests: XCTestCase {
         startPoint.press(forDuration: 0.1, thenDragTo: endPoint)
         
         sleep(1)
-        let foldersNavBar = app.navigationBars["Папки"]
+        let foldersNavBar = app.navigationBars["Folders"]
         if foldersNavBar.waitForExistence(timeout: 2) {
             XCTAssertTrue(foldersNavBar.exists, "После свайпа вправо должен вернуться к списку папок")
         } else {
@@ -184,14 +170,13 @@ final class FileListViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет long press на файле в списке результатов для nested search
     func testLongPressOnFileInResultsList() throws {
         let files = waitForFiles(timeout: 15.0)
         
         var hasFiles = files.count > 0
         if !hasFiles {
-            let noteFile = app.staticTexts["Заметка о цели"].firstMatch
-            let audioFile = app.staticTexts["Аудио идея.m4a"].firstMatch
+            let noteFile = app.staticTexts["Goal note"].firstMatch
+            let audioFile = app.staticTexts["Audio idea.m4a"].firstMatch
             hasFiles = noteFile.exists || audioFile.exists
         }
         
@@ -208,4 +193,3 @@ final class FileListViewUITests: XCTestCase {
         XCTAssertTrue(app.scrollViews.firstMatch.exists, "После long press на файле должен начаться nested search")
     }
 }
-

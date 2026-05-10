@@ -2,8 +2,6 @@
 //  TranscriptionView.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -25,7 +23,7 @@ struct TranscriptionView: View {
                     HStack {
                         ProgressView()
                             .scaleEffect(0.8)
-                        Text("Говорите...")
+                        Text("Speak...")
                             .font(.body)
                             .foregroundColor(.gray.opacity(0.7))
                     }
@@ -47,4 +45,3 @@ struct TranscriptionView: View {
         }
     }
 }
-

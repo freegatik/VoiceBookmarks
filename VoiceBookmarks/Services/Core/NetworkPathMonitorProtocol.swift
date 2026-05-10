@@ -2,8 +2,6 @@
 //  NetworkPathMonitorProtocol.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -105,4 +103,3 @@ class MockNetworkPathMonitor: NetworkPathMonitorProtocol {
         pathUpdateHandler?(path)
     }
 }
-

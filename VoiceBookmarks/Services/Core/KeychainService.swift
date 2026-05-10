@@ -2,8 +2,6 @@
 //  KeychainService.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -61,7 +59,7 @@ class KeychainService: KeychainServiceProtocol {
             logger.info("UserId успешно сохранен в Keychain", category: .storage)
             return true
         } else {
-            logger.error("Ошибка сохранения в Keychain: \(status)", category: .storage)
+            logger.error("Error сохранения в Keychain: \(status)", category: .storage)
             return false
         }
     }
@@ -111,9 +109,8 @@ class KeychainService: KeychainServiceProtocol {
             logger.debug("UserId не найден в Keychain (уже удален)", category: .storage)
             return true
         } else {
-            logger.warning("Ошибка удаления из Keychain: \(status)", category: .storage)
+            logger.warning("Error удаления из Keychain: \(status)", category: .storage)
             return false
         }
     }
 }
-

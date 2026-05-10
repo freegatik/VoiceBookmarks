@@ -2,8 +2,6 @@
 //  ShareView.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -14,7 +12,8 @@ struct ShareView: View {
     @StateObject var viewModel: ShareViewModel
     @State private var tapStartTime: Date?
     @State private var isLongPressing: Bool = false
-    @State private var hasCalledSwipeDown: Bool = false // Защита от повторных вызовов handleSwipeDown в onChanged
+    @State private var hasCalledSwipeDown: Bool = false
+
     
     var body: some View {
         GeometryReader { geometry in
@@ -24,7 +23,7 @@ struct ShareView: View {
                 
                 VStack(spacing: 0) {
                     TranscriptionView(
-                        text: viewModel.isRecording ? (viewModel.transcription.isEmpty ? "Говорите..." : viewModel.transcription) : viewModel.transcription,
+                        text: viewModel.isRecording ? (viewModel.transcription.isEmpty ? "Speak..." : viewModel.transcription) : viewModel.transcription,
                         onTap: {
                             if !viewModel.isRecording && viewModel.contentPreview == nil {
                                 let screenWidth = UIScreen.main.bounds.width
@@ -97,7 +96,8 @@ struct ShareView: View {
                 .onEnded { value in
                     let startTime = tapStartTime
                     tapStartTime = nil
-                    hasCalledSwipeDown = false // Сбрасываем флаг при завершении жеста
+                    hasCalledSwipeDown = false
+
                     let translation = value.translation
                     
                     if viewModel.isRecording {

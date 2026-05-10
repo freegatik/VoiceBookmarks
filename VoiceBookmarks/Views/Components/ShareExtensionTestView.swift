@@ -2,8 +2,6 @@
 //  ShareExtensionTestView.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -28,7 +26,7 @@ struct ShareExtensionTestView: View {
                     Button("Loading") {
                         currentState = .loading
                         viewModel.isLoading = true
-                        viewModel.statusMessage = "Добавление контента..."
+                        viewModel.statusMessage = "Adding content..."
                         viewModel.showSuccess = false
                         viewModel.showError = false
                     }
@@ -36,25 +34,25 @@ struct ShareExtensionTestView: View {
                     
                     Button("Processing") {
                         currentState = .loading
-                        viewModel.updateStatus(message: "Обработка контента...", isSuccess: false)
+                        viewModel.updateStatus(message: "Processing content...", isSuccess: false)
                     }
                     .buttonStyle(.bordered)
                     
                     Button("Processing Image") {
                         currentState = .loading
-                        viewModel.updateStatus(message: "Обработка изображения...", isSuccess: false)
+                        viewModel.updateStatus(message: "Processing image...", isSuccess: false)
                     }
                     .buttonStyle(.bordered)
                     
                     Button("Success") {
                         currentState = .success
-                        viewModel.updateStatus(message: "Контент успешно добавлен", isSuccess: true)
+                        viewModel.updateStatus(message: "Content added successfully", isSuccess: true)
                     }
                     .buttonStyle(.borderedProminent)
                     
                     Button("Error") {
                         currentState = .error
-                        viewModel.showError("Нет контента для добавления")
+                        viewModel.showError("No content to add")
                     }
                     .buttonStyle(.bordered)
                     .tint(.red)
@@ -62,7 +60,7 @@ struct ShareExtensionTestView: View {
                     Button("Default") {
                         currentState = .defaultState
                         viewModel.isLoading = false
-                        viewModel.statusMessage = "Добавление контента..."
+                        viewModel.statusMessage = "Adding content..."
                         viewModel.showSuccess = false
                         viewModel.showError = false
                     }
@@ -143,4 +141,3 @@ struct ActivityView: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 #endif
-

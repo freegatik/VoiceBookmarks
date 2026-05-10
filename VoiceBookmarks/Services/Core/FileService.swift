@@ -2,8 +2,6 @@
 //  FileService.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -190,7 +188,7 @@ class FileService: FileServiceProtocol {
             presetName: AVAssetExportPresetMediumQuality
         ) else {
             let error = NSError(domain: "FileService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Не удалось создать export session"])
-            logger.error("Ошибка создания export session", category: .fileOperation)
+            logger.error("Error создания export session", category: .fileOperation)
             completion(nil, error)
             return
         }
@@ -220,7 +218,7 @@ class FileService: FileServiceProtocol {
                     completion(outputURL, nil)
                     
                 case .failed, .cancelled:
-                    self.logger.error("Ошибка сжатия видео: \(exportSession.error?.localizedDescription ?? "unknown")", category: .fileOperation)
+                    self.logger.error("Error сжатия видео: \(exportSession.error?.localizedDescription ?? "unknown")", category: .fileOperation)
                     completion(nil, exportSession.error)
                     
                 default:
@@ -240,7 +238,7 @@ class FileService: FileServiceProtocol {
             logger.info("Файл сохранен в temp: \(fileName)", category: .fileOperation)
             return url
         } catch {
-            logger.error("Ошибка сохранения в temp: \(error)", category: .fileOperation)
+            logger.error("Error сохранения в temp: \(error)", category: .fileOperation)
             return nil
         }
     }
@@ -272,7 +270,7 @@ class FileService: FileServiceProtocol {
         do {
             try FileManager.default.createDirectory(at: filesDir, withIntermediateDirectories: true)
         } catch {
-            logger.error("Ошибка создания директории Files в App Group: \(error)", category: .fileOperation)
+            logger.error("Error создания директории Files в App Group: \(error)", category: .fileOperation)
             throw error
         }
         
@@ -282,7 +280,7 @@ class FileService: FileServiceProtocol {
             logger.info("Файл скопирован в App Group: \(destinationURL.lastPathComponent)", category: .fileOperation)
             return destinationURL
         } catch {
-            logger.error("Ошибка копирования файла в App Group: \(error)", category: .fileOperation)
+            logger.error("Error копирования файла в App Group: \(error)", category: .fileOperation)
             throw error
         }
     }
@@ -292,7 +290,7 @@ class FileService: FileServiceProtocol {
             let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
             return attributes[.size] as? Int64
         } catch {
-            logger.error("Ошибка получения размера файла: \(error)", category: .fileOperation)
+            logger.error("Error получения размера файла: \(error)", category: .fileOperation)
             return nil
         }
     }
@@ -310,7 +308,7 @@ class FileService: FileServiceProtocol {
             if (error as NSError).code == NSFileNoSuchFileError || (error as NSError).code == 2 {
                 logger.info("Файл уже был удален: \(url.lastPathComponent)", category: .fileOperation)
             } else {
-                logger.error("Ошибка удаления файла: \(error)", category: .fileOperation)
+                logger.error("Error удаления файла: \(error)", category: .fileOperation)
             }
         }
     }
@@ -331,4 +329,3 @@ class FileService: FileServiceProtocol {
         return ContentType.fromFileExtension(ext)
     }
 }
-

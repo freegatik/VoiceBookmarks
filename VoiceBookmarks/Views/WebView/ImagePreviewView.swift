@@ -2,8 +2,6 @@
 //  ImagePreviewView.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -38,7 +36,7 @@ struct ImagePreviewView: View {
                 .ignoresSafeArea()
             
             if isLoading {
-                LoadingView(message: "Загрузка изображения...")
+                LoadingView(message: "Loading image...")
             } else if let image = image {
                 Image(uiImage: image)
                     .resizable()
@@ -73,7 +71,8 @@ struct ImagePreviewView: View {
         loadError = nil
         
         let timeoutTask = Task {
-            try? await Task.sleep(nanoseconds: 15_000_000_000) // 15 секунд (сокращено с 30)
+            try? await Task.sleep(nanoseconds: 15_000_000_000)
+
             if !Task.isCancelled {
                 await MainActor.run {
                     if isLoading {
@@ -94,12 +93,15 @@ struct ImagePreviewView: View {
                 data = try Data(contentsOf: imageURL)
             } else {
                 let config = URLSessionConfiguration.default
-                config.timeoutIntervalForRequest = 10 // 10 секунд для запроса (сокращено с 15)
-                config.timeoutIntervalForResource = 15 // 15 секунд для всего ресурса (сокращено с 30)
+                config.timeoutIntervalForRequest = 10
+
+                config.timeoutIntervalForResource = 15
+
                 let session = URLSession(configuration: config)
                 
                 var request = URLRequest(url: imageURL)
-                request.timeoutInterval = 10 // Сокращено с 15 до 10 секунд
+                request.timeoutInterval = 10
+
                 if let headers = headers { for (k,v) in headers { request.setValue(v, forHTTPHeaderField: k) } }
                 let (remoteData, _) = try await session.data(for: request)
                 data = remoteData
@@ -154,9 +156,9 @@ struct ImagePreviewView: View {
             }
         } catch {
             await MainActor.run {
-                loadError = "Ошибка: \(error.localizedDescription)"
+                loadError = "Error: \(error.localizedDescription)"
                 isLoading = false
-                logger.error("Ошибка загрузки изображения: \(error)", category: .webview)
+                logger.error("Error загрузки изображения: \(error)", category: .webview)
                 onLoadFail?(error)
             }
         }

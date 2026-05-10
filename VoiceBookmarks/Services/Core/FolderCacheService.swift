@@ -2,8 +2,6 @@
 //  FolderCacheService.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -18,7 +16,8 @@ class FolderCacheService {
     private let logger = LoggerService.shared
     private let cacheKey = "cached_folders"
     private let cacheExpirationKey = "cached_folders_expiration"
-    private let cacheValidityDuration: TimeInterval = 300 // Кеш действителен 5 минут
+    private let cacheValidityDuration: TimeInterval = 300
+
     
     private init() {}
     
@@ -32,9 +31,9 @@ class FolderCacheService {
             UserDefaults.standard.set(data, forKey: cacheKey)
         UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: cacheExpirationKey)
         
-        logger.info("Папки сохранены в кеш: \(folders.count)", category: .storage)
+        logger.info("Folders сохранены в кеш: \(folders.count)", category: .storage)
         } catch {
-            logger.error("Ошибка сохранения папок в кеш: \(error)", category: .storage)
+            logger.error("Error сохранения папок в кеш: \(error)", category: .storage)
             let folderNames = folders.map { $0.fullPath }
             UserDefaults.standard.set(folderNames, forKey: cacheKey)
             UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: cacheExpirationKey)
@@ -62,7 +61,7 @@ class FolderCacheService {
             do {
                 let decoder = JSONDecoder()
                 let folders = try decoder.decode([Folder].self, from: data)
-                logger.debug("Папки загружены из кеша (иерархия): \(folders.count), возраст: \(Int(cacheAge))с", category: .storage)
+                logger.debug("Folders загружены из кеша (иерархия): \(folders.count), возраст: \(Int(cacheAge))с", category: .storage)
                 return folders
             } catch {
                 logger.warning("Не удалось декодировать иерархию папок из кеша: \(error), пробуем fallback", category: .storage)
@@ -75,7 +74,7 @@ class FolderCacheService {
         }
         
         let folders = folderNames.map { Folder(name: $0) }
-        logger.debug("Папки загружены из кеша (плоский список): \(folders.count), возраст: \(Int(cacheAge))с", category: .storage)
+        logger.debug("Folders загружены из кеша (плоский список): \(folders.count), возраст: \(Int(cacheAge))с", category: .storage)
         
         return folders
     }

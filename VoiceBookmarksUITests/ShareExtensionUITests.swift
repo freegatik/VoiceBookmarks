@@ -2,15 +2,11 @@
 //  ShareExtensionUITests.swift
 //  VoiceBookmarksUITests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
 import XCTest
 
-// UI тесты Share Extension: структура UI компонентов через тестовый экран ShareExtensionTestView
-// Тесты проверяют состояния загрузки, обработки, успеха/ошибки в Share Extension
 final class ShareExtensionUITests: XCTestCase {
     
     var app: XCUIApplication!
@@ -58,7 +54,6 @@ final class ShareExtensionUITests: XCTestCase {
         super.tearDown()
     }
     
-    // Проверяет структуру Share Extension View: наличие кнопок (Loading, Success, Error, Default) и статусного текста
     func testShareExtensionViewStructure() throws {
         let navBar = app.navigationBars["Share Extension Test"]
         guard navBar.waitForExistence(timeout: 10) else {
@@ -71,12 +66,11 @@ final class ShareExtensionUITests: XCTestCase {
         XCTAssertTrue(app.buttons["Error"].waitForExistence(timeout: 5), "Кнопка 'Error' должна существовать")
         XCTAssertTrue(app.buttons["Default"].waitForExistence(timeout: 5), "Кнопка 'Default' должна существовать")
         
-        let statusText = app.staticTexts["Добавление контента..."]
+        let statusText = app.staticTexts["Adding content..."]
         XCTAssertTrue(statusText.waitForExistence(timeout: 3) || app.images.firstMatch.exists, 
                      "UI элементы должны отображаться")
     }
     
-    // Проверяет, что индикатор загрузки (ProgressView) отображается при нажатии кнопки "Loading"
     func testShareExtensionLoadingIndicator() throws {
         let navBar = app.navigationBars["Share Extension Test"]
         guard navBar.waitForExistence(timeout: 5) else {
@@ -89,13 +83,12 @@ final class ShareExtensionUITests: XCTestCase {
         sleep(2)
         
         let progressIndicators = app.progressIndicators
-        let statusText = app.staticTexts["Добавление контента..."]
+        let statusText = app.staticTexts["Adding content..."]
         
         XCTAssertTrue(progressIndicators.count > 0 || statusText.waitForExistence(timeout: 3), 
                      "ProgressView или статусный текст должны отображаться")
     }
     
-    // Проверяет, что сообщение об успешном импорте отображается при нажатии кнопки "Success"
     func testShareExtensionSuccessMessage() throws {
         let navBar = app.navigationBars["Share Extension Test"]
         guard navBar.waitForExistence(timeout: 5) else {
@@ -107,12 +100,11 @@ final class ShareExtensionUITests: XCTestCase {
         successButton.tap()
         sleep(3)
         
-        let successMessage = app.staticTexts["Контент успешно добавлен"]
+        let successMessage = app.staticTexts["Content added successfully"]
         XCTAssertTrue(successMessage.waitForExistence(timeout: 5) || app.images.count > 0, 
                      "Должно отображаться сообщение об успехе или иконка")
     }
     
-    // Проверяет, что сообщение об ошибке отображается при нажатии кнопки "Error"
     func testShareExtensionErrorMessage() throws {
         let navBar = app.navigationBars["Share Extension Test"]
         guard navBar.waitForExistence(timeout: 5) else {
@@ -124,12 +116,11 @@ final class ShareExtensionUITests: XCTestCase {
         errorButton.tap()
         sleep(2)
         
-        let errorMessage = app.staticTexts["Нет контента для добавления"]
+        let errorMessage = app.staticTexts["No content to add"]
         XCTAssertTrue(errorMessage.waitForExistence(timeout: 5) || app.images.count > 0, 
                      "Должно отображаться сообщение об ошибке или иконка")
     }
     
-    // Проверяет, что Share Extension автоматически закрывается после успешного импорта
     func testShareExtensionAutoClose() throws {
         let navBar = app.navigationBars["Share Extension Test"]
         guard navBar.waitForExistence(timeout: 5) else {
@@ -143,12 +134,11 @@ final class ShareExtensionUITests: XCTestCase {
         successButton.tap()
         sleep(2)
         
-        let successMessage = app.staticTexts["Контент успешно добавлен"]
+        let successMessage = app.staticTexts["Content added successfully"]
         XCTAssertTrue(successMessage.waitForExistence(timeout: 5), 
                      "Сообщение об успехе должно отображаться перед закрытием")
     }
     
-    // Проверяет поддержку различных типов контента
     func testShareExtensionHandlesDifferentContentTypes() throws {
         let navBar = app.navigationBars["Share Extension Test"]
         guard navBar.waitForExistence(timeout: 5) else {
@@ -159,7 +149,6 @@ final class ShareExtensionUITests: XCTestCase {
         XCTAssertTrue(app.otherElements.firstMatch.exists, "UI должен поддерживать обработку контента")
     }
     
-    // Проверяет добавление контента в офлайн очередь
     func testShareExtensionAddsToOfflineQueue() throws {
         let navBar = app.navigationBars["Share Extension Test"]
         guard navBar.waitForExistence(timeout: 10) else {
@@ -172,7 +161,6 @@ final class ShareExtensionUITests: XCTestCase {
         XCTAssertTrue(app.otherElements.firstMatch.exists, "UI должен поддерживать работу с очередью")
     }
     
-    // Проверяет отображение иконок в различных состояниях
     func testShareExtensionIconsDisplay() throws {
         let navBar = app.navigationBars["Share Extension Test"]
         guard navBar.waitForExistence(timeout: 5) else {
@@ -198,7 +186,6 @@ final class ShareExtensionUITests: XCTestCase {
         XCTAssertTrue(app.images.count > 0, "Должна отображаться иконка ошибки")
     }
     
-    // Проверяет цвета текста статуса
     func testShareExtensionStatusColor() throws {
         let navBar = app.navigationBars["Share Extension Test"]
         guard navBar.waitForExistence(timeout: 5) else {
@@ -210,7 +197,7 @@ final class ShareExtensionUITests: XCTestCase {
         errorButton.tap()
         sleep(2)
         
-        let errorText = app.staticTexts["Нет контента для добавления"]
+        let errorText = app.staticTexts["No content to add"]
         XCTAssertTrue(errorText.waitForExistence(timeout: 5), "Текст ошибки должен отображаться")
         
         let successButton = app.buttons["Success"]
@@ -218,8 +205,7 @@ final class ShareExtensionUITests: XCTestCase {
         successButton.tap()
         sleep(2)
         
-        let successText = app.staticTexts["Контент успешно добавлен"]
+        let successText = app.staticTexts["Content added successfully"]
         XCTAssertTrue(successText.waitForExistence(timeout: 5), "Текст успеха должен отображаться")
     }
 }
-

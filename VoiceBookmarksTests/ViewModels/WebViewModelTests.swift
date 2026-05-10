@@ -2,8 +2,6 @@
 //  WebViewModelTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -59,7 +57,7 @@ final class WebViewModelTests: XCTestCase {
         let content = WebViewContent.command( html)
         let viewModel = WebViewModel(content: content, bookmarkService: mockBookmarkService)
         
-        XCTAssertEqual(viewModel.content.title, "Результат команды")
+        XCTAssertEqual(viewModel.content.title, "Command result")
         XCTAssertNil(viewModel.bookmark)
     }
     
@@ -779,4 +777,3 @@ final class WebViewModelTests: XCTestCase {
         XCTAssertNil(headers, "Заголовки не должны возвращаться для внешнего домена")
     }
 }
-

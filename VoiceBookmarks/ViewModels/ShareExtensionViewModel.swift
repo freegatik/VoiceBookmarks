@@ -2,8 +2,6 @@
 //  ShareExtensionViewModel.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -14,7 +12,7 @@ import Combine
 
 public class ShareExtensionViewModel: ObservableObject {
     @Published public var isLoading = true
-    @Published public var statusMessage = "Добавление контента..."
+    @Published public var statusMessage = "Adding content..."
     @Published public var showSuccess = false
     @Published public var showError = false
     @Published public var errorMessage: String?
@@ -43,4 +41,3 @@ public class ShareExtensionViewModel: ObservableObject {
         }
     }
 }
-

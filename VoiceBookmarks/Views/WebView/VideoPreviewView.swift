@@ -2,8 +2,6 @@
 //  VideoPreviewView.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -32,7 +30,7 @@ struct VideoPreviewView: View {
                 VideoPlayer(player: player)
                     .ignoresSafeArea()
             } else {
-                LoadingView(message: "Загрузка видео...")
+                LoadingView(message: "Loading video...")
             }
         }
         .onAppear {
@@ -47,4 +45,3 @@ struct VideoPreviewView: View {
         }
     }
 }
-

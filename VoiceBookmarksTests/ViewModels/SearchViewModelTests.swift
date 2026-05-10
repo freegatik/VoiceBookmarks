@@ -2,8 +2,6 @@
 //  SearchViewModelTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -67,10 +65,10 @@ final class SearchViewModelTests: XCTestCase {
         
         await sut.loadFolders()
         
-        XCTAssertEqual(sut.folders[0].displayName, "Саморефлексия")
-        XCTAssertEqual(sut.folders[1].displayName, "Задачи")
-        XCTAssertEqual(sut.folders[2].displayName, "Ресурсы проекта")
-        XCTAssertEqual(sut.folders[3].displayName, "Без категории")
+        XCTAssertEqual(sut.folders[0].displayName, "Self-reflection")
+        XCTAssertEqual(sut.folders[1].displayName, "Tasks")
+        XCTAssertEqual(sut.folders[2].displayName, "Project resources")
+        XCTAssertEqual(sut.folders[3].displayName, "Uncategorized")
     }
     
     func testSearchViewModel_LoadFolders_SetsLoadingState() async {
@@ -665,7 +663,7 @@ final class SearchViewModelTests: XCTestCase {
     func testWebViewContent_Command_ReturnsCorrectTitle() {
         let content = WebViewContent.command( "<html></html>")
         
-        XCTAssertEqual(content.title, "Результат команды")
+        XCTAssertEqual(content.title, "Command result")
         XCTAssertFalse(content.canDelete)
     }
     
@@ -753,4 +751,3 @@ final class SearchViewModelTests: XCTestCase {
         }
     }
 }
-

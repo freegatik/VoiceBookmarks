@@ -2,16 +2,6 @@
 //  SearchDestination.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
-import Foundation
-
-/// Навигационные точки: список файлов в папке или WebView с контентом/командой
-/// 
-/// Архитектура:
-/// - Два типа навигации: fileList (список файлов в папке) и webView (просмотр контента/команды)
-/// - Кастомная реализация Equatable для сравнения навигационных точек
-/// - Используется для навигации в SearchView
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -41,4 +31,3 @@ enum SearchDestination: Equatable {
         }
     }
 }
-

@@ -2,8 +2,6 @@
 //  WebContentViewTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -189,7 +187,7 @@ final class WebContentViewTests: XCTestCase {
         
         let content = WebViewContent.file(bookmark)
         let viewModel = WebViewModel(content: content, bookmarkService: mockBookmarkService)
-        viewModel.loadError = "Ошибка загрузки"
+        viewModel.loadError = "Error загрузки"
         
         let view = WebContentView(viewModel: viewModel)
         
@@ -335,4 +333,3 @@ final class WebContentViewTests: XCTestCase {
         XCTAssertFalse(content.canDelete)
     }
 }
-

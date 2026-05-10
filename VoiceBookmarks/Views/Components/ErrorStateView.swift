@@ -2,8 +2,6 @@
 //  ErrorStateView.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -20,7 +18,7 @@ struct ErrorStateView: View {
                 .font(.system(size: 60))
                 .foregroundColor(.error)
             
-            Text("Ошибка")
+            Text("Error")
                 .font(.title2)
                 .foregroundColor(.appText)
             
@@ -45,4 +43,3 @@ struct ErrorStateView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
-

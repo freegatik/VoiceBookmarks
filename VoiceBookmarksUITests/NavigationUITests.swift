@@ -2,14 +2,11 @@
 //  NavigationUITests.swift
 //  VoiceBookmarksUITests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
 import XCTest
 
-// UI тесты навигации: переходы между экранами, кнопка "Назад", стек навигации
 final class NavigationUITests: XCTestCase {
     
     var app: XCUIApplication!
@@ -27,16 +24,15 @@ final class NavigationUITests: XCTestCase {
         super.tearDown()
     }
     
-    // Проверяет полный путь навигации: Папки → Файлы → WebView → Назад (проверка стека)
     func testFullNavigationPath() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
         if folders.count > 0 {
             folders.firstMatch.tap()
             
-            let fileListNavBar = app.navigationBars["Файлы"]
+            let fileListNavBar = app.navigationBars["Files"]
             if fileListNavBar.waitForExistence(timeout: 3) {
                 XCTAssertTrue(fileListNavBar.exists, "Должен открыться FileListView")
                 
@@ -52,7 +48,7 @@ final class NavigationUITests: XCTestCase {
                         if backButton.exists {
                             backButton.tap()
                             
-                            let fileListNavBarAfter = app.navigationBars["Файлы"]
+                            let fileListNavBarAfter = app.navigationBars["Files"]
                             if fileListNavBarAfter.waitForExistence(timeout: 2) {
                                 XCTAssertTrue(fileListNavBarAfter.exists, "Должен вернуться к FileListView")
                             }
@@ -63,22 +59,21 @@ final class NavigationUITests: XCTestCase {
         }
     }
     
-    // Проверяет навигацию от FileListView к WebView через context menu
     func testNavigationFromFileListToWebViewViaContextMenu() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
         if folders.count > 0 {
             folders.firstMatch.tap()
             
-            _ = app.navigationBars["Файлы"].waitForExistence(timeout: 3)
+            _ = app.navigationBars["Files"].waitForExistence(timeout: 3)
             
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.press(forDuration: 1.0)
                 
-                let viewAction = app.buttons["Посмотреть"]
+                let viewAction = app.buttons["View"]
                 if viewAction.waitForExistence(timeout: 2) {
                     viewAction.tap()
                     
@@ -91,26 +86,24 @@ final class NavigationUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что закрытие WebView возвращает к FileListView
     func testCloseWebViewReturnsToFileList() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
         if folders.count > 0 {
             folders.firstMatch.tap()
-            _ = app.navigationBars["Файлы"].waitForExistence(timeout: 3)
+            _ = app.navigationBars["Files"].waitForExistence(timeout: 3)
             
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
                 
-                let closeButton = app.navigationBars.buttons["Закрыть"]
                 let closeButton = UITestInteractions.webCloseButton(in: app)
                 if closeButton.waitForExistence(timeout: 3) {
                     closeButton.tap()
                     
-                    let fileListNavBar = app.navigationBars["Файлы"]
+                    let fileListNavBar = app.navigationBars["Files"]
                     if fileListNavBar.waitForExistence(timeout: 2) {
                         XCTAssertTrue(fileListNavBar.exists, "Должен вернуться к FileListView после закрытия WebView")
                     }
@@ -119,52 +112,49 @@ final class NavigationUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что навигация между вкладками сохраняет состояние
     func testTabNavigationPreservesState() throws {
-        let addTab = app.tabBars.buttons["Добавить"]
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let addTab = app.tabBars.buttons["Add"]
+        let searchTab = app.tabBars.buttons["Search"]
         
         addTab.tap()
         let addScreen = app.otherElements.firstMatch
-        XCTAssertTrue(addScreen.exists, "Экран 'Добавить' должен отображаться")
+        XCTAssertTrue(addScreen.exists, "Экран 'Add' должен отображаться")
         
         searchTab.tap()
         let searchScreen = app.scrollViews.firstMatch
-        XCTAssertTrue(searchScreen.exists || app.navigationBars.firstMatch.exists, "Экран 'Поиск' должен отображаться")
+        XCTAssertTrue(searchScreen.exists || app.navigationBars.firstMatch.exists, "Экран 'Search' должен отображаться")
         
         addTab.tap()
         let addScreenAfter = app.otherElements.firstMatch
-        XCTAssertTrue(addScreenAfter.exists, "Экран 'Добавить' должен снова отображаться")
+        XCTAssertTrue(addScreenAfter.exists, "Экран 'Add' должен снова отображаться")
     }
     
-    // Проверяет, что переключение на вкладку "Поиск" сбрасывает состояние поиска
     func testSwitchingToSearchTabResetsSearchState() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
         if folders.count > 0 {
             folders.firstMatch.tap()
             
-            let fileListNavBar = app.navigationBars["Файлы"]
+            let fileListNavBar = app.navigationBars["Files"]
             if fileListNavBar.waitForExistence(timeout: 3) {
-                let addTab = app.tabBars.buttons["Добавить"]
+                let addTab = app.tabBars.buttons["Add"]
                 addTab.tap()
                 
                 searchTab.tap()
                 
-                let folderListExists = app.navigationBars["Папки"].waitForExistence(timeout: 2)
+                let folderListExists = app.navigationBars["Folders"].waitForExistence(timeout: 2)
                 XCTAssertTrue(
                     folderListExists || app.scrollViews.firstMatch.exists,
-                    "После переключения на вкладку 'Поиск' должен отображаться список папок"
+                    "После переключения на вкладку 'Search' должен отображаться список папок"
                 )
             }
         }
     }
     
-    // Проверяет, что возврат из WebView после команды возвращает к списку папок
     func testReturnFromWebViewAfterCommandReturnsToFolderList() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -174,12 +164,11 @@ final class NavigationUITests: XCTestCase {
             
             let webViewNavBar = app.navigationBars.firstMatch
             if webViewNavBar.waitForExistence(timeout: 5) {
-                let closeButton = app.navigationBars.buttons["Закрыть"]
                 let closeButton = UITestInteractions.webCloseButton(in: app)
                 if closeButton.waitForExistence(timeout: 2) {
                     closeButton.tap()
                     
-                    let folderListNavBar = app.navigationBars["Папки"]
+                    let folderListNavBar = app.navigationBars["Folders"]
                     if folderListNavBar.waitForExistence(timeout: 3) {
                         XCTAssertTrue(folderListNavBar.exists, "После закрытия WebView с командой должен вернуться список папок")
                     }
@@ -188,4 +177,3 @@ final class NavigationUITests: XCTestCase {
         }
     }
 }
-

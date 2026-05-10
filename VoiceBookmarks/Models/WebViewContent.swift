@@ -2,16 +2,6 @@
 //  WebViewContent.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
-import Foundation
-
-/// Контент для WebView: файл (закладка) или HTML команды
-/// 
-/// Архитектура:
-/// - Два типа контента: файл (закладка) или HTML команды (результат поиска)
-/// - Вычисляемые свойства для UI: title, canDelete
-/// - Команды нельзя удалять (только просматривать)
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -28,7 +18,7 @@ enum WebViewContent {
         case .file(let bookmark):
             return bookmark.fileName
         case .command:
-            return "Результат команды"
+            return "Command result"
         }
     }
     
@@ -41,4 +31,3 @@ enum WebViewContent {
         }
     }
 }
-

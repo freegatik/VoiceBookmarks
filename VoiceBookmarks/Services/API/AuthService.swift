@@ -2,8 +2,6 @@
 //  AuthService.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -42,7 +40,7 @@ class AuthService {
         let saved = await keychainService.saveUserId(userId)
         if !saved {
             logger.error("Не удалось сохранить userId в Keychain", category: .auth)
-            throw APIError.serverError(message: "Ошибка сохранения userId")
+            throw APIError.serverError(message: "Error сохранения userId")
         }
         
         networkService.setUserId(userId)

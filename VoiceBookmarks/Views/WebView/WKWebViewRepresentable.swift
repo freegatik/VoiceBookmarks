@@ -2,8 +2,6 @@
 //  WKWebViewRepresentable.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -15,7 +13,8 @@ import UIKit
 struct WKWebViewRepresentable: UIViewRepresentable {
     
     let url: URL
-    let htmlString: String? // Для быстрой загрузки простых HTML файлов
+    let htmlString: String?
+
     let configuration: WKWebViewConfiguration
     let headers: [String: String]?
     let onLoadFinish: () -> Void
@@ -166,7 +165,8 @@ struct WKWebViewRepresentable: UIViewRepresentable {
         let onLoadFail: (Error) -> Void
         private let logger = LoggerService.shared
         private var loadTimer: Timer?
-        private let loadTimeout: TimeInterval = 15 // Таймаут загрузки 15 секунд
+        private let loadTimeout: TimeInterval = 15
+
         
         private var isLocalFile = false
         private var hasLoadedContent = false
@@ -343,4 +343,3 @@ struct WKWebViewRepresentable: UIViewRepresentable {
     }
 }
 #endif
-

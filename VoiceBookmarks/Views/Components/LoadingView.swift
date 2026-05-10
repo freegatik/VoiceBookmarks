@@ -2,8 +2,6 @@
 //  LoadingView.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -33,4 +31,3 @@ struct LoadingView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
-

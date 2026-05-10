@@ -2,8 +2,6 @@
 //  FolderListView.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -37,11 +35,11 @@ struct FolderListView: View {
                                 .font(.system(size: 60))
                                 .foregroundColor(.error)
                             
-                            Text("Нет подключения к интернету")
+                            Text("No internet connection")
                                 .font(.headline)
                                 .foregroundColor(.appText)
                             
-                            Text("Для работы с поиском требуется подключение к сети")
+                            Text("Search requires a network connection")
                                 .font(.body)
                                 .foregroundColor(.appSecondaryText)
                                 .multilineTextAlignment(.center)
@@ -57,7 +55,7 @@ struct FolderListView: View {
                         
                     } else {
                         HStack(spacing: 12) {
-                            TextField("Поиск...", text: $viewModel.searchQuery)
+                            TextField("Search...", text: $viewModel.searchQuery)
                                 .font(.body)
                                 .foregroundColor(.appText)
                                 .padding(.horizontal, 16)
@@ -129,7 +127,7 @@ struct FolderListView: View {
                             if viewModel.isLoading {
                                 VStack {
                                     Spacer()
-                                    LoadingView(message: viewModel.loadingMessage ?? "Обновление...")
+                                    LoadingView(message: viewModel.loadingMessage ?? "Refreshing...")
                                         .padding()
                                     Spacer()
                                 }
@@ -137,17 +135,17 @@ struct FolderListView: View {
                             }
                         }
                     } else if viewModel.isLoading {
-                        LoadingView(message: viewModel.loadingMessage ?? "Загрузка...")
+                        LoadingView(message: viewModel.loadingMessage ?? "Loading...")
                     } else {
                         EmptyStateView(
-                            message: "Нет папок",
+                            message: "No folders",
                             icon: "folder.badge.questionmark"
                         )
                     }
                 }
             }
             }
-            .navigationTitle("Папки")
+            .navigationTitle("Folders")
             .navigationBarTitleDisplayMode(.inline)
             .background(
                 NavigationLink(
@@ -332,7 +330,8 @@ struct FolderHierarchyView: View {
                                 Rectangle()
                                     .fill(Color.gray.opacity(0.1))
                                     .frame(height: 1)
-                                    .padding(.leading, Constants.UI.cardPadding + 40) // Отступ от иконки
+                                    .padding(.leading, Constants.UI.cardPadding + 40)
+
                             }
                         }
                     }
@@ -346,4 +345,3 @@ struct FolderHierarchyView: View {
         }
     }
 }
-

@@ -2,8 +2,6 @@
 //  NetworkMonitorTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -282,7 +280,8 @@ final class NetworkMonitorTests: XCTestCase {
         var connectionTypeUpdates: [NWInterface.InterfaceType?] = []
         
         let cancellable1 = sut.$isConnected
-            .dropFirst() // Пропускаем начальное значение
+            .dropFirst()
+
             .sink { value in
                 isConnectedUpdates.append(value)
             }
@@ -305,4 +304,3 @@ final class NetworkMonitorTests: XCTestCase {
         XCTAssertTrue(true, "pathUpdateHandler выполнился и обработал все возможные ветки")
     }
 }
-

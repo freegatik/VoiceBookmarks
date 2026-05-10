@@ -2,8 +2,6 @@
 //  ShareSheetTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -119,4 +117,3 @@ final class ShareSheetTests: XCTestCase {
         return hostingController
     }
 }
-

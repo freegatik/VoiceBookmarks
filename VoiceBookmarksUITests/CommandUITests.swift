@@ -2,14 +2,11 @@
 //  CommandUITests.swift
 //  VoiceBookmarksUITests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
 import XCTest
 
-// UI тесты команд: голосовые команды, выполнение команд, отображение HTML результатов
 final class CommandUITests: XCTestCase {
     
     var app: XCUIApplication!
@@ -28,17 +25,16 @@ final class CommandUITests: XCTestCase {
         super.tearDown()
     }
     
-    // Вспомогательная функция: ждет появления папок с таймаутом
     func waitForFolders(timeout: TimeInterval = 20.0) -> (folders: XCUIElementQuery, hasFolders: Bool) {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         if !searchTab.isSelected {
             searchTab.tap()
         }
         
         sleep(1)
         
-        let loadingMessage = app.staticTexts["Загрузка папок..."]
-        let emptyStateMessage = app.staticTexts["Нет папок"]
+        let loadingMessage = app.staticTexts["Loading folders..."]
+        let emptyStateMessage = app.staticTexts["No folders"]
         
         if loadingMessage.waitForExistence(timeout: 5.0) {
             let startTime = Date()
@@ -50,8 +46,8 @@ final class CommandUITests: XCTestCase {
         }
         
         let folders = app.scrollViews.buttons
-        let selfReflectionFolder = app.staticTexts["Саморефлексия"].firstMatch
-        let tasksFolder = app.staticTexts["Задачи"].firstMatch
+        let selfReflectionFolder = app.staticTexts["Self-reflection"].firstMatch
+        let tasksFolder = app.staticTexts["Tasks"].firstMatch
         
         let start = Date()
         var hasFolders = folders.count > 0 || selfReflectionFolder.exists || tasksFolder.exists
@@ -65,16 +61,15 @@ final class CommandUITests: XCTestCase {
         return (folders, hasFolders && !isEmpty)
     }
     
-    // Вспомогательная функция: ждет появления файлов с таймаутом
     func waitForFiles(timeout: TimeInterval = 15.0) -> (files: XCUIElementQuery, hasFiles: Bool) {
         sleep(2)
         
-        let emptyStateMessage = app.staticTexts["Файлы не найдены"]
+        let emptyStateMessage = app.staticTexts["Files не найдены"]
         let files = app.scrollViews.buttons
         
-        let noteFile = app.staticTexts["Заметка о цели"].firstMatch
-        let audioFile = app.staticTexts["Аудио идея.m4a"].firstMatch
-        let noteDescription = app.staticTexts["Краткое описание заметки"].firstMatch
+        let noteFile = app.staticTexts["Goal note"].firstMatch
+        let audioFile = app.staticTexts["Audio idea.m4a"].firstMatch
+        let noteDescription = app.staticTexts["Short note description"].firstMatch
         let audioDescription = app.staticTexts["Черновик голосовой заметки"].firstMatch
         
         let start = Date()
@@ -89,27 +84,15 @@ final class CommandUITests: XCTestCase {
         return (files, hasFiles && !isEmpty)
     }
     
-    // Проверяет, что команда открывается в WebView
     func testCommandOpensInWebView() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
-        let searchField = app.textFields["Поиск..."]
+        let searchField = app.textFields["Search..."]
         if searchField.waitForExistence(timeout: 3) {
             searchField.tap()
             searchField.typeText("command query")
             
-            let searchButton = app.buttons.matching(identifier: "magnifyingglass").firstMatch
-            if searchButton.exists {
-                searchButton.tap()
-                
-                let webViewNavBar = app.navigationBars.firstMatch
-                if webViewNavBar.waitForExistence(timeout: 5) {
-                    let closeButton = webViewNavBar.buttons["Закрыть"]
-                    if closeButton.exists {
-                        XCTAssertTrue(closeButton.exists, "WebView с командой должен открыться")
-                    }
-                }
             UITestInteractions.submitFolderSearch(app: app, searchField: searchField)
             
             let webViewNavBar = app.navigationBars.firstMatch
@@ -120,9 +103,8 @@ final class CommandUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что HTML контент команды отображается корректно
     func testCommandHTMLContentDisplays() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -141,9 +123,8 @@ final class CommandUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что закрытие команды возвращает к поиску
     func testCloseCommandReturnsToSearch() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -154,7 +135,6 @@ final class CommandUITests: XCTestCase {
             if files.count > 0 {
                 files.firstMatch.tap()
                 
-                let closeButton = app.navigationBars.buttons["Закрыть"]
                 let closeButton = UITestInteractions.webCloseButton(in: app)
                 if closeButton.waitForExistence(timeout: 3) {
                     closeButton.tap()
@@ -166,18 +146,16 @@ final class CommandUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что команда сохраняет состояние после закрытия
     func testCommandStatePreserved() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
-        let searchField = app.textFields["Поиск..."]
+        let searchField = app.textFields["Search..."]
         XCTAssertTrue(searchField.exists || app.scrollViews.firstMatch.exists, "После команды должен быть доступен экран поиска")
     }
     
-    // Проверяет, что после выполнения команды возврат к состоянию списка элементов
     func testAfterCommandReturnsToListState() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let (folders, hasFolders) = waitForFolders(timeout: 20.0)
@@ -188,11 +166,11 @@ final class CommandUITests: XCTestCase {
         if folders.count > 0 {
             firstFolder = folders.firstMatch
         } else {
-            let selfReflectionFolder = app.staticTexts["Саморефлексия"].firstMatch
+            let selfReflectionFolder = app.staticTexts["Self-reflection"].firstMatch
             if selfReflectionFolder.exists {
                 firstFolder = selfReflectionFolder
             } else {
-                let tasksFolder = app.staticTexts["Задачи"].firstMatch
+                let tasksFolder = app.staticTexts["Tasks"].firstMatch
                 if tasksFolder.exists {
                     firstFolder = tasksFolder
                 }
@@ -212,15 +190,15 @@ final class CommandUITests: XCTestCase {
         if files.count > 0 {
             firstFile = files.firstMatch
         } else {
-            let noteFile = app.staticTexts["Заметка о цели"].firstMatch
+            let noteFile = app.staticTexts["Goal note"].firstMatch
             if noteFile.exists {
                 firstFile = noteFile
             } else {
-                let audioFile = app.staticTexts["Аудио идея.m4a"].firstMatch
+                let audioFile = app.staticTexts["Audio idea.m4a"].firstMatch
                 if audioFile.exists {
                     firstFile = audioFile
                 } else {
-                    let noteDescription = app.staticTexts["Краткое описание заметки"].firstMatch
+                    let noteDescription = app.staticTexts["Short note description"].firstMatch
                     if noteDescription.exists {
                         firstFile = noteDescription
                     } else {
@@ -238,7 +216,6 @@ final class CommandUITests: XCTestCase {
         
         firstFile!.tap()
         
-        let closeButton = app.navigationBars.buttons["Закрыть"]
         let closeButton = UITestInteractions.webCloseButton(in: app)
         if closeButton.waitForExistence(timeout: 3) {
             closeButton.tap()
@@ -250,7 +227,7 @@ final class CommandUITests: XCTestCase {
         }
         
         sleep(1)
-        let foldersNavBar = app.navigationBars["Папки"]
+        let foldersNavBar = app.navigationBars["Folders"]
         if foldersNavBar.waitForExistence(timeout: 2) {
             XCTAssertTrue(foldersNavBar.exists, "После закрытия команды должен вернуться к списку папок")
         } else {
@@ -260,9 +237,8 @@ final class CommandUITests: XCTestCase {
         }
     }
     
-    // Проверяет отправку ID папки + текст на сервер при выполнении команды
     func testCommandSendsFolderIdAndText() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let (folders, hasFolders) = waitForFolders(timeout: 20.0)
@@ -273,11 +249,11 @@ final class CommandUITests: XCTestCase {
         if folders.count > 0 {
             firstFolder = folders.firstMatch
         } else {
-            let selfReflectionFolder = app.staticTexts["Саморефлексия"].firstMatch
+            let selfReflectionFolder = app.staticTexts["Self-reflection"].firstMatch
             if selfReflectionFolder.exists {
                 firstFolder = selfReflectionFolder
             } else {
-                let tasksFolder = app.staticTexts["Задачи"].firstMatch
+                let tasksFolder = app.staticTexts["Tasks"].firstMatch
                 if tasksFolder.exists {
                     firstFolder = tasksFolder
                 }
@@ -298,4 +274,3 @@ final class CommandUITests: XCTestCase {
         }
     }
 }
-

@@ -2,8 +2,6 @@
 //  FolderTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -14,22 +12,22 @@ final class FolderTests: XCTestCase {
     
     func testFolder_DisplayName_SelfReflection_ReturnsSelfReflection() {
         let folder = Folder(name: "SelfReflection")
-        XCTAssertEqual(folder.displayName, "Саморефлексия")
+        XCTAssertEqual(folder.displayName, "Self-reflection")
     }
     
     func testFolder_DisplayName_Tasks_ReturnsTasks() {
         let folder = Folder(name: "Tasks")
-        XCTAssertEqual(folder.displayName, "Задачи")
+        XCTAssertEqual(folder.displayName, "Tasks")
     }
     
     func testFolder_DisplayName_ProjectResources_ReturnsProjectResources() {
         let folder = Folder(name: "ProjectResources")
-        XCTAssertEqual(folder.displayName, "Ресурсы проекта")
+        XCTAssertEqual(folder.displayName, "Project resources")
     }
     
     func testFolder_DisplayName_Uncategorised_ReturnsUncategorised() {
         let folder = Folder(name: "Uncategorised")
-        XCTAssertEqual(folder.displayName, "Без категории")
+        XCTAssertEqual(folder.displayName, "Uncategorized")
     }
     
     func testFolder_DisplayName_Unknown_ReturnsName() {
@@ -76,4 +74,3 @@ final class FolderTests: XCTestCase {
         XCTAssertEqual(predefined.count, 4)
     }
 }
-

@@ -2,14 +2,11 @@
 //  ErrorStateUITests.swift
 //  VoiceBookmarksUITests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
 import XCTest
 
-// UI тесты состояний ошибок: отображение ErrorStateView, кнопка "Повторить", сообщения об ошибках
 final class ErrorStateUITests: XCTestCase {
     
     var app: XCUIApplication!
@@ -27,9 +24,8 @@ final class ErrorStateUITests: XCTestCase {
         super.tearDown()
     }
     
-    // Проверяет, что ErrorStateView отображается при ошибке (иконка, сообщение, кнопка повтора)
     func testErrorStateViewStructure() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -41,7 +37,7 @@ final class ErrorStateUITests: XCTestCase {
                 files.firstMatch.tap()
                 
                 let errorIcon = app.images.matching(identifier: "exclamationmark.triangle").firstMatch
-                let errorText = app.staticTexts["Ошибка"]
+                let errorText = app.staticTexts["Error"]
                 let webViewNavBar = app.navigationBars.firstMatch
                 XCTAssertTrue(
                     webViewNavBar.exists || errorText.exists || errorIcon.exists,
@@ -51,20 +47,18 @@ final class ErrorStateUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что кнопка "Повторить" присутствует в ErrorStateView (опционально)
     func testRetryButtonInErrorState() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
 
         let showsFoldersChrome = app.navigationBars.firstMatch.waitForExistence(timeout: 6)
             || app.scrollViews.firstMatch.waitForExistence(timeout: 6)
             || app.staticTexts.firstMatch.waitForExistence(timeout: 6)
-        XCTAssertTrue(showsFoldersChrome, "После перехода на Поиск должен отображаться экран папок или контент")
+        XCTAssertTrue(showsFoldersChrome, "После перехода на Search должен отображаться экран папок или контент")
     }
     
-    // Проверяет, что ошибка в WebView отображается корректно
     func testWebViewErrorDisplays() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -76,7 +70,7 @@ final class ErrorStateUITests: XCTestCase {
                 files.firstMatch.tap()
                 
                 let navBar = app.navigationBars.firstMatch
-                let errorText = app.staticTexts["Ошибка"]
+                let errorText = app.staticTexts["Error"]
                 
                 if navBar.waitForExistence(timeout: 3) {
                     XCTAssertTrue(navBar.exists || errorText.exists, "WebView должен отображать контент или ошибку")
@@ -85,15 +79,13 @@ final class ErrorStateUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что ErrorStateView показывает детальное сообщение об ошибке
     func testErrorStateShowsDetailedMessage() throws {
         let screen = app.otherElements.firstMatch
         XCTAssertTrue(screen.exists, "ErrorStateView должен показывать детальное сообщение об ошибке")
     }
     
-    // Проверяет, что кнопка "Повторить" в ErrorStateView работает
     func testRetryButtonWorks() throws {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         searchTab.tap()
         
         let folders = app.scrollViews.buttons
@@ -114,4 +106,3 @@ final class ErrorStateUITests: XCTestCase {
         }
     }
 }
-

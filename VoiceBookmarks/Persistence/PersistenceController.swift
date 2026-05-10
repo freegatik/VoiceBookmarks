@@ -2,8 +2,6 @@
 //  PersistenceController.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -56,8 +54,10 @@ final class PersistenceController {
         let bundle: Bundle
         if Bundle.main.bundleURL.pathExtension == "appex" {
             let mainAppBundleURL = Bundle.main.bundleURL
-                .deletingLastPathComponent()  // Убираем .appex
-                .deletingLastPathComponent()  // Убираем PlugIns
+                .deletingLastPathComponent()
+
+                .deletingLastPathComponent()
+
                 .appendingPathComponent("VoiceBookmarks.app")
             
             if let mainAppBundle = Bundle(url: mainAppBundleURL) {
@@ -141,7 +141,7 @@ final class PersistenceController {
                 try context.save()
                 logger.debug("Core Data контекст сохранен", category: .storage)
             } catch {
-                logger.error("Ошибка сохранения Core Data: \(error.localizedDescription)", category: .storage)
+                logger.error("Error сохранения Core Data: \(error.localizedDescription)", category: .storage)
             }
         }
     }
@@ -162,7 +162,7 @@ final class PersistenceController {
             }
             logger.info("Все PendingUpload удалены", category: .storage)
         } catch {
-            logger.error("Ошибка удаления PendingUpload: \(error.localizedDescription)", category: .storage)
+            logger.error("Error удаления PendingUpload: \(error.localizedDescription)", category: .storage)
         }
     }
 }

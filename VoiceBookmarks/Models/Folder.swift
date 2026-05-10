@@ -2,19 +2,6 @@
 //  Folder.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
-import Foundation
-
-/// Папка: предопределенные категории с локализованными названиями и иконками
-/// Поддерживает иерархическую структуру (родительские и дочерние папки)
-/// 
-/// Архитектура:
-/// - Иерархическая структура с поддержкой вложенных папок
-/// - Маппинг русских названий на английские для API (apiName, apiPath)
-/// - Маппинг английских названий на русские для UI (displayName)
-/// - Предопределенные категории с иконками
-/// - Поддержка Codable с восстановлением связей parent-child
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -27,14 +14,13 @@ class Folder: ObservableObject, Identifiable, Codable {
     let name: String
     
     
-    /// Дочерние папки (опубликовано для обновления UI)
+    /// Child folders (published for SwiftUI updates).
     @Published var children: [Folder] = []
     weak var parent: Folder?
     @Published var isExpanded: Bool = false
     
     
-    /// Полный путь папки (для API запросов): объединяет родительские папки через "_"
-    /// Например: "Аудиозаписи_Самоанализ" для вложенной папки
+    /// Folder path key using "_" between parents (e.g. nested segments from server).
     var fullPath: String {
         if let parent = parent {
             return "\(parent.fullPath)_\(name)"
@@ -42,8 +28,7 @@ class Folder: ObservableObject, Identifiable, Codable {
         return name
     }
     
-    /// API-имя категории: маппинг русских названий на английские для API запросов
-    /// Необходимо для корректной работы с сервером, который использует английские названия
+    /// Backend category token derived from localized segment names.
     var apiName: String {
         let parts = name.split(separator: "_")
         let baseName = String(parts.last ?? Substring(name))
@@ -51,9 +36,9 @@ class Folder: ObservableObject, Identifiable, Codable {
         switch baseName {
         case "Все остальное", "Без категории":
             return "Uncategorised"
-        case "Саморефлексия", "Самоанализ":
+        case "Self-reflection", "Самоанализ":
             return "SelfReflection"
-        case "Задачи":
+        case "Tasks":
             return "Tasks"
         case "Ресурсы проекта":
             return "ProjectResources"
@@ -63,21 +48,20 @@ class Folder: ObservableObject, Identifiable, Codable {
             if Folder.predefined.contains(baseName) {
                 return baseName
             }
-            if displayName == "Без категории" {
+            if displayName == "Uncategorized" {
                 return "Uncategorised"
-            } else if displayName == "Саморефлексия" || displayName == "Самоанализ" {
+            } else if displayName == "Self-reflection" || displayName == "Самоанализ" {
                 return "SelfReflection"
-            } else if displayName == "Задачи" {
+            } else if displayName == "Tasks" {
                 return "Tasks"
-            } else if displayName == "Ресурсы проекта" {
+            } else if displayName == "Project resources" {
                 return "ProjectResources"
             }
             return baseName
         }
     }
     
-    /// Полный путь для API: объединяет родительские папки через "_" с английскими названиями
-    /// Используется для запросов к серверу (например: "SelfReflection_SubFolder")
+    /// English API path joining parent segments with "_".
     var apiPath: String {
         if let parent = parent {
             return "\(parent.apiPath)_\(apiName)"
@@ -85,8 +69,7 @@ class Folder: ObservableObject, Identifiable, Codable {
         return apiName
     }
     
-    /// Уровень вложенности: 0 для корневых папок, увеличивается для вложенных
-    /// Используется для отступа в UI (визуальная иерархия)
+    /// Depth in the tree (drives indentation).
     var level: Int {
         if let parent = parent {
             return parent.level + 1
@@ -102,27 +85,26 @@ class Folder: ObservableObject, Identifiable, Codable {
     ]
     
     
-    /// Отображаемое имя: маппинг английских названий на русские для UI
-    /// Пользователь видит русские названия, но API работает с английскими
+    /// Human-readable folder title for lists (maps API tokens to UI labels).
     var displayName: String {
         let parts = name.split(separator: "_")
         let displayName = String(parts.last ?? Substring(name))
         
         switch displayName {
         case "SelfReflection":
-            return "Саморефлексия"
+            return "Self-reflection"
         case "Tasks":
-            return "Задачи"
+            return "Tasks"
         case "ProjectResources":
-            return "Ресурсы проекта"
+            return "Project resources"
         case "Uncategorised":
-            return "Без категории"
+            return "Uncategorized"
         default:
             return displayName
         }
     }
     
-    /// Иконка папки в зависимости от типа категории
+    /// SF Symbol name for the folder row.
     var icon: String {
         let parts = name.split(separator: "_")
         let baseName = String(parts.last ?? Substring(name))
@@ -142,7 +124,6 @@ class Folder: ObservableObject, Identifiable, Codable {
     }
     
     
-    /// Создание папки с указанием имени и опционального родителя
     init(name: String, parent: Folder? = nil) {
         self.name = name
         self.parent = parent
@@ -176,19 +157,15 @@ class Folder: ObservableObject, Identifiable, Codable {
     }
     
     
-    /// Добавляет дочернюю папку и устанавливает связь parent-child
     func addChild(_ folder: Folder) {
         folder.parent = self
         children.append(folder)
     }
     
-    /// Проверяет, является ли папка родительской (имеет дочерние папки)
     var hasChildren: Bool {
         return !children.isEmpty
     }
     
-    /// Получает все дочерние папки рекурсивно (включая вложенные)
-    /// Используется для получения полного списка файлов в иерархии
     func getAllChildren() -> [Folder] {
         var allChildren: [Folder] = []
         for child in children {

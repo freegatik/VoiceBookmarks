@@ -2,8 +2,6 @@
 //  BookmarkCacheService.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -16,7 +14,8 @@ class BookmarkCacheService {
     static let shared = BookmarkCacheService()
     
     private let logger = LoggerService.shared
-    private let cacheValidityDuration: TimeInterval = 300 // Кеш действителен 5 минут
+    private let cacheValidityDuration: TimeInterval = 300
+
     
     private init() {}
     
@@ -45,7 +44,7 @@ class BookmarkCacheService {
             
             logger.info("Закладки сохранены в кеш для категории \(category): \(bookmarks.count)", category: .storage)
         } catch {
-            logger.error("Ошибка сохранения закладок в кеш: \(error)", category: .storage)
+            logger.error("Error сохранения закладок в кеш: \(error)", category: .storage)
         }
     }
     
@@ -78,7 +77,7 @@ class BookmarkCacheService {
             logger.debug("Закладки загружены из кеша для категории \(category): \(bookmarks.count), возраст: \(Int(cacheAge))с", category: .storage)
             return bookmarks
         } catch {
-            logger.error("Ошибка декодирования закладок из кеша: \(error)", category: .storage)
+            logger.error("Error декодирования закладок из кеша: \(error)", category: .storage)
             return nil
         }
     }
@@ -114,4 +113,3 @@ class BookmarkCacheService {
         logger.info("Принудительная очистка кеша закладок выполнена", category: .storage)
     }
 }
-

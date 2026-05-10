@@ -2,14 +2,11 @@
 //  FolderListViewUITests.swift
 //  VoiceBookmarksUITests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
 import XCTest
 
-// UI тесты экрана "Поиск": список папок, загрузка, тап на папку, голосовой поиск
 final class FolderListViewUITests: XCTestCase {
     
     var app: XCUIApplication!
@@ -22,7 +19,7 @@ final class FolderListViewUITests: XCTestCase {
         app.launch()
         sleep(1)
         
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         if !searchTab.exists {
             _ = searchTab.waitForExistence(timeout: 10)
         }
@@ -34,17 +31,16 @@ final class FolderListViewUITests: XCTestCase {
         super.tearDown()
     }
     
-    // Вспомогательная функция: ждет появления папок с таймаутом
     func waitForFolders(timeout: TimeInterval = 15.0) -> (folders: XCUIElementQuery, hasFolders: Bool) {
-        let searchTab = app.tabBars.buttons["Поиск"]
+        let searchTab = app.tabBars.buttons["Search"]
         if !searchTab.isSelected {
             searchTab.tap()
         }
         
         sleep(1)
         
-        let loadingMessage = app.staticTexts["Загрузка папок..."]
-        let emptyStateMessage = app.staticTexts["Нет папок"]
+        let loadingMessage = app.staticTexts["Loading folders..."]
+        let emptyStateMessage = app.staticTexts["No folders"]
         let progressIndicators = app.progressIndicators
         
         if loadingMessage.waitForExistence(timeout: 3.0) || progressIndicators.count > 0 {
@@ -60,10 +56,10 @@ final class FolderListViewUITests: XCTestCase {
         var hasFolders = folders.count > 0
         
         if !hasFolders {
-            let selfReflectionFolder = app.staticTexts["Саморефлексия"].firstMatch
-            let tasksFolder = app.staticTexts["Задачи"].firstMatch
-            let projectResourcesFolder = app.staticTexts["Ресурсы проекта"].firstMatch
-            let uncategorisedFolder = app.staticTexts["Без категории"].firstMatch
+            let selfReflectionFolder = app.staticTexts["Self-reflection"].firstMatch
+            let tasksFolder = app.staticTexts["Tasks"].firstMatch
+            let projectResourcesFolder = app.staticTexts["Project resources"].firstMatch
+            let uncategorisedFolder = app.staticTexts["Uncategorized"].firstMatch
             
             hasFolders = selfReflectionFolder.exists || tasksFolder.exists || projectResourcesFolder.exists || uncategorisedFolder.exists
         }
@@ -74,8 +70,8 @@ final class FolderListViewUITests: XCTestCase {
             hasFolders = folders.count > 0
             
             if !hasFolders {
-                let selfReflectionFolder = app.staticTexts["Саморефлексия"].firstMatch
-                let tasksFolder = app.staticTexts["Задачи"].firstMatch
+                let selfReflectionFolder = app.staticTexts["Self-reflection"].firstMatch
+                let tasksFolder = app.staticTexts["Tasks"].firstMatch
                 hasFolders = selfReflectionFolder.exists || tasksFolder.exists
             }
         }
@@ -85,41 +81,32 @@ final class FolderListViewUITests: XCTestCase {
         return (folders, hasFolders && !isEmpty)
     }
     
-    // Проверяет, что тап на папку открывает список файлов
     func testTapOnFolderOpensFileList() throws {
         let folders = app.scrollViews.buttons
         if folders.count > 0 {
             folders.firstMatch.tap()
             
-            let navBar = app.navigationBars["Файлы"]
+            let navBar = app.navigationBars["Files"]
             if navBar.waitForExistence(timeout: 3) {
                 XCTAssertTrue(navBar.exists, "Должен открыться список файлов после тапа на папку")
             }
         }
     }
     
-    // Проверяет, что текстовый поиск через поле поиска выполняется
     func testTextSearchPerformsQuery() throws {
-        let searchField = app.textFields["Поиск..."]
+        let searchField = app.textFields["Search..."]
         if searchField.waitForExistence(timeout: 3) {
             searchField.tap()
             searchField.typeText("test query")
             
-            let searchButton = app.buttons.matching(identifier: "magnifyingglass").firstMatch
-            if searchButton.exists {
-                searchButton.tap()
-                
-                XCTAssertTrue(app.scrollViews.firstMatch.exists || app.staticTexts.firstMatch.exists, "Поиск должен быть выполнен")
-            }
             UITestInteractions.submitFolderSearch(app: app, searchField: searchField)
             
             XCTAssertTrue(app.scrollViews.firstMatch.exists || app.staticTexts.firstMatch.exists, "Search должен быть выполнен")
         }
     }
     
-    // Проверяет, что результаты поиска отображаются
     func testSearchResultsDisplay() throws {
-        let searchField = app.textFields["Поиск..."]
+        let searchField = app.textFields["Search..."]
         if searchField.waitForExistence(timeout: 3) {
             searchField.tap()
             searchField.typeText("test")
@@ -133,27 +120,23 @@ final class FolderListViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что состояния загрузки отображаются
     func testLoadingStateDisplays() throws {
         let screen = app.scrollViews.firstMatch
         XCTAssertTrue(screen.exists || app.staticTexts.firstMatch.exists, "Экран должен отображаться")
     }
     
-    // Проверяет, что пустое состояние отображается
     func testEmptyStateDisplays() throws {
         let folders = app.scrollViews.firstMatch
         XCTAssertTrue(folders.exists || app.staticTexts.firstMatch.exists, "Должно отображаться либо папки, либо пустое состояние")
     }
     
-    // Проверяет, что long press на папке доступен
     func testLongPressOnFolderAvailable() throws {
         let folders = app.scrollViews.buttons
         if folders.count > 0 {
-            XCTAssertTrue(folders.firstMatch.exists, "Папки должны существовать для long press")
+            XCTAssertTrue(folders.firstMatch.exists, "Folders должны существовать для long press")
         }
     }
     
-    // Проверяет, что long press на папке показывает визуальные эффекты
     func testLongPressShowsVisualEffects() throws {
         let (folders, hasFolders) = waitForFolders(timeout: 15.0)
         guard hasFolders else {
@@ -169,7 +152,6 @@ final class FolderListViewUITests: XCTestCase {
         XCTAssertTrue(app.scrollViews.firstMatch.exists, "После long press экран должен оставаться видимым с визуальными эффектами")
     }
     
-    // Проверяет, что свайп вниз во время записи отменяет запись
     func testSwipeDownCancelsRecording() throws {
         let (folders, hasFolders) = waitForFolders(timeout: 15.0)
         guard hasFolders else {
@@ -191,7 +173,6 @@ final class FolderListViewUITests: XCTestCase {
         XCTAssertTrue(app.scrollViews.firstMatch.exists, "После отмены записи должен вернуться к списку папок")
     }
     
-    // Проверяет, что отпускание после long press отправляет ID папки + текст на сервер
     func testLongPressReleaseSendsFolderIdAndText() throws {
         let (folders, hasFolders) = waitForFolders(timeout: 15.0)
         guard hasFolders else {
@@ -212,9 +193,8 @@ final class FolderListViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что поиск с пустым запросом показывает ошибку
     func testEmptySearchShowsError() throws {
-        let searchField = app.textFields["Поиск..."]
+        let searchField = app.textFields["Search..."]
         if searchField.waitForExistence(timeout: 3) {
             searchField.tap()
             
@@ -225,9 +205,8 @@ final class FolderListViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что результаты поиска отображаются с разными типами контента
     func testSearchResultsWithDifferentContentTypes() throws {
-        let searchField = app.textFields["Поиск..."]
+        let searchField = app.textFields["Search..."]
         if searchField.waitForExistence(timeout: 3) {
             searchField.tap()
             searchField.typeText("test search")
@@ -241,28 +220,25 @@ final class FolderListViewUITests: XCTestCase {
         }
     }
     
-    // Проверяет, что папки отображаются с иконками
     func testFoldersDisplayWithIcons() throws {
         let folders = app.scrollViews.buttons
         if folders.count > 0 {
-            XCTAssertTrue(folders.firstMatch.exists, "Папки должны отображаться с иконками")
+            XCTAssertTrue(folders.firstMatch.exists, "Folders должны отображаться с иконками")
         }
     }
     
-    // Проверяет, что папки показывают пользовательские имена
     func testFoldersShowUserFriendlyNames() throws {
         let userFriendlyNames = [
-            "Саморефлексия",
-            "Задачи",
-            "Ресурсы проекта",
-            "Без категории"
+            "Self-reflection",
+            "Tasks",
+            "Project resources",
+            "Uncategorized"
         ]
         
         let folders = app.scrollViews.buttons
         if folders.count > 0 {
             _ = userFriendlyNames.first { app.staticTexts[$0].exists }
-            XCTAssertTrue(folders.firstMatch.exists, "Папки должны отображаться")
+            XCTAssertTrue(folders.firstMatch.exists, "Folders должны отображаться")
         }
     }
 }
-

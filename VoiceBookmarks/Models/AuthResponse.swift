@@ -2,17 +2,6 @@
 //  AuthResponse.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
-import Foundation
-
-/// Ответ анонимной регистрации: userId, anonymousId, статус
-/// 
-/// Архитектура:
-/// - success: успешность регистрации
-/// - userId: уникальный UUID пользователя (основной идентификатор)
-/// - anonymousId: опциональный анонимный идентификатор
-/// - message: опциональное сообщение от сервера
 //  Created by Anton Soloviev on 09.05.2026.
 //
 

@@ -2,8 +2,6 @@
 //  ToastView.swift
 //  VoiceBookmarks
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -91,7 +89,8 @@ struct ToastModifier: ViewModifier {
             lhs.id == rhs.id
         }
     }
-    private let autoDismissDuration: TimeInterval = 4.0 // Автоскрытие через 4 секунды
+    private let autoDismissDuration: TimeInterval = 4.0
+
     
     func body(content: Content) -> some View {
         applyToastChange(to:
@@ -192,4 +191,3 @@ extension View {
         modifier(ToastModifier(toast: toast))
     }
 }
-

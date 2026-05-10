@@ -2,8 +2,6 @@
 //  KeychainServiceTests.swift
 //  VoiceBookmarksTests
 //
-//  Created by Anton Solovev on 09.05.2026.
-//
 //  Created by Anton Soloviev on 09.05.2026.
 //
 
@@ -65,7 +63,8 @@ final class KeychainServiceTests: XCTestCase {
                 if result {
                     break
                 }
-            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 секунды
+            try? await Task.sleep(nanoseconds: 100_000_000)
+
             }
             
             XCTAssertTrue(result, "saveUserId должна вернуть true")
@@ -77,7 +76,8 @@ final class KeychainServiceTests: XCTestCase {
                 if retrieved == testUserId {
                     break
                 }
-            try? await Task.sleep(nanoseconds: 150_000_000) // 0.15 секунды
+            try? await Task.sleep(nanoseconds: 150_000_000)
+
         }
         XCTAssertEqual(retrieved, testUserId)
         #endif
@@ -95,7 +95,8 @@ final class KeychainServiceTests: XCTestCase {
                 if saveResult {
                     break
                 }
-            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 секунды
+            try? await Task.sleep(nanoseconds: 100_000_000)
+
             }
             XCTAssertTrue(saveResult, "Сохранение должно быть успешным")
             
@@ -108,7 +109,8 @@ final class KeychainServiceTests: XCTestCase {
                     break
                 }
                 if attempt < 14 {
-                try? await Task.sleep(nanoseconds: 150_000_000) // 0.15 секунды
+                try? await Task.sleep(nanoseconds: 150_000_000)
+
             }
         }
         
@@ -151,7 +153,8 @@ final class KeychainServiceTests: XCTestCase {
                 if beforeDelete == testId {
                     break
                 }
-            try? await Task.sleep(nanoseconds: 150_000_000) // 0.15 секунды
+            try? await Task.sleep(nanoseconds: 150_000_000)
+
                 beforeDelete = sut.getUserId()
             }
             XCTAssertEqual(beforeDelete, testId)
@@ -162,7 +165,8 @@ final class KeychainServiceTests: XCTestCase {
                 if result {
                     break
                 }
-            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 секунды
+            try? await Task.sleep(nanoseconds: 100_000_000)
+
             }
             XCTAssertTrue(result)
             
@@ -173,7 +177,8 @@ final class KeychainServiceTests: XCTestCase {
                 if afterDelete == nil {
                     break
                 }
-            try? await Task.sleep(nanoseconds: 150_000_000) // 0.15 секунды
+            try? await Task.sleep(nanoseconds: 150_000_000)
+
                 afterDelete = sut.getUserId()
             }
             XCTAssertNil(afterDelete)
@@ -192,18 +197,21 @@ final class KeychainServiceTests: XCTestCase {
                 if saveResult {
                     break
                 }
-            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 секунды
+            try? await Task.sleep(nanoseconds: 100_000_000)
+
             }
             XCTAssertTrue(saveResult, "Сохранение должно быть успешным")
             
-        try? await Task.sleep(nanoseconds: 250_000_000) // 0.25 секунды
+        try? await Task.sleep(nanoseconds: 250_000_000)
+
             
             var beforeDelete = sut.getUserId()
             for _ in 0..<10 {
                 if beforeDelete == testId {
                     break
                 }
-            try? await Task.sleep(nanoseconds: 150_000_000) // 0.15 секунды
+            try? await Task.sleep(nanoseconds: 150_000_000)
+
                 beforeDelete = sut.getUserId()
             }
             XCTAssertEqual(beforeDelete, testId, "Значение должно быть сохранено перед удалением")
@@ -214,11 +222,13 @@ final class KeychainServiceTests: XCTestCase {
                 if deleteResult {
                     break
                 }
-            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 секунды
+            try? await Task.sleep(nanoseconds: 100_000_000)
+
             }
             XCTAssertTrue(deleteResult, "Удаление должно быть успешным")
             
-        try? await Task.sleep(nanoseconds: 250_000_000) // 0.25 секунды
+        try? await Task.sleep(nanoseconds: 250_000_000)
+
             
             var userId: String? = "not-nil"
             for attempt in 0..<15 {
@@ -227,7 +237,8 @@ final class KeychainServiceTests: XCTestCase {
                     break
                 }
                 if attempt < 14 {
-                try? await Task.sleep(nanoseconds: 150_000_000) // 0.15 секунды
+                try? await Task.sleep(nanoseconds: 150_000_000)
+
             }
         }
         
@@ -245,18 +256,21 @@ final class KeychainServiceTests: XCTestCase {
                 if firstResult {
                     break
                 }
-            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 секунды
+            try? await Task.sleep(nanoseconds: 100_000_000)
+
             }
             XCTAssertTrue(firstResult, "Первое сохранение должно быть успешным")
             
-        try? await Task.sleep(nanoseconds: 250_000_000) // 0.25 секунды
+        try? await Task.sleep(nanoseconds: 250_000_000)
+
             
             var firstValue = sut.getUserId()
             for _ in 0..<10 {
                 if firstValue == "first-id" {
                     break
                 }
-            try? await Task.sleep(nanoseconds: 150_000_000) // 0.15 секунды
+            try? await Task.sleep(nanoseconds: 150_000_000)
+
                 firstValue = sut.getUserId()
             }
             XCTAssertEqual(firstValue, "first-id", "Первое значение должно быть сохранено")
@@ -267,11 +281,13 @@ final class KeychainServiceTests: XCTestCase {
                 if secondResult {
                     break
                 }
-            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 секунды
+            try? await Task.sleep(nanoseconds: 100_000_000)
+
             }
             XCTAssertTrue(secondResult, "Второе сохранение должно быть успешным")
             
-        try? await Task.sleep(nanoseconds: 250_000_000) // 0.25 секунды
+        try? await Task.sleep(nanoseconds: 250_000_000)
+
             
             var retrievedUserId = sut.getUserId()
             for attempt in 0..<15 {
@@ -279,7 +295,8 @@ final class KeychainServiceTests: XCTestCase {
                     break
                 }
                 if attempt < 14 {
-                try? await Task.sleep(nanoseconds: 150_000_000) // 0.15 секунды
+                try? await Task.sleep(nanoseconds: 150_000_000)
+
                     retrievedUserId = sut.getUserId()
                 }
             }
@@ -301,18 +318,21 @@ final class KeychainServiceTests: XCTestCase {
                 if save1Result {
                     break
                 }
-            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 секунды
+            try? await Task.sleep(nanoseconds: 100_000_000)
+
             }
             XCTAssertTrue(save1Result, "Сохранение первого userId должно быть успешным")
             
-        try? await Task.sleep(nanoseconds: 250_000_000) // 0.25 секунды
+        try? await Task.sleep(nanoseconds: 250_000_000)
+
             
             var retrieved1 = sut.getUserId()
             for _ in 0..<10 {
                 if retrieved1 == userId1 {
                     break
                 }
-            try? await Task.sleep(nanoseconds: 150_000_000) // 0.15 секунды
+            try? await Task.sleep(nanoseconds: 150_000_000)
+
                 retrieved1 = sut.getUserId()
             }
             XCTAssertEqual(retrieved1, userId1, "Первый userId должен быть сохранен")
@@ -323,11 +343,13 @@ final class KeychainServiceTests: XCTestCase {
                 if save2Result {
                     break
                 }
-            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 секунды
+            try? await Task.sleep(nanoseconds: 100_000_000)
+
             }
             XCTAssertTrue(save2Result, "Сохранение второго userId должно быть успешным")
             
-        try? await Task.sleep(nanoseconds: 250_000_000) // 0.25 секунды
+        try? await Task.sleep(nanoseconds: 250_000_000)
+
             
             var retrieved2 = sut.getUserId()
             for attempt in 0..<15 {
@@ -335,7 +357,8 @@ final class KeychainServiceTests: XCTestCase {
                     break
                 }
                 if attempt < 14 {
-                try? await Task.sleep(nanoseconds: 150_000_000) // 0.15 секунды
+                try? await Task.sleep(nanoseconds: 150_000_000)
+
                     retrieved2 = sut.getUserId()
                 }
             }
@@ -353,11 +376,13 @@ final class KeychainServiceTests: XCTestCase {
                 if result {
                     break
                 }
-            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 секунды
+            try? await Task.sleep(nanoseconds: 100_000_000)
+
             }
             XCTAssertTrue(result, "Сохранение пустой строки должно вернуть true")
         
-        try? await Task.sleep(nanoseconds: 250_000_000) // 0.25 секунды
+        try? await Task.sleep(nanoseconds: 250_000_000)
+
             
             var retrievedUserId: String? = nil
             for attempt in 0..<15 {
@@ -366,7 +391,8 @@ final class KeychainServiceTests: XCTestCase {
                     break
                 }
                 if attempt < 14 {
-                try? await Task.sleep(nanoseconds: 150_000_000) // 0.15 секунды
+                try? await Task.sleep(nanoseconds: 150_000_000)
+
                 }
             }
             
@@ -375,4 +401,3 @@ final class KeychainServiceTests: XCTestCase {
         #endif
     }
 }
-
