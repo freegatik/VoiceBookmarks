@@ -14,6 +14,7 @@ jobs:
   ios:
     name: Build, test, coverage
     runs-on: macos-14
+    timeout-minutes: 90
     env:
       IOS_DESTINATION: platform=iOS Simulator,name=iPhone 16,OS=18.2
 
@@ -52,10 +53,16 @@ jobs:
             exit 1
           fi
 
-      - name: Run tests with code coverage
+      - name: Run unit tests (coverage)
         run: |
           chmod +x Scripts/ci/run-ios-tests.sh
-          Scripts/ci/run-ios-tests.sh
+          Scripts/ci/run-ios-tests.sh main-unit
+
+      - name: Run UI tests (VoiceBookmarks)
+        run: Scripts/ci/run-ios-tests.sh main-ui
+
+      - name: Run Share extension tests
+        run: Scripts/ci/run-ios-tests.sh share
 
       - name: Upload xcresult bundles
         if: always()
@@ -64,6 +71,7 @@ jobs:
           name: ios-test-results
           path: |
             TestResults-main.xcresult
+            TestResults-main-ui.xcresult
             TestResults-share.xcresult
           if-no-files-found: ignore
 
