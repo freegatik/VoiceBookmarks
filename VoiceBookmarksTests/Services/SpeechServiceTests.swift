@@ -22,6 +22,14 @@ final class SpeechServiceTests: XCTestCase {
         sut = nil
         super.tearDown()
     }
+
+    private func skipLiveSpeechOnCISimulator() throws {
+        #if targetEnvironment(simulator)
+        if ProcessInfo.processInfo.environment["CI"] == "true" {
+            throw XCTSkip("Skip live SpeechService recording on CI simulator (AVAudioEngine / speech stack deadlocks).")
+        }
+        #endif
+    }
     
     func testSpeechService_Singleton_IsAccessible() {
         XCTAssertNotNil(SpeechService.shared)
@@ -264,8 +272,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_StartRecording_TriggersHaptic() async {
+    func testSpeechService_StartRecording_TriggersHaptic() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -274,8 +283,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_StartRecording_ThrowsWhenNotIdle() async {
+    func testSpeechService_StartRecording_ThrowsWhenNotIdle() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -293,8 +303,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_StartRecording_HandlesAudioSessionError() async {
+    func testSpeechService_StartRecording_HandlesAudioSessionError() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -304,8 +315,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_StartRecording_HandlesAudioEngineStartError() async {
+    func testSpeechService_StartRecording_HandlesAudioEngineStartError() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -315,8 +327,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_StartRecording_HandlesUnavailableRecognizer() async {
+    func testSpeechService_StartRecording_HandlesUnavailableRecognizer() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -326,8 +339,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_RecognitionTask_HandlesCanceledError() async {
+    func testSpeechService_RecognitionTask_HandlesCanceledError() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -336,8 +350,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_RecognitionTask_HandlesFinalResult() async {
+    func testSpeechService_RecognitionTask_HandlesFinalResult() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -348,8 +363,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_RecognitionTask_HandlesPartialResult() async {
+    func testSpeechService_RecognitionTask_HandlesPartialResult() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -359,8 +375,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_RecognitionTask_ResetsTimer() async {
+    func testSpeechService_RecognitionTask_ResetsTimer() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -370,8 +387,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_StartRecognitionTimer_CreatesTimer() async {
+    func testSpeechService_StartRecognitionTimer_CreatesTimer() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -381,8 +399,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_RecognitionTimer_StopsRecordingOnTimeout() async {
+    func testSpeechService_RecognitionTimer_StopsRecordingOnTimeout() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -392,8 +411,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_ResetRecognitionTimer_InvalidatesAndCreatesNew() async {
+    func testSpeechService_ResetRecognitionTimer_InvalidatesAndCreatesNew() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -403,8 +423,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_StartMaxDurationTimer_CreatesTimer() async {
+    func testSpeechService_StartMaxDurationTimer_CreatesTimer() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -414,8 +435,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_MaxDurationTimer_StopsRecordingOnMaxDuration() async {
+    func testSpeechService_MaxDurationTimer_StopsRecordingOnMaxDuration() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -439,8 +461,9 @@ final class SpeechServiceTests: XCTestCase {
         XCTAssertNotNil(sut)
     }
     
-    func testSpeechService_StopRecording_WaitsForFinalization() async {
+    func testSpeechService_StopRecording_WaitsForFinalization() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -457,8 +480,9 @@ final class SpeechServiceTests: XCTestCase {
         XCTAssertNotNil(sut)
     }
     
-    func testSpeechService_StopRecording_HandlesAudioSessionDeactivationError() async {
+    func testSpeechService_StopRecording_HandlesAudioSessionDeactivationError() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -527,6 +551,7 @@ final class SpeechServiceTests: XCTestCase {
     
     func testSpeechService_StartRecording_ChecksState() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -537,8 +562,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_RecognitionTask_HandlesWeakSelfNil() async {
+    func testSpeechService_RecognitionTask_HandlesWeakSelfNil() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -556,6 +582,7 @@ final class SpeechServiceTests: XCTestCase {
     
     func testSpeechService_StartRecording_SetsPartialResultCallback() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -567,6 +594,7 @@ final class SpeechServiceTests: XCTestCase {
     
     func testSpeechService_StartRecording_ClearsFinalTranscription() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -684,8 +712,9 @@ final class SpeechServiceTests: XCTestCase {
         #endif
     }
     
-    func testSpeechService_RecognitionTask_HandlesNonCanceledError() async {
+    func testSpeechService_RecognitionTask_HandlesNonCanceledError() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -696,8 +725,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_RecognitionTask_HandlesNonFinalResult() async {
+    func testSpeechService_RecognitionTask_HandlesNonFinalResult() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in
@@ -715,8 +745,9 @@ final class SpeechServiceTests: XCTestCase {
         XCTAssertNil(result)
     }
     
-    func testSpeechService_StopRecording_StopsAudioEngineWhenRunning() async {
+    func testSpeechService_StopRecording_StopsAudioEngineWhenRunning() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -760,8 +791,9 @@ final class SpeechServiceTests: XCTestCase {
         XCTAssertNotNil(sut)
     }
     
-    func testSpeechService_StartRecording_SetsStateToRecording() async {
+    func testSpeechService_StartRecording_SetsStateToRecording() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -770,8 +802,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_StartRecording_SetsPartialResults() async {
+    func testSpeechService_StartRecording_SetsPartialResults() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
@@ -780,8 +813,9 @@ final class SpeechServiceTests: XCTestCase {
         }
     }
     
-    func testSpeechService_StartRecording_SetsRecognitionRequest() async {
+    func testSpeechService_StartRecording_SetsRecognitionRequest() async throws {
         sut.cancelRecording()
+        try skipLiveSpeechOnCISimulator()
         
         do {
             try await sut.startRecordingForUnitTests { _ in }
