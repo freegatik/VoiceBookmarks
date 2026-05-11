@@ -23,9 +23,11 @@ final class SpeechServiceTests: XCTestCase {
         super.tearDown()
     }
 
-    /// Hosted CI often omits or varies `CI`; GitHub always sets `GITHUB_ACTIONS` / `GITHUB_RUN_ID`.
     private func skipLiveSpeechOnCISimulator() throws {
         #if targetEnvironment(simulator)
+        #if VOICEBOOKMARKS_CI
+        throw XCTSkip("Skip live SpeechService recording on CI simulator (AVAudioEngine / speech stack).")
+        #else
         let e = ProcessInfo.processInfo.environment
         let ciFlag = e["CI"].map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
         let looksLikeHostedCI =
@@ -35,8 +37,9 @@ final class SpeechServiceTests: XCTestCase {
             || ciFlag == "1"
             || e["CONTINUOUS_INTEGRATION"]?.lowercased() == "true"
         if looksLikeHostedCI {
-            throw XCTSkip("Skip live SpeechService recording on CI simulator (AVAudioEngine / speech stack).")
+            throw XCTSkip("Skip live SpeechService recording on CI simulator (hosted CI env).")
         }
+        #endif
         #endif
     }
     

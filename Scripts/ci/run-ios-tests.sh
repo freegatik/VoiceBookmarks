@@ -14,11 +14,18 @@ SCHEME="VoiceBookmarks"
 
 PHASE="${1:-all}"
 
+# Simulator test host does not inherit GitHub env (GITHUB_ACTIONS, etc.). Compile this flag so tests can skip live audio.
+xb_ci_swift_flags=()
+if [[ -n "${CI:-}" || -n "${GITHUB_ACTIONS:-}" || -n "${GITHUB_RUN_ID:-}" ]]; then
+  xb_ci_swift_flags=(OTHER_SWIFT_FLAGS='$(inherited) -DVOICEBOOKMARKS_CI')
+fi
+
 xb_base() {
   xcodebuild test \
     -project "$PROJECT" \
     -scheme "$SCHEME" \
     -destination "$DEST" \
+    "${xb_ci_swift_flags[@]}" \
     "$@"
 }
 
