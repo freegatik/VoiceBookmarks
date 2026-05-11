@@ -135,8 +135,8 @@ final class WebViewUITests: XCTestCase {
                     let closeButton = UITestInteractions.webCloseButton(in: app)
                     XCTAssertTrue(closeButton.waitForExistence(timeout: 20), "Кнопка Close должна существовать")
                     
-                    let menuButton = app.navigationBars.buttons.matching(identifier: "ellipsis.circle").firstMatch
-                    XCTAssertTrue(menuButton.exists, "Кнопка Menu должна существовать")
+                    let menuButton = UITestInteractions.webOverflowMenuButton(in: app)
+                    XCTAssertTrue(menuButton.waitForExistence(timeout: 15), "Кнопка Menu должна существовать")
                 }
             }
         }
@@ -155,8 +155,8 @@ final class WebViewUITests: XCTestCase {
                     files.firstMatch.tap()
                     UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                     
-                    let menuButton = app.navigationBars.buttons.matching(identifier: "ellipsis.circle").firstMatch
-                    if menuButton.exists {
+                    let menuButton = UITestInteractions.webOverflowMenuButton(in: app)
+                    if menuButton.waitForExistence(timeout: 15) {
                         menuButton.tap()
                         
                         let shareButton = app.buttons["Share"]
@@ -207,8 +207,8 @@ final class WebViewUITests: XCTestCase {
                     files.firstMatch.tap()
                     UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                     
-                    let menuButton = app.navigationBars.buttons.matching(identifier: "ellipsis.circle").firstMatch
-                    if menuButton.exists {
+                    let menuButton = UITestInteractions.webOverflowMenuButton(in: app)
+                    if menuButton.waitForExistence(timeout: 15) {
                         menuButton.tap()
                         
                         let shareButton = app.buttons["Share"]
@@ -237,8 +237,8 @@ final class WebViewUITests: XCTestCase {
                     files.firstMatch.tap()
                     UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                     
-                    let menuButton = app.navigationBars.buttons.matching(identifier: "ellipsis.circle").firstMatch
-                    if menuButton.exists {
+                    let menuButton = UITestInteractions.webOverflowMenuButton(in: app)
+                    if menuButton.waitForExistence(timeout: 15) {
                         menuButton.tap()
                         
                         let deleteButton = app.buttons["Delete"]

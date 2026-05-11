@@ -71,6 +71,7 @@ struct WebContentView: View {
                     } label: {
                         Image(systemName: "ellipsis.circle")
                             .foregroundColor(.gold)
+                            .accessibilityIdentifier("WebContentOverflowMenu")
                     }
                 }
             }

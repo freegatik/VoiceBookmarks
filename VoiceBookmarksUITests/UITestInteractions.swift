@@ -10,6 +10,7 @@ import XCTest
 enum UITestInteractions {
     static let searchSubmitButtonIdentifier = "SearchSubmitButton"
     static let webCloseButtonIdentifier = "WebContentClose"
+    static let webOverflowMenuIdentifier = "WebContentOverflowMenu"
 
     /// Запускает текстовый поиск на экране списка папок без совпадения с вкладкой «Search» в tab bar.
     static func submitFolderSearch(app: XCUIApplication, searchField: XCUIElement) {
@@ -47,5 +48,29 @@ enum UITestInteractions {
             }
         }
         return app.buttons[webCloseButtonIdentifier]
+    }
+
+    /// Кнопка overflow (⋯) в тулбаре WebContent; на CI не полагаемся на SF Symbol `ellipsis.circle`.
+    static func webOverflowMenuButton(in app: XCUIApplication) -> XCUIElement {
+        let byId = app.descendants(matching: .any).matching(identifier: webOverflowMenuIdentifier).firstMatch
+        if byId.exists {
+            return byId
+        }
+        let navBars = app.navigationBars
+        let count = navBars.count
+        if count > 0 {
+            for i in stride(from: count - 1, through: 0, by: -1) {
+                let nav = navBars.element(boundBy: i)
+                let sym = nav.buttons.matching(identifier: "ellipsis.circle").firstMatch
+                if sym.exists {
+                    return sym
+                }
+                let more = nav.buttons["More"]
+                if more.exists {
+                    return more
+                }
+            }
+        }
+        return app.descendants(matching: .any).matching(identifier: webOverflowMenuIdentifier).firstMatch
     }
 }
