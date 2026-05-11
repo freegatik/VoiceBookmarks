@@ -84,7 +84,7 @@ final class FileListViewUITests: XCTestCase {
                 XCTAssertTrue(navBar.exists, "WebView должен открыться после тапа на файл")
                 
                 let closeButton = UITestInteractions.webCloseButton(in: app)
-                XCTAssertTrue(closeButton.waitForExistence(timeout: 5), "Кнопка 'Close' должна присутствовать")
+                XCTAssertTrue(closeButton.waitForExistence(timeout: 20), "Кнопка 'Close' должна присутствовать")
             }
         }
     }

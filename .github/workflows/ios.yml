@@ -64,16 +64,31 @@ jobs:
       - name: Run Share extension tests
         run: Scripts/ci/run-ios-tests.sh share
 
+      - name: Pack xcresults (single artifact; avoids upload-artifact multi-file timeout)
+        if: always()
+        run: |
+          set -euo pipefail
+          rm -f ios-test-results.zip
+          shopt -s nullglob
+          paths=(TestResults-main.xcresult TestResults-main-ui.xcresult TestResults-share.xcresult)
+          existing=()
+          for p in "${paths[@]}"; do
+            [[ -d "$p" ]] && existing+=("$p")
+          done
+          if ((${#existing[@]})); then
+            zip -qr ios-test-results.zip "${existing[@]}"
+          else
+            echo "No xcresult bundles to pack"
+          fi
+
       - name: Upload xcresult bundles
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ios-test-results
-          path: |
-            TestResults-main.xcresult
-            TestResults-main-ui.xcresult
-            TestResults-share.xcresult
+          path: ios-test-results.zip
           if-no-files-found: ignore
+          compression-level: 0
 
       - name: Coverage summary (line rate)
         if: success()

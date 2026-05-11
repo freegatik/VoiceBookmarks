@@ -64,12 +64,27 @@ struct FileListView: View {
 
         .sheet(isPresented: $showWebView) {
             if let bookmark = bookmarkToView {
-                WebContentView(
-                    viewModel: WebViewModel(
-                        content: .file(bookmark),
-                        bookmarkService: bookmarkService
-                    )
-                )
+                Group {
+                    if #available(iOS 16, *) {
+                        NavigationStack {
+                            WebContentView(
+                                viewModel: WebViewModel(
+                                    content: .file(bookmark),
+                                    bookmarkService: bookmarkService
+                                )
+                            )
+                        }
+                    } else {
+                        NavigationView {
+                            WebContentView(
+                                viewModel: WebViewModel(
+                                    content: .file(bookmark),
+                                    bookmarkService: bookmarkService
+                                )
+                            )
+                        }
+                    }
+                }
             }
         }
         .sheet(isPresented: $showShareSheet) {

@@ -23,11 +23,21 @@ enum UITestInteractions {
     }
 
     static func webCloseButton(in app: XCUIApplication) -> XCUIElement {
-        let global = app.buttons[webCloseButtonIdentifier]
-        if global.exists { return global }
-        let nav = app.navigationBars.firstMatch
-        let inNav = nav.buttons[webCloseButtonIdentifier]
-        if inNav.exists { return inNav }
-        return nav.buttons["Close"]
+        let byId = app.descendants(matching: .any).matching(identifier: webCloseButtonIdentifier).firstMatch
+        if byId.exists {
+            return byId
+        }
+        let navBars = app.navigationBars
+        let count = navBars.count
+        if count > 0 {
+            for i in stride(from: count - 1, through: 0, by: -1) {
+                let nav = navBars.element(boundBy: i)
+                let idBtn = nav.buttons[webCloseButtonIdentifier]
+                if idBtn.exists { return idBtn }
+                let closeBtn = nav.buttons["Close"]
+                if closeBtn.exists { return closeBtn }
+            }
+        }
+        return app.buttons[webCloseButtonIdentifier]
     }
 }

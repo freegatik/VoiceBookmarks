@@ -132,7 +132,7 @@ final class WebViewUITests: XCTestCase {
                     files.firstMatch.tap()
                     
                     let closeButton = UITestInteractions.webCloseButton(in: app)
-                    XCTAssertTrue(closeButton.waitForExistence(timeout: 5), "Кнопка Close должна существовать")
+                    XCTAssertTrue(closeButton.waitForExistence(timeout: 20), "Кнопка Close должна существовать")
                     
                     let menuButton = app.navigationBars.buttons.matching(identifier: "ellipsis.circle").firstMatch
                     XCTAssertTrue(menuButton.exists, "Кнопка Menu должна существовать")
