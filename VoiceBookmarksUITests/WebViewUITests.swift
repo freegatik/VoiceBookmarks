@@ -112,6 +112,7 @@ final class WebViewUITests: XCTestCase {
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
+                UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                 
                 let navBar = app.navigationBars.firstMatch
                 XCTAssertTrue(navBar.exists, "Navigation bar должен появиться")
@@ -130,7 +131,7 @@ final class WebViewUITests: XCTestCase {
                 let files = app.scrollViews.buttons
                 if files.count > 0 {
                     files.firstMatch.tap()
-                    
+                    UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                     let closeButton = UITestInteractions.webCloseButton(in: app)
                     XCTAssertTrue(closeButton.waitForExistence(timeout: 20), "Кнопка Close должна существовать")
                     
@@ -152,6 +153,7 @@ final class WebViewUITests: XCTestCase {
                 let files = app.scrollViews.buttons
                 if files.count > 0 {
                     files.firstMatch.tap()
+                    UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                     
                     let menuButton = app.navigationBars.buttons.matching(identifier: "ellipsis.circle").firstMatch
                     if menuButton.exists {
@@ -178,6 +180,7 @@ final class WebViewUITests: XCTestCase {
                 let files = app.scrollViews.buttons
                 if files.count > 0 {
                     files.firstMatch.tap()
+                    UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                     
                     let closeButton = UITestInteractions.webCloseButton(in: app)
                     if closeButton.waitForExistence(timeout: 3) {
@@ -202,6 +205,7 @@ final class WebViewUITests: XCTestCase {
                 let files = app.scrollViews.buttons
                 if files.count > 0 {
                     files.firstMatch.tap()
+                    UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                     
                     let menuButton = app.navigationBars.buttons.matching(identifier: "ellipsis.circle").firstMatch
                     if menuButton.exists {
@@ -231,6 +235,7 @@ final class WebViewUITests: XCTestCase {
                 let files = app.scrollViews.buttons
                 if files.count > 0 {
                     files.firstMatch.tap()
+                    UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                     
                     let menuButton = app.navigationBars.buttons.matching(identifier: "ellipsis.circle").firstMatch
                     if menuButton.exists {
@@ -309,6 +314,7 @@ final class WebViewUITests: XCTestCase {
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
+                UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                 
                 let navBar = app.navigationBars.firstMatch
                 if navBar.waitForExistence(timeout: 3) {
@@ -329,6 +335,7 @@ final class WebViewUITests: XCTestCase {
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
+                UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                 
                 let navBar = app.navigationBars.firstMatch
                 if navBar.waitForExistence(timeout: 3) {
@@ -349,6 +356,7 @@ final class WebViewUITests: XCTestCase {
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
+                UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                 
                 let navBar = app.navigationBars.firstMatch
                 if navBar.waitForExistence(timeout: 3) {
@@ -369,6 +377,7 @@ final class WebViewUITests: XCTestCase {
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
+                UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                 
                 let navBar = app.navigationBars.firstMatch
                 if navBar.waitForExistence(timeout: 3) {
@@ -389,6 +398,7 @@ final class WebViewUITests: XCTestCase {
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
+                UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                 
                 let navBar = app.navigationBars.firstMatch
                 if navBar.waitForExistence(timeout: 3) {
@@ -409,6 +419,7 @@ final class WebViewUITests: XCTestCase {
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
+                UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                 
                 let navBar = app.navigationBars.firstMatch
                 if navBar.waitForExistence(timeout: 5) {
@@ -429,6 +440,7 @@ final class WebViewUITests: XCTestCase {
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
+                UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                 
                 let navBar = app.navigationBars.firstMatch
                 if navBar.waitForExistence(timeout: 3) {
@@ -449,6 +461,7 @@ final class WebViewUITests: XCTestCase {
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
+                UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                 
                 let navBar = app.navigationBars.firstMatch
                 if navBar.waitForExistence(timeout: 5) {
@@ -469,6 +482,7 @@ final class WebViewUITests: XCTestCase {
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
+                UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                 
                 let navBar = app.navigationBars.firstMatch
                 if navBar.waitForExistence(timeout: 5) {
@@ -489,6 +503,7 @@ final class WebViewUITests: XCTestCase {
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
+                UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                 
                 let navBar = app.navigationBars.firstMatch
                 let errorText = app.staticTexts["Error"]
@@ -526,6 +541,7 @@ final class WebViewUITests: XCTestCase {
         
         if files.count > 0 {
             files.firstMatch.tap()
+            UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
         } else {
             let noteFile = app.staticTexts["Goal note"].firstMatch
             let audioFile = app.staticTexts["Audio idea.m4a"].firstMatch
@@ -599,6 +615,7 @@ final class WebViewUITests: XCTestCase {
         
         if files.count > 0 {
             files.firstMatch.tap()
+            UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
         } else {
             let noteFile = app.staticTexts["Goal note"].firstMatch
             let audioFile = app.staticTexts["Audio idea.m4a"].firstMatch

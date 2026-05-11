@@ -22,6 +22,14 @@ enum UITestInteractions {
         searchField.typeText("\n")
     }
 
+    /// После тапа по карточке файла SwiftUI показывает `confirmationDialog` с «View» — без этого шита с WebContent нет.
+    static func confirmOpenBookmarkFromFileListIfNeeded(app: XCUIApplication) {
+        let view = app.buttons["View"]
+        if view.waitForExistence(timeout: 4) {
+            view.tap()
+        }
+    }
+
     static func webCloseButton(in app: XCUIApplication) -> XCUIElement {
         let byId = app.descendants(matching: .any).matching(identifier: webCloseButtonIdentifier).firstMatch
         if byId.exists {

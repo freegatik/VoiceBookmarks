@@ -35,6 +35,7 @@ final class ErrorStateUITests: XCTestCase {
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
+                UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                 
                 let errorIcon = app.images.matching(identifier: "exclamationmark.triangle").firstMatch
                 let errorText = app.staticTexts["Error"]
@@ -68,6 +69,7 @@ final class ErrorStateUITests: XCTestCase {
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
+                UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                 
                 let navBar = app.navigationBars.firstMatch
                 let errorText = app.staticTexts["Error"]
@@ -95,6 +97,7 @@ final class ErrorStateUITests: XCTestCase {
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
+                UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                 
                 let retryButton = app.buttons["Повторить"]
                 let navBar = app.navigationBars.firstMatch

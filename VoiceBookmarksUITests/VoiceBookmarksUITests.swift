@@ -215,6 +215,7 @@ final class VoiceBookmarksUITests: XCTestCase {
         }
         
         files.firstMatch.tap()
+        UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
         
         let navBar = app.navigationBars.firstMatch
         XCTAssertTrue(navBar.waitForExistence(timeout: 5), "WebView должен открыться")

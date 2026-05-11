@@ -114,6 +114,7 @@ final class CommandUITests: XCTestCase {
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
+                UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                 
                 let navBar = app.navigationBars.firstMatch
                 if navBar.waitForExistence(timeout: 3) {
@@ -134,6 +135,7 @@ final class CommandUITests: XCTestCase {
             let files = app.scrollViews.buttons
             if files.count > 0 {
                 files.firstMatch.tap()
+                UITestInteractions.confirmOpenBookmarkFromFileListIfNeeded(app: app)
                 
                 let closeButton = UITestInteractions.webCloseButton(in: app)
                 if closeButton.waitForExistence(timeout: 3) {
