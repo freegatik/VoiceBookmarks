@@ -25,7 +25,7 @@ final class ShareSheetTests: XCTestCase {
     
     func testShareSheet_MakeUIViewController_CreatesUIActivityViewController() {
         let items: [Any] = ["Test text", URL(string: "https://example.com")!]
-        sut = ShareSheet(items: items)
+        sut = ShareSheet(isPresented: .constant(true), items: items)
         
         let controller = makeUIViewControllerForShareSheet()
         
@@ -34,7 +34,7 @@ final class ShareSheetTests: XCTestCase {
     
     func testShareSheet_MakeUIViewController_CreatesControllerWithItems() {
         let items: [Any] = ["Test text", URL(string: "https://example.com")!]
-        sut = ShareSheet(items: items)
+        sut = ShareSheet(isPresented: .constant(true), items: items)
         
         let controller = makeUIViewControllerForShareSheet()
         
@@ -43,7 +43,7 @@ final class ShareSheetTests: XCTestCase {
     
     func testShareSheet_MakeUIViewController_CreatesControllerWithEmptyItems() {
         let items: [Any] = []
-        sut = ShareSheet(items: items)
+        sut = ShareSheet(isPresented: .constant(true), items: items)
         
         let controller = makeUIViewControllerForShareSheet()
         
@@ -57,7 +57,7 @@ final class ShareSheetTests: XCTestCase {
             UIImage(systemName: "star")!,
             Data("test data".utf8)
         ]
-        sut = ShareSheet(items: items)
+        sut = ShareSheet(isPresented: .constant(true), items: items)
         
         let controller = makeUIViewControllerForShareSheet()
         
@@ -66,7 +66,7 @@ final class ShareSheetTests: XCTestCase {
     
     func testShareSheet_MakeUIViewController_SetsApplicationActivitiesToNil() {
         let items: [Any] = ["Test"]
-        sut = ShareSheet(items: items)
+        sut = ShareSheet(isPresented: .constant(true), items: items)
         
         let controller = makeUIViewControllerForShareSheet()
         
@@ -75,7 +75,7 @@ final class ShareSheetTests: XCTestCase {
     
     func testShareSheet_UpdateUIViewController_DoesNothing() {
         let items: [Any] = ["Test"]
-        sut = ShareSheet(items: items)
+        sut = ShareSheet(isPresented: .constant(true), items: items)
         
         XCTAssertNoThrow({})
     }
@@ -90,14 +90,14 @@ final class ShareSheetTests: XCTestCase {
         ]
         
         for items in testCases {
-            sut = ShareSheet(items: items)
+            sut = ShareSheet(isPresented: .constant(true), items: items)
             XCTAssertNotNil(sut, "ShareSheet должен создаваться с items: \(items)")
         }
     }
     
     func testShareSheet_CreatedWithCorrectItems() {
         let items: [Any] = ["Test"]
-        sut = ShareSheet(items: items)
+        sut = ShareSheet(isPresented: .constant(true), items: items)
         
         XCTAssertNotNil(sut)
     }

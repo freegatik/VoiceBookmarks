@@ -104,7 +104,7 @@ struct WebContentView: View {
                     }
             )
         .sheet(isPresented: $viewModel.showShareSheet) {
-            ShareSheet(items: viewModel.itemsToShare)
+            ShareSheet(isPresented: $viewModel.showShareSheet, items: viewModel.itemsToShare)
         }
         .confirmationDialog(
             "Delete bookmark?",

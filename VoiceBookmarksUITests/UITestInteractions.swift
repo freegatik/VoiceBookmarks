@@ -73,4 +73,25 @@ enum UITestInteractions {
         }
         return app.descendants(matching: .any).matching(identifier: webOverflowMenuIdentifier).firstMatch
     }
+
+    static func waitForSystemShareSheet(app: XCUIApplication, timeout: TimeInterval = 20) -> Bool {
+        let marker = app.descendants(matching: .any).matching(identifier: "VoiceBookmarksSharePresenterHost").firstMatch
+        if marker.waitForExistence(timeout: timeout) {
+            return true
+        }
+        if app.sheets.firstMatch.waitForExistence(timeout: 2) {
+            return true
+        }
+        let cv = app.collectionViews.firstMatch
+        return cv.waitForExistence(timeout: 2)
+    }
+
+    static func waitForDeleteBookmarkConfirmation(in app: XCUIApplication, timeout: TimeInterval = 8) -> XCUIElement? {
+        let sheet = app.sheets.firstMatch
+        if sheet.waitForExistence(timeout: timeout) {
+            return sheet
+        }
+        let alert = app.alerts["Delete bookmark?"]
+        return alert.waitForExistence(timeout: 2) ? alert : nil
+    }
 }

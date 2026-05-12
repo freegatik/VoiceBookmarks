@@ -88,7 +88,7 @@ struct FileListView: View {
             }
         }
         .sheet(isPresented: $showShareSheet) {
-            ShareSheet(items: itemsToShare)
+            ShareSheet(isPresented: $showShareSheet, items: itemsToShare)
         }
         .confirmationDialog(
             "Delete bookmark?",

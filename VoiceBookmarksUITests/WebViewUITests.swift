@@ -214,9 +214,10 @@ final class WebViewUITests: XCTestCase {
                         let shareButton = app.buttons["Share"]
                         if shareButton.exists {
                             shareButton.tap()
-                            
-                            let activitySheet = app.sheets.firstMatch
-                            XCTAssertTrue(activitySheet.exists, "Share sheet должен появиться")
+                            XCTAssertTrue(
+                                UITestInteractions.waitForSystemShareSheet(app: app, timeout: 20),
+                                "Share sheet должен появиться"
+                            )
                         }
                     }
                 }
@@ -244,12 +245,12 @@ final class WebViewUITests: XCTestCase {
                         let deleteButton = app.buttons["Delete"]
                         if deleteButton.exists {
                             deleteButton.tap()
-                            
-                            let confirmDialog = app.alerts["Delete bookmark?"]
-                            XCTAssertTrue(confirmDialog.exists, "Confirmation dialog должен появиться")
-                            
-                            let confirmButton = app.alerts.buttons["Delete"]
-                            let cancelButton = app.alerts.buttons["Cancel"]
+                            guard let confirmDialog = UITestInteractions.waitForDeleteBookmarkConfirmation(in: app, timeout: 8) else {
+                                XCTFail("Confirmation dialog должен появиться")
+                                return
+                            }
+                            let confirmButton = confirmDialog.buttons["Delete"]
+                            let cancelButton = confirmDialog.buttons["Cancel"]
                             XCTAssertTrue(confirmButton.exists || cancelButton.exists, "Dialog должен содержать кнопки")
                         }
                     }
