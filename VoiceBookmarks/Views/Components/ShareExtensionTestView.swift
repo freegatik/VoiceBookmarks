@@ -120,24 +120,9 @@ struct ShareExtensionTestView: View {
             .navigationBarTitleDisplayMode(.inline)
             #if canImport(UIKit)
             .sheet(isPresented: $showShareSheet) {
-                ActivityView(activityItems: ["Test share content"])
+                ShareSheet(isPresented: $showShareSheet, items: ["Test share content"])
             }
             #endif
         }
     }
 }
-
-#if canImport(UIKit)
-import UIKit
-
-struct ActivityView: UIViewControllerRepresentable {
-    let activityItems: [Any]
-    let applicationActivities: [UIActivity]? = nil
-    
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: activityItems, applicationActivities: applicationActivities)
-    }
-    
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}
-#endif

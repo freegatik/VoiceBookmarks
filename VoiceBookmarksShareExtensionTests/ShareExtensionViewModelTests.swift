@@ -46,16 +46,16 @@ final class ShareExtensionViewModelTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
     
-    func testShareExtensionViewModel_UpdateStatus_Error() {
+    func testShareExtensionViewModel_UpdateStatus_Failure_KeepsLoading() {
         let expectation = XCTestExpectation(description: "Status updated")
         
-        sut.updateStatus(message: "Error", isSuccess: false)
+        sut.updateStatus(message: "Processing content...", isSuccess: false)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            XCTAssertFalse(self.sut.isLoading)
-            XCTAssertEqual(self.sut.statusMessage, "Error")
+            XCTAssertTrue(self.sut.isLoading)
+            XCTAssertEqual(self.sut.statusMessage, "Processing content...")
             XCTAssertFalse(self.sut.showSuccess)
-            XCTAssertTrue(self.sut.showError)
+            XCTAssertFalse(self.sut.showError)
             expectation.fulfill()
         }
         

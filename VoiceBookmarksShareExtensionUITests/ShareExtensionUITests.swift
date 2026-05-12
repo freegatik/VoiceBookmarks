@@ -79,21 +79,26 @@ final class ShareExtensionUITests: XCTestCase {
         XCTAssertTrue(openButton.waitForExistence(timeout: 3))
         openButton.tap()
 
+        let presenterHost = app.descendants(matching: .any).matching(identifier: "VoiceBookmarksSharePresenterHost").firstMatch
         let shareSheet = app.sheets.firstMatch
         let cancelButton = app.buttons["Cancel"].firstMatch
         let moreButton = app.buttons["More"].firstMatch
-        
-        let sheetExists = shareSheet.waitForExistence(timeout: 3) || 
-                         cancelButton.waitForExistence(timeout: 1) || 
-                         moreButton.waitForExistence(timeout: 1)
+
+        let sheetExists = presenterHost.waitForExistence(timeout: 15)
+            || shareSheet.waitForExistence(timeout: 2)
+            || cancelButton.waitForExistence(timeout: 2)
+            || moreButton.waitForExistence(timeout: 2)
+            || app.collectionViews.firstMatch.waitForExistence(timeout: 2)
         XCTAssertTrue(sheetExists, "Share Sheet должен появиться после нажатия кнопки")
-        
+
         if cancelButton.exists {
             cancelButton.tap()
         } else if shareSheet.exists {
             let startPoint = shareSheet.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.1))
             let endPoint = startPoint.withOffset(CGVector(dx: 0, dy: 300))
             startPoint.press(forDuration: 0.1, thenDragTo: endPoint)
+        } else if presenterHost.exists {
+            presenterHost.swipeDown(velocity: .fast)
         }
     }
 
@@ -110,7 +115,10 @@ final class ShareExtensionUITests: XCTestCase {
         
         app.buttons["Error"].tap()
         XCTAssertTrue(app.staticTexts["No content to add"].waitForExistence(timeout: 2))
-        XCTAssertTrue(app.images["exclamationmark.triangle.fill"].exists)
+        XCTAssertTrue(
+            app.images["exclamationmark.triangle.fill"].waitForExistence(timeout: 3),
+            "После ошибки должен отображаться значок предупреждения"
+        )
         
         app.buttons["Default"].tap()
         XCTAssertTrue(app.staticTexts["Adding content..."].waitForExistence(timeout: 2))

@@ -36,6 +36,7 @@ public class ShareExtensionViewModel: ObservableObject {
         DispatchQueue.main.async {
             self.isLoading = false
             self.statusMessage = message
+            self.showSuccess = false
             self.showError = true
             self.errorMessage = message
         }
